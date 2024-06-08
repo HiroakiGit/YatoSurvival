@@ -5,13 +5,44 @@ using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine.UI;
 
-public class Login : MonoBehaviour
+public class LoginManager : MonoBehaviour
 {
+    public GameManager _gameManager;
+    [SerializeField] GameObject LoginCanvas;
     [SerializeField] InputField IFUserName;
     [SerializeField] InputField IFPassWord;
     public string SUserName;
     public string SPassWord;
     public string SDisplayName;
+
+    public void StartLogin()
+    {
+        LoginCanvas.SetActive(true);
+    }
+
+    //===============================
+    public void AutoLogin()
+    {
+        SUserName = "testman";
+        SPassWord = "testman";
+
+        //リクエスト
+        var LoginRequest = new LoginWithPlayFabRequest()
+        {
+            TitleId = "455AB",
+            Username = SUserName,
+            Password = SPassWord,
+
+            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+            {
+                GetPlayerProfile = true
+            }
+        };
+
+        //ログイン
+        PlayFabClientAPI.LoginWithPlayFab(LoginRequest, OnLoginSuccess, OnError);
+    }
+    //===============================
 
     //登録ボタンを押したとき
     public void OnClickRegisterButton()
@@ -84,6 +115,16 @@ public class Login : MonoBehaviour
         Debug.Log("PlayFabアカウントでログインしました！");
         //DisplayNameを設定
         SetDisplayName();
+        //プロセス終了
+        EndLogin();
+    }
+
+    //ログイン終了
+    private void EndLogin()
+    {
+        LoginCanvas.SetActive(false);
+        //ログイン終了時の処理を呼び出す
+        _gameManager.OnLoginEnd();
     }
 
     //エラー
