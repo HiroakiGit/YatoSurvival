@@ -8,12 +8,10 @@ using UnityEngine.UI;
 public class LoginManager : MonoBehaviour
 {
     public GameManager _gameManager;
+    public Player _player;
     [SerializeField] GameObject LoginCanvas;
     [SerializeField] InputField IFUserName;
     [SerializeField] InputField IFPassWord;
-    public string SUserName;
-    public string SPassWord;
-    public string SDisplayName;
 
     public void StartLogin()
     {
@@ -23,15 +21,15 @@ public class LoginManager : MonoBehaviour
     //===============================
     public void AutoLogin()
     {
-        SUserName = "testman";
-        SPassWord = "testman";
+        _player.SUserName = "testman";
+        _player.SPassWord = "testman";
 
         //リクエスト
         var LoginRequest = new LoginWithPlayFabRequest()
         {
             TitleId = "455AB",
-            Username = SUserName,
-            Password = SPassWord,
+            Username = _player.SUserName,
+            Password = _player.SPassWord,
 
             InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
             {
@@ -47,15 +45,15 @@ public class LoginManager : MonoBehaviour
     //登録ボタンを押したとき
     public void OnClickRegisterButton()
     {
-        SUserName = IFUserName.text;
-        SPassWord = IFPassWord.text;
+        _player.SUserName = IFUserName.text;
+        _player.SPassWord = IFPassWord.text;
 
         //リクエスト
         var RegisterRequest = new RegisterPlayFabUserRequest()
         {
             TitleId = "455AB",
-            Username = SUserName,
-            Password = SPassWord,
+            Username = _player.SUserName,
+            Password = _player.SPassWord,
             RequireBothUsernameAndEmail = false
         };
 
@@ -76,15 +74,15 @@ public class LoginManager : MonoBehaviour
     //ログインボタンを押したとき
     public void OnClickLoginButton()
     {
-        SUserName = IFUserName.text;
-        SPassWord = IFPassWord.text;
+        _player.SUserName = IFUserName.text;
+        _player.SPassWord = IFPassWord.text;
 
         //リクエスト
         var LoginRequest = new LoginWithPlayFabRequest()
         {
             TitleId = "455AB",
-            Username = SUserName,
-            Password = SPassWord,
+            Username = _player.SUserName,
+            Password = _player.SPassWord,
 
             InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
             {
@@ -101,11 +99,11 @@ public class LoginManager : MonoBehaviour
     {
         PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
         {
-            DisplayName = SUserName
+            DisplayName = _player.SUserName
         }, result =>
         {
-            SDisplayName = result.DisplayName;
-            Debug.Log($"ニックネームは:{SDisplayName}");
+            _player.SDisplayName = result.DisplayName;
+            Debug.Log($"ニックネームは:{_player.SDisplayName}");
         }, error => OnError(error)) ;
     }
 
@@ -130,8 +128,8 @@ public class LoginManager : MonoBehaviour
     //エラー
     private void OnError(PlayFabError error)
     {
-        SUserName = null;
-        SPassWord = null;
+        _player.SUserName = null;
+        _player.SPassWord = null;
         Debug.Log(error);
     }
 }

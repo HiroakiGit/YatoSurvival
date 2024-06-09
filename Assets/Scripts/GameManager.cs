@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 {
     public LoginManager _loginManager;
     public EnemyGenerater _enemyGenerater;
-    public GameObject player;
 
     //GameManagerから各プログラムに処理をお願いする => 各プログラムから終了報告を受け取る
 
@@ -14,8 +13,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //ログイン開始
-        //_loginManager.AutoLogin();
-        _loginManager.StartLogin();
+        _loginManager.AutoLogin();
+        //_loginManager.StartLogin();
     }
 
     //ログイン終了時
