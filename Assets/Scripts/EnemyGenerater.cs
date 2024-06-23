@@ -6,10 +6,11 @@ public class EnemyGenerater : MonoBehaviour
 {
     public Player _player;
     public GameObject EnemyPrefab;
+    public int EnemyNum;
 
     public void Generate()
     {
-        for(int i = 0; i<2; i++)
+        for(int i = 0; i<EnemyNum; i++)
         {
             // ランダムなX座標とY座標を生成
             float randomX = Random.Range(-5f, 5f); // X座標の範囲は-5から5までとします
@@ -22,7 +23,7 @@ public class EnemyGenerater : MonoBehaviour
             Vector3 randomPosition = new Vector3(randomX, randomY, zCoordinate);
 
             GameObject enemy = Instantiate(EnemyPrefab, randomPosition, Quaternion.identity);
-            enemy.GetComponent<EnemyAI>().player = _player.player.transform;
+            enemy.GetComponent<EnemyAI>()._player = _player;
         }
     }
 }

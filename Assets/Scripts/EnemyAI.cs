@@ -4,29 +4,38 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    public Transform player; // プレイヤーのTransform
+    public Player _player;
+    public Transform playerTransform; // プレイヤーのTransform
     public float speed = 5f; // 移動速度
     public float minDistance = 1f; // プレイヤーとの最小距離
     private SpriteRenderer spriteRenderer; // スプライトレンダラーをキャッシュ
 
+    [Header("Attack")]
+    public float attackRange = 0.5f;
+    public int attackDamage = 10;
+    public float attackInterval = 5f;
+    private float lastAttackTime;
+
     private void Start()
     {
+        playerTransform = _player.transform;
         spriteRenderer = GetComponent<SpriteRenderer>(); // スプライトレンダラーを取得
     }
 
     void Update()
     {
+        //動き
         // プレイヤーとの距離を計算
-        float distance = Vector2.Distance(transform.position, player.position);
+        float distance = Vector2.Distance(transform.position, playerTransform.position);
 
         // プレイヤーへの方向ベクトルを正規化
-        Vector2 direction = (player.position - transform.position).normalized;
+        Vector2 direction = (playerTransform.position - transform.position).normalized;
 
         // プレイヤーとの距離が最小距離より大きい場合にのみ移動
         if (distance > minDistance)
         {
             // プレイヤーに向かって移動
-            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, speed * Time.deltaTime);
         }
 
 
@@ -39,5 +48,27 @@ public class EnemyAI : MonoBehaviour
         {
             spriteRenderer.flipX = true; // 左向き
         }
+
+        //攻撃
+        if (playerTransform == null || _player == null)
+        {
+            return;
+        }
+
+        float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+        if (distanceToPlayer <= attackRange)
+        {
+            if (Time.time - lastAttackTime >= attackInterval)
+            {
+                AttackPlayer();
+                lastAttackTime = Time.time;
+            }
+        }
+    }
+    void AttackPlayer()
+    {
+        // ダメージをプレイヤーに与える
+        _player._playerHealth.TakeDamage(attackDamage);
+        Debug.Log("Attacked Player for " + attackDamage + " damage.");
     }
 }

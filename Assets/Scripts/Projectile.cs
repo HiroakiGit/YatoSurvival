@@ -17,5 +17,9 @@ public class Projectile : MonoBehaviour
             }
             Destroy(gameObject); // ’e‚ð”j‰ó
         }
+        else if (other.CompareTag("Map"))
+        {
+            Destroy(gameObject); // ’e‚ð”j‰ó
+        }
     }
 }

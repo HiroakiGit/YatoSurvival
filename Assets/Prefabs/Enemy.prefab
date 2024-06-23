@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 7726196693310552489}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af65254dbcd9c344685a90ccb8797c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  experiencePool: {fileID: 0}
   health: 3
 --- !u!114 &-1948042322869360024
 MonoBehaviour:
@@ -128,6 +129,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa4fc4976045b54c97ee5492365fdf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  speed: 0.7
-  minDistance: 0.8
+  _player: {fileID: 0}
+  playerTransform: {fileID: 0}
+  speed: 0.4
+  minDistance: 0.15
+  attackRange: 0.2
+  attackDamage: 2
+  attackInterval: 2

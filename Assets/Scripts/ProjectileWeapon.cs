@@ -10,6 +10,6 @@ public class ProjectileWeapon : MonoBehaviour
     public void Fire(Vector2 direction, Transform origin)
     {
         GameObject projectile = Instantiate(projectilePrefab, origin.position, Quaternion.identity);
-        projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+        projectile.GetComponent<Rigidbody2D>().velocity = direction.normalized * projectileSpeed;
     }
 }

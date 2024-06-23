@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class LaserWeapon : MonoBehaviour
 {
+    public Player _player;
     public LineRenderer lineRenderer;
+    public float laserLength;
     public float laserDuration = 0.2f;
 
     public void Fire(Vector2 direction, Transform origin)
@@ -21,17 +23,7 @@ public class LaserWeapon : MonoBehaviour
         // Raycast‚ğ‰Â‹‰»
         Debug.DrawRay(raycastOrigin, direction * 10f, Color.red);
 
-        lineRenderer.SetPosition(0, origin.position);
-
-        //“G‚É“–‚½‚Á‚½‚Æ‚±‚ë‚Ü‚ÅƒŒ[ƒU[‰Â‹‰»
-        //if (hit.collider != null)
-        //{
-        //lineRenderer.SetPosition(1, hit.point);
-        //}
-        //else
-        //{
-        lineRenderer.SetPosition(1, (Vector2)origin.position + direction * 10f); // ”CˆÓ‚Ì‹——£
-        //}
+        lineRenderer.SetPosition(1, (Vector2)origin.position + direction.normalized * laserLength); // ”CˆÓ‚Ì‹——£
 
         lineRenderer.enabled = true;
         yield return new WaitForSeconds(laserDuration);
@@ -48,5 +40,11 @@ public class LaserWeapon : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void LateUpdate()
+    {
+        //‹“_‚Í©•ª‚ÉŒÅ’è
+        lineRenderer.SetPosition(0, _player.player.transform.position);
     }
 }
