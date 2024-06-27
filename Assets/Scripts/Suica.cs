@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Suica : MonoBehaviour
 {
-    public int damage = 1; // 弾が与えるダメージ
+    public int damage = 1; //与えるダメージ
 
     void OnTriggerEnter2D(Collider2D other)
     {

@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour
 {
     public Player _player;
-    public Transform playerTransform; // プレイヤーのTransform
     public float speed = 5f; // 移動速度
     public float minDistance = 1f; // プレイヤーとの最小距離
     private SpriteRenderer spriteRenderer; // スプライトレンダラーをキャッシュ
@@ -18,7 +17,6 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = _player.transform;
         spriteRenderer = GetComponent<SpriteRenderer>(); // スプライトレンダラーを取得
     }
 
@@ -26,16 +24,16 @@ public class EnemyAI : MonoBehaviour
     {
         //動き
         // プレイヤーとの距離を計算
-        float distance = Vector2.Distance(transform.position, playerTransform.position);
+        float distance = Vector2.Distance(transform.position, _player.playerTransform.position);
 
         // プレイヤーへの方向ベクトルを正規化
-        Vector2 direction = (playerTransform.position - transform.position).normalized;
+        Vector2 direction = (_player.playerTransform.position - transform.position).normalized;
 
         // プレイヤーとの距離が最小距離より大きい場合にのみ移動
         if (distance > minDistance)
         {
             // プレイヤーに向かって移動
-            transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, _player.playerTransform.position, speed * Time.deltaTime);
         }
 
 
@@ -50,12 +48,12 @@ public class EnemyAI : MonoBehaviour
         }
 
         //攻撃
-        if (playerTransform == null || _player == null)
+        if (_player.playerTransform == null || _player == null)
         {
             return;
         }
 
-        float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+        float distanceToPlayer = Vector2.Distance(transform.position, _player.playerTransform.position);
         if (distanceToPlayer <= attackRange)
         {
             if (Time.time - lastAttackTime >= attackInterval)

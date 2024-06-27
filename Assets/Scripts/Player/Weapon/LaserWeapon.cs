@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserWeapon : MonoBehaviour
+public class LaserWeapon : Weapon
 {
-    public Player _player;
+    public Transform playerTransform;
     public LineRenderer lineRenderer;
     public float laserLength;
     public float laserDuration = 0.2f;
+    public int damage = 1; //与えるダメージ
+
+    public override void Initialize(Transform playerT)
+    {
+        playerTransform = playerT;
+    }
 
     public void Fire(Vector2 direction, Transform origin)
     {
@@ -36,7 +42,7 @@ public class LaserWeapon : MonoBehaviour
                 Enemy enemy = hit.collider.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    enemy.TakeDamage(1); // レーザービームのダメージを与える
+                    enemy.TakeDamage(damage);
                 }
             }
         }
@@ -44,7 +50,8 @@ public class LaserWeapon : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (playerTransform == null) return;
         //視点は自分に固定
-        lineRenderer.SetPosition(0, _player.player.transform.position);
+        lineRenderer.SetPosition(0, playerTransform.position);
     }
 }

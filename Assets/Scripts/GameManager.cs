@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public LoginManager _loginManager;
-    public EnemyGenerater _enemyGenerater;
+    public MapEdgeEnemySpawner _enemyGenerater;
 
     //GameManagerから各プログラムに処理をお願いする => 各プログラムから終了報告を受け取る
 
@@ -20,6 +20,6 @@ public class GameManager : MonoBehaviour
     //ログイン終了時
     public void OnLoginEnd()
     {
-        _enemyGenerater.Generate();
+        //_enemyGenerater.Generate();
     }
 }

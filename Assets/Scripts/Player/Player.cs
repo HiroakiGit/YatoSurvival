@@ -11,6 +11,6 @@ public class Player : MonoBehaviour
     public string SPassWord;
     public string SDisplayName;
 
-    public GameObject player;
+    public Transform playerTransform;
     
 }

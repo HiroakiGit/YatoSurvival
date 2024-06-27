@@ -5,6 +5,7 @@ using UnityEngine;
 public class ObjectPool : MonoBehaviour
 {
     public GameObject objectPrefab;
+    public Transform objectSpawnPoint;
     public int poolSize = 100;
 
     private Queue<GameObject> poolQueue;
@@ -15,7 +16,7 @@ public class ObjectPool : MonoBehaviour
 
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject obj = Instantiate(objectPrefab);
+            GameObject obj = Instantiate(objectPrefab,objectSpawnPoint);
             obj.SetActive(false);
             poolQueue.Enqueue(obj);
         }
@@ -31,7 +32,7 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            GameObject obj = Instantiate(objectPrefab);
+            GameObject obj = Instantiate(objectPrefab, objectSpawnPoint);
             return obj;
         }
     }
