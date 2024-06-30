@@ -2,20 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapEdgeEnemySpawner : MonoBehaviour
+public class MapEdgeEnemySpawner : EnemySpawner
 {
     public Player _player;
     public GameObject enemyPrefab;
     public Transform enemySpawnPoint;
-    public float spawnInterval = 2f;
-    public Vector2 mapCenter = Vector2.zero;
-    public float mapWidth = 20f;
-    public float mapHeight = 20f;
+    public float spawnInterval = 5f;
 
     private float timeSinceLastSpawn;
-    public Color gizmoColor = Color.red;
+    public MapManager _MapManager;
 
-    void Update()
+    public override void SpawnEnemy()
+    {
+        Vector2 spawnPosition = GetRandomEdgePosition();
+        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, enemySpawnPoint);
+        enemy.GetComponent<EnemyAI>()._player = _player;
+    }
+    
+    private void Update()
     {
         timeSinceLastSpawn += Time.deltaTime;
 
@@ -26,53 +30,35 @@ public class MapEdgeEnemySpawner : MonoBehaviour
         }
     }
 
-    void SpawnEnemy()
+    private Vector2 GetRandomEdgePosition()
     {
-        Vector2 spawnPosition = GetRandomPositionOnMapEdge();
-        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, enemySpawnPoint);
-        enemy.GetComponent<EnemyAI>()._player = _player;
-    }
+        float x, y;
+        int edge = Random.Range(0, 4);
 
-    Vector2 GetRandomPositionOnMapEdge()
-    {
-        // マップの四辺のどこかをランダムに選択
-        int side = Random.Range(0, 4);
-        Vector2 spawnPosition = Vector2.zero;
-
-        switch (side)
+        switch (edge)
         {
             case 0: // 上辺
-                spawnPosition = new Vector2(Random.Range(mapCenter.x - mapWidth / 2, mapCenter.x + mapWidth / 2), mapCenter.y + mapHeight / 2);
+                x = Random.Range(_MapManager.edgeSizeMin.x, _MapManager.edgeSizeMax.x);
+                y = _MapManager.edgeSizeMax.y;
                 break;
-            case 1: // 右辺
-                spawnPosition = new Vector2(mapCenter.x + mapWidth / 2, Random.Range(mapCenter.y - mapHeight / 2, mapCenter.y + mapHeight / 2));
+            case 1: // 下辺
+                x = Random.Range(_MapManager.edgeSizeMin.x, _MapManager.edgeSizeMax.x);
+                y = _MapManager.edgeSizeMin.y;
                 break;
-            case 2: // 下辺
-                spawnPosition = new Vector2(Random.Range(mapCenter.x - mapWidth / 2, mapCenter.x + mapWidth / 2), mapCenter.y - mapHeight / 2);
+            case 2: // 左辺
+                x = _MapManager.edgeSizeMin.x;
+                y = Random.Range(_MapManager.edgeSizeMin.y, _MapManager.edgeSizeMax.y);
                 break;
-            case 3: // 左辺
-                spawnPosition = new Vector2(mapCenter.x - mapWidth / 2, Random.Range(mapCenter.y - mapHeight / 2, mapCenter.y + mapHeight / 2));
+            case 3: // 右辺
+                x = _MapManager.edgeSizeMax.x;
+                y = Random.Range(_MapManager.edgeSizeMin.y, _MapManager.edgeSizeMax.y);
+                break;
+            default:
+                x = 0;
+                y = 0;
                 break;
         }
 
-        return spawnPosition;
-    }
-
-    // ギズモを使用してマップの四辺を描画
-    void OnDrawGizmos()
-    {
-        Gizmos.color = gizmoColor;
-
-        // 四辺の頂点を計算
-        Vector2 topLeft = new Vector2(mapCenter.x - mapWidth / 2, mapCenter.y + mapHeight / 2);
-        Vector2 topRight = new Vector2(mapCenter.x + mapWidth / 2, mapCenter.y + mapHeight / 2);
-        Vector2 bottomLeft = new Vector2(mapCenter.x - mapWidth / 2, mapCenter.y - mapHeight / 2);
-        Vector2 bottomRight = new Vector2(mapCenter.x + mapWidth / 2, mapCenter.y - mapHeight / 2);
-
-        // 四辺を描画
-        Gizmos.DrawLine(topLeft, topRight);
-        Gizmos.DrawLine(topRight, bottomRight);
-        Gizmos.DrawLine(bottomRight, bottomLeft);
-        Gizmos.DrawLine(bottomLeft, topLeft);
+        return new Vector2(x, y);
     }
 }

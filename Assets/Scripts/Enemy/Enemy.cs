@@ -46,6 +46,7 @@ public class Enemy : MonoBehaviour
         {
             // マップコライダーとの衝突を無視する
             Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
+            Debug.Log("Map");
         }
     }
 }

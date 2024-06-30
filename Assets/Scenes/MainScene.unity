@@ -149,7 +149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 18954410}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.01, y: 4.74, z: 0}
+  m_LocalPosition: {x: -0.01, y: 4.734, z: 0}
   m_LocalScale: {x: 0.80569357, y: 9.96, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -475,6 +475,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 66239153}
+  - component: {fileID: 66239154}
   m_Layer: 0
   m_Name: Map
   m_TagString: Map
@@ -502,6 +503,22 @@ Transform:
   m_Father: {fileID: 80221917}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &66239154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66239152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0bc3c915c440543922712b6b291c62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapSizeMin: {x: -4.2, y: -4.51}
+  mapSizeMax: {x: 4.21, y: 4.33}
+  edgeSizeMin: {x: -4.64, y: -4.77}
+  edgeSizeMax: {x: 4.62, y: 4.8}
 --- !u!1 &80221916
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,6 +553,7 @@ Transform:
   - {fileID: 1082271258}
   - {fileID: 1936879417}
   - {fileID: 1056032894}
+  - {fileID: 493638390}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -673,7 +691,7 @@ GameObject:
   - component: {fileID: 111783902}
   m_Layer: 0
   m_Name: 10
-  m_TagString: Map
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -966,7 +984,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 233712052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.62, y: 0, z: 0}
+  m_LocalPosition: {x: -4.58, y: 0, z: 0}
   m_LocalScale: {x: 0.80569357, y: 9.96, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1177,6 +1195,53 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &493638389
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 493638390}
+  - component: {fileID: 493638391}
+  m_Layer: 0
+  m_Name: HealthItemSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &493638390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493638389}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 80221917}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &493638391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493638389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c873ac36b5e9014d97bf49d40244e10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthItemPrefab: {fileID: 5384540244294909098, guid: 9bacc36818d9bbc4e930695477d1a1db, type: 3}
+  minSpawnInterval: 5
+  maxSpawnInterval: 15
 --- !u!1 &496882671
 GameObject:
   m_ObjectHideFlags: 0
@@ -2067,7 +2132,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919376484}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.63, y: 0, z: 0}
+  m_LocalPosition: {x: 4.6, y: 0, z: 0}
   m_LocalScale: {x: 0.80569357, y: 9.96, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2559,7 +2624,7 @@ GameObject:
   - component: {fileID: 1048469449}
   m_Layer: 0
   m_Name: 05
-  m_TagString: Map
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2913,7 +2978,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attractionRadius: 0.85
-  attractionSpeed: 2
 --- !u!114 &1061298086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2973,7 +3037,7 @@ GameObject:
   - component: {fileID: 1123801270}
   m_Layer: 0
   m_Name: 07
-  m_TagString: Map
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3497,7 +3561,7 @@ GameObject:
   - component: {fileID: 1408612004}
   m_Layer: 0
   m_Name: 08
-  m_TagString: Map
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3941,7 +4005,7 @@ GameObject:
   - component: {fileID: 1567577237}
   m_Layer: 0
   m_Name: 06
-  m_TagString: Map
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4552,8 +4616,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1907327851}
   - component: {fileID: 1907327852}
+  - component: {fileID: 1907327853}
   m_Layer: 0
-  m_Name: EnemyGenerater
+  m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4589,11 +4654,24 @@ MonoBehaviour:
   _player: {fileID: 1061298081}
   enemyPrefab: {fileID: 7726196693310552489, guid: e964f9d8d7a22094d81964934f8b6d71, type: 3}
   enemySpawnPoint: {fileID: 1082271258}
-  spawnInterval: 5
-  mapCenter: {x: 0, y: 0}
-  mapWidth: 9.3
-  mapHeight: 9.6
-  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  spawnInterval: 1
+  _MapManager: {fileID: 66239154}
+--- !u!114 &1907327853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907327850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c47e5246566c584abc6bf5a03ee6aa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 1061298081}
+  enemyPrefab: {fileID: 7726196693310552489, guid: e964f9d8d7a22094d81964934f8b6d71, type: 3}
+  enemySpawnPoint: {fileID: 1082271258}
+  spawnInterval: 30
 --- !u!1 &1909818185
 GameObject:
   m_ObjectHideFlags: 0
@@ -4896,7 +4974,7 @@ GameObject:
   - component: {fileID: 2145001288}
   m_Layer: 0
   m_Name: 09
-  m_TagString: Map
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

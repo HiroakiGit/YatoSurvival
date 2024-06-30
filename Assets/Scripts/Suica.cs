@@ -17,7 +17,7 @@ public class Suica : MonoBehaviour
             }
             Destroy(gameObject); // ’e‚ð”j‰ó
         }
-        else if (other.CompareTag("Map"))
+        else if (other.CompareTag("Map") || other.CompareTag("Obstacle"))
         {
             Destroy(gameObject); // ’e‚ð”j‰ó
         }

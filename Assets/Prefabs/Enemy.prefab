@@ -130,7 +130,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
-  playerTransform: {fileID: 0}
   speed: 0.4
   minDistance: 0.15
   attackRange: 0.2

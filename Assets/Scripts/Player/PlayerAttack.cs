@@ -22,12 +22,7 @@ public class PlayerAttack : MonoBehaviour
     public float fireRate;
     private float nextFireTime = 0f;
 
-    public enum WeaponType
-    {
-        Suica,
-        Laser,
-        Chart
-    }
+    
 
     private void Start()
     {

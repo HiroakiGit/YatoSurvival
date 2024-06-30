@@ -2,14 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Experience : Item
+public class HealItem : Item
 {
-    private ObjectPool pool;
-
-    void Start()
-    {
-        pool = GameObject.FindObjectOfType<ObjectPool>();
-    }
+    public int healAmount = 2;
 
     void Update()
     {
@@ -23,8 +18,8 @@ public class Experience : Item
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<Player>()._playerExperience.AddExperience(1);
-            pool.ReturnObject(gameObject);
+            other.GetComponent<Player>()._playerHealth.Heal(healAmount);
+            Destroy(this.gameObject);
         }
     }
 }

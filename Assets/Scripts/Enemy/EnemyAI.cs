@@ -36,7 +36,6 @@ public class EnemyAI : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, _player.playerTransform.position, speed * Time.deltaTime);
         }
 
-
         // 敵の向きをプレイヤーに向ける（右向きと左向きのみ）
         if (direction.x > 0)
         {
