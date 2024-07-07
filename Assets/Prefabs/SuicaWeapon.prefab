@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   suicaPrefab: {fileID: 5902252264874722799, guid: 61f46b90262565249b41da12f8f0fe4f, type: 3}
-  suicaSpeed: 2
+  suicaSpeed: 3

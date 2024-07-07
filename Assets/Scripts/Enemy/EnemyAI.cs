@@ -5,9 +5,12 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour
 {
     public Player _player;
-    public float speed = 5f; // 移動速度
-    public float minDistance = 1f; // プレイヤーとの最小距離
-    private SpriteRenderer spriteRenderer; // スプライトレンダラーをキャッシュ
+    public float speed = 5f; 
+    public float minDistance = 1f;
+    public Sprite spriteNormal;
+    public Sprite spriteWalk;
+    private SpriteRenderer spriteRenderer;
+    private bool walk = false;
 
     [Header("Attack")]
     public float attackRange = 0.5f;
@@ -17,7 +20,26 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>(); // スプライトレンダラーを取得
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        StartCoroutine(Move());
+    }
+
+    IEnumerator Move()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.3f);
+            walk = !walk;
+
+            if (walk)
+            {
+                spriteRenderer.sprite = spriteWalk;
+            }
+            else
+            {
+                spriteRenderer.sprite = spriteNormal;
+            }
+        }
     }
 
     void Update()
