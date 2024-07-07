@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public PlayerHealth _playerHealth;
-    public PlayerExperience _playerExperience;
+    public PlayerController _PlayerController;
+    public PlayerAttack _PlayerAttack;
+    public PlayerHealth _PlayerHealth;
+    public PlayerExperience _PlayerExperience;
     public string SUserName;
     public string SPassWord;
     public string SDisplayName;

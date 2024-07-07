@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
 {
-    public GameManager _gameManager;
     public Player _player;
     [SerializeField] GameObject LoginCanvas;
     [SerializeField] InputField IFUserName;
@@ -122,7 +121,7 @@ public class LoginManager : MonoBehaviour
     {
         LoginCanvas.SetActive(false);
         //ログイン終了時の処理を呼び出す
-        _gameManager.OnLoginEnd();
+        GameManager.Instance.OnLoginEnd();
     }
 
     //エラー

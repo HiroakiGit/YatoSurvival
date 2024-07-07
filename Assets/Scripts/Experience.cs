@@ -23,7 +23,7 @@ public class Experience : Item
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<Player>()._playerExperience.AddExperience(1);
+            other.GetComponent<Player>()._PlayerExperience.AddExperience(1);
             pool.ReturnObject(gameObject);
         }
     }

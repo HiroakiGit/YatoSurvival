@@ -18,7 +18,7 @@ public class HealItem : Item
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<Player>()._playerHealth.Heal(healAmount);
+            other.GetComponent<Player>()._PlayerHealth.Heal(healAmount);
             Destroy(this.gameObject);
         }
     }

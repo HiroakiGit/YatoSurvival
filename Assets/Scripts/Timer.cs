@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public float GenerateRandomTime(float minTime, float maxTime)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return Random.Range(minTime, maxTime);
     }
 }

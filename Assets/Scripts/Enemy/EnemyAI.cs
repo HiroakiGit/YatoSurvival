@@ -65,7 +65,7 @@ public class EnemyAI : MonoBehaviour
     void AttackPlayer()
     {
         // ダメージをプレイヤーに与える
-        _player._playerHealth.TakeDamage(attackDamage);
+        _player._PlayerHealth.TakeDamage(attackDamage);
         Debug.Log("Attacked Player for " + attackDamage + " damage.");
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScreenEdgeEnemySpawner : EnemySpawner
+public class ScreenEdgeEnemySpawner : Spawner
 {
     public Player _player;
     public GameObject enemyPrefab;
@@ -12,7 +12,7 @@ public class ScreenEdgeEnemySpawner : EnemySpawner
     private float timeSinceLastSpawn;
     private Camera mainCamera;
 
-    public override void SpawnEnemy()
+    public override void Spawn()
     {
         Vector2 spawnPosition = GetRandomPositionOnScreenEdge();
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, enemySpawnPoint);
@@ -26,11 +26,14 @@ public class ScreenEdgeEnemySpawner : EnemySpawner
 
     void Update()
     {
+        //ŠJŽn‚Ü‚Å‘Ò‚Â
+        if (!GameManager.Instance.IsGameStarted()) return;
+
         timeSinceLastSpawn += Time.deltaTime;
 
         if (timeSinceLastSpawn >= spawnInterval)
         {
-            SpawnEnemy();
+            Spawn();
             timeSinceLastSpawn = 0f;
         }
     }

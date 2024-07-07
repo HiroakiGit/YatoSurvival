@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapEdgeEnemySpawner : EnemySpawner
+public class MapEdgeEnemySpawner : Spawner
 {
     public Player _player;
     public GameObject enemyPrefab;
@@ -12,7 +12,7 @@ public class MapEdgeEnemySpawner : EnemySpawner
     private float timeSinceLastSpawn;
     public MapManager _MapManager;
 
-    public override void SpawnEnemy()
+    public override void Spawn()
     {
         Vector2 spawnPosition = GetRandomEdgePosition();
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, enemySpawnPoint);
@@ -21,11 +21,14 @@ public class MapEdgeEnemySpawner : EnemySpawner
     
     private void Update()
     {
+        //ŠJŽn‚Ü‚Å‘Ò‚Â
+        if (!GameManager.Instance.IsGameStarted()) return;
+
         timeSinceLastSpawn += Time.deltaTime;
 
         if (timeSinceLastSpawn >= spawnInterval)
         {
-            SpawnEnemy();
+            Spawn();
             timeSinceLastSpawn = 0f;
         }
     }

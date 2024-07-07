@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        //ŠJŽn‚Ü‚Å‘Ò‚Â
+        if (!GameManager.Instance.IsGameStarted()) return;
+
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         moveVelocity = moveInput.normalized * speed;
     }
