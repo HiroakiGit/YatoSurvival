@@ -42,11 +42,15 @@ public class Enemy : MonoBehaviour
             // プレイヤーとの衝突を無視する
             Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
         }
+        else if (collision.gameObject.CompareTag("Enemy"))
+        {
+            // 敵との衝突を無視する
+            Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
+        }
         else if (collision.gameObject.CompareTag("Map"))
         {
             // マップコライダーとの衝突を無視する
             Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
-            Debug.Log("Map");
         }
     }
 }

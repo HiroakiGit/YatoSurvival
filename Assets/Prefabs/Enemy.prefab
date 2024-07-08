@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3407789160980561749}
   - component: {fileID: 7318340374665909538}
   - component: {fileID: 3502981764688028728}
+  - component: {fileID: 7807428266982624097}
   - component: {fileID: 239794287712467783}
   - component: {fileID: -1948042322869360024}
   m_Layer: 0
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 14
   m_Sprite: {fileID: 21300000, guid: 6ebefb8137b777a47bd083ff4c12bf44, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -103,6 +104,28 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.17
+--- !u!195 &7807428266982624097
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7726196693310552489}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.08
+  m_Speed: 0.4
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0.18
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 0
+  m_AutoRepath: 1
+  m_Height: 0.32
+  m_BaseOffset: 0.16
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 0
 --- !u!114 &239794287712467783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,8 +153,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
-  speed: 0.4
-  minDistance: 0.15
   spriteNormal: {fileID: 21300000, guid: 6ebefb8137b777a47bd083ff4c12bf44, type: 3}
   spriteWalk: {fileID: 21300000, guid: 9840b41f99f77e546a80c7f72cc0764b, type: 3}
   attackRange: 0.2

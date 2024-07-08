@@ -7,7 +7,8 @@ public class HealthItemSpawner : Spawner
     public Timer _Timer;
     private MapManager _MapManager;
 
-    public GameObject healthItemPrefab; 
+    public GameObject healthItemPrefab;
+    public Transform itemSpawnPoint;
     public float minSpawnInterval = 5f; 
     public float maxSpawnInterval = 15f;
 
@@ -54,7 +55,7 @@ public class HealthItemSpawner : Spawner
         );
 
         // ‰ñ•œƒAƒCƒeƒ€‚ğ¶¬
-        GameObject healItem = Instantiate(healthItemPrefab, spawnPosition, Quaternion.identity);
+        GameObject healItem = Instantiate(healthItemPrefab, spawnPosition, Quaternion.identity, itemSpawnPoint);
         healItem.GetComponent<HealItem>().Initialize();
     }
 }

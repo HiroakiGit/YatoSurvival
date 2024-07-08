@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
     public Player _player;
-    public float speed = 5f; 
-    public float minDistance = 1f;
     public Sprite spriteNormal;
     public Sprite spriteWalk;
     private SpriteRenderer spriteRenderer;
@@ -18,9 +17,14 @@ public class EnemyAI : MonoBehaviour
     public float attackInterval = 5f;
     private float lastAttackTime;
 
+    NavMeshAgent agent;
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
         StartCoroutine(Move());
     }
 
@@ -46,17 +50,14 @@ public class EnemyAI : MonoBehaviour
     {
         //動き
         // プレイヤーとの距離を計算
-        float distance = Vector2.Distance(transform.position, _player.playerTransform.position);
+        //float distance = Vector2.Distance(transform.position, _player.playerTransform.position);
 
         // プレイヤーへの方向ベクトルを正規化
         Vector2 direction = (_player.playerTransform.position - transform.position).normalized;
 
-        // プレイヤーとの距離が最小距離より大きい場合にのみ移動
-        if (distance > minDistance)
-        {
-            // プレイヤーに向かって移動
-            transform.position = Vector2.MoveTowards(transform.position, _player.playerTransform.position, speed * Time.deltaTime);
-        }
+        // プレイヤーに向かって移動
+        agent.SetDestination(_player.playerTransform.position);
+        
 
         // 敵の向きをプレイヤーに向ける（右向きと左向きのみ）
         if (direction.x > 0)
