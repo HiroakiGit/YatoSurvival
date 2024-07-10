@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 14
-  m_Sprite: {fileID: 21300000, guid: 6ebefb8137b777a47bd083ff4c12bf44, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!58 &3502981764688028728
@@ -138,8 +138,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af65254dbcd9c344685a90ccb8797c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  experiencePool: {fileID: 0}
+  enemyType: 0
+  _player: {fileID: 0}
+  spritesNormal:
+  - {fileID: 21300000, guid: 6ebefb8137b777a47bd083ff4c12bf44, type: 3}
+  - {fileID: 21300000, guid: 6ac1de1fed88ae948b826a3da43c03d2, type: 3}
+  - {fileID: 21300000, guid: d3e72196da3def844b7fbe2b3c3fe2fe, type: 3}
+  spritesWalk:
+  - {fileID: 21300000, guid: 9840b41f99f77e546a80c7f72cc0764b, type: 3}
+  - {fileID: 21300000, guid: 16a91986645782546a5a8c75cc4621cb, type: 3}
+  - {fileID: 21300000, guid: b420690a099bd7e4cba256cdcdc56bf4, type: 3}
+  spriteNormal: {fileID: 0}
+  spriteWalk: {fileID: 0}
   health: 3
+  experiencePool: {fileID: 0}
+  attackRange: 0.2
+  attackDamage: 10
+  attackInterval: 5
 --- !u!114 &-1948042322869360024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,9 +167,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa4fc4976045b54c97ee5492365fdf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
-  spriteNormal: {fileID: 21300000, guid: 6ebefb8137b777a47bd083ff4c12bf44, type: 3}
-  spriteWalk: {fileID: 21300000, guid: 9840b41f99f77e546a80c7f72cc0764b, type: 3}
-  attackRange: 0.2
-  attackDamage: 2
-  attackInterval: 2
+  _Enemy: {fileID: 239794287712467783}

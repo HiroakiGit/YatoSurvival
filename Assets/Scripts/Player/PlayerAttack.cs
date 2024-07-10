@@ -14,9 +14,10 @@ public class PlayerAttack : MonoBehaviour
     private float nextSuicaFireTime = 0f;
     [Header("LaserBeam")]
     public GameObject laserWeaponPrefab;
-    private LaserWeapon _LaserWeapon;
+    private LaserWeapon[] _LaserWeapon = new LaserWeapon[4];
     public float laserFireRate = 0.75f;
     private float nextLaserFireTime = 0f;
+    private int numberOfLaserWeapons = 4;
     [Header("Chart")]
     public GameObject chartWeaponPrefab;
     private ChartWeapon _ChartWeapon;
@@ -32,10 +33,15 @@ public class PlayerAttack : MonoBehaviour
         }
 
         GenerateWeapon(WeaponType.Suica);
-        GenerateWeapon(WeaponType.Laser);
+
+        for (int i = 0; i < numberOfLaserWeapons; i++)
+        {
+            int lazerWeaponsCount = i;
+            GenerateWeapon(WeaponType.Laser, 0, lazerWeaponsCount);
+        }
     }
 
-    private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f)
+    private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f, int lazerWeaponsCount = 0)
     {
         GameObject weaponPrefab = null;
 
@@ -63,7 +69,9 @@ public class PlayerAttack : MonoBehaviour
                     _SuicaWeapon = weapon.GetComponent<SuicaWeapon>();
                     break;
                 case WeaponType.Laser:
-                    _LaserWeapon = weapon.GetComponent<LaserWeapon>();
+                    _LaserWeapon[lazerWeaponsCount] = weapon.GetComponent<LaserWeapon>();
+                    //レーザーの場合、向きを設定
+                    _LaserWeapon[lazerWeaponsCount].direction = _LaserWeapon[lazerWeaponsCount].directions[lazerWeaponsCount]; 
                     break;
                 case WeaponType.Chart:
                     // 回転武器の場合、初期角度を設定
@@ -125,13 +133,13 @@ public class PlayerAttack : MonoBehaviour
 
     void FireLaser()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePosition - transform.position).normalized;
-
         if (_LaserWeapon != null)
         {
             // レーザービームを発射
-            _LaserWeapon.Fire(direction, transform);
+            for(int i = 0; i < numberOfLaserWeapons; i++)
+            {
+                _LaserWeapon[i].Fire();
+            }
         }
     }
 }

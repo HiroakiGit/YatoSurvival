@@ -5,18 +5,11 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    public Player _player;
-    public Sprite spriteNormal;
-    public Sprite spriteWalk;
+    public Enemy _Enemy;
+
     private SpriteRenderer spriteRenderer;
     private bool walk = false;
-
-    [Header("Attack")]
-    public float attackRange = 0.5f;
-    public int attackDamage = 10;
-    public float attackInterval = 5f;
     private float lastAttackTime;
-
     NavMeshAgent agent;
 
     private void Start()
@@ -25,10 +18,10 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
-        StartCoroutine(Move());
+        StartCoroutine(MoveAnimation());
     }
 
-    IEnumerator Move()
+    IEnumerator MoveAnimation()
     {
         while (true)
         {
@@ -37,26 +30,22 @@ public class EnemyAI : MonoBehaviour
 
             if (walk)
             {
-                spriteRenderer.sprite = spriteWalk;
+                spriteRenderer.sprite = _Enemy.spriteWalk;
             }
             else
             {
-                spriteRenderer.sprite = spriteNormal;
+                spriteRenderer.sprite = _Enemy.spriteNormal;
             }
         }
     }
 
     void Update()
     {
-        //動き
-        // プレイヤーとの距離を計算
-        //float distance = Vector2.Distance(transform.position, _player.playerTransform.position);
-
         // プレイヤーへの方向ベクトルを正規化
-        Vector2 direction = (_player.playerTransform.position - transform.position).normalized;
+        Vector2 direction = (_Enemy._player.playerTransform.position - transform.position).normalized;
 
         // プレイヤーに向かって移動
-        agent.SetDestination(_player.playerTransform.position);
+        agent.SetDestination(_Enemy._player.playerTransform.position);
         
 
         // 敵の向きをプレイヤーに向ける（右向きと左向きのみ）
@@ -70,15 +59,15 @@ public class EnemyAI : MonoBehaviour
         }
 
         //攻撃
-        if (_player.playerTransform == null || _player == null)
+        if (_Enemy._player.playerTransform == null || _Enemy._player == null)
         {
             return;
         }
 
-        float distanceToPlayer = Vector2.Distance(transform.position, _player.playerTransform.position);
-        if (distanceToPlayer <= attackRange)
+        float distanceToPlayer = Vector2.Distance(transform.position, _Enemy._player.playerTransform.position);
+        if (distanceToPlayer <= _Enemy.attackRange)
         {
-            if (Time.time - lastAttackTime >= attackInterval)
+            if (Time.time - lastAttackTime >= _Enemy.attackInterval)
             {
                 AttackPlayer();
                 lastAttackTime = Time.time;
@@ -88,7 +77,7 @@ public class EnemyAI : MonoBehaviour
     void AttackPlayer()
     {
         // ダメージをプレイヤーに与える
-        _player._PlayerHealth.TakeDamage(attackDamage);
-        Debug.Log("Attacked Player for " + attackDamage + " damage.");
+        _Enemy._player._PlayerHealth.TakeDamage(_Enemy.attackDamage);
+        //Debug.Log("Attacked Player for " + _Enemy.attackDamage + " damage.");
     }
 }

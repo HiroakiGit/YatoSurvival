@@ -4,9 +4,47 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public ObjectPool experiencePool;
+    public EnemyType enemyType;
+    public Player _player;
+    public Sprite[] spritesNormal;
+    public Sprite[] spritesWalk;
+    [HideInInspector] public Sprite spriteNormal;
+    [HideInInspector] public Sprite spriteWalk;
     public int health = 3;
-    
+
+    public ObjectPool experiencePool;
+
+    [Header("Attack")]
+    public float attackRange = 0.5f;
+    public int attackDamage = 10;
+    public float attackInterval = 5f;
+
+    public void InitializeEnemyType(EnemyType type)
+    {
+        enemyType = type;
+
+        if(enemyType == EnemyType.Weak)
+        {
+            spriteNormal = spritesNormal[0];
+            spriteWalk = spritesWalk[0];
+            health = 3;
+            attackDamage = 1;
+        }
+        else if (enemyType == EnemyType.Medium)
+        {
+            spriteNormal = spritesNormal[1];
+            spriteWalk = spritesWalk[1];
+            health = 5;
+            attackDamage = 2;
+        }
+        else if (enemyType == EnemyType.Strong)
+        {
+            spriteNormal = spritesNormal[2];
+            spriteWalk = spritesWalk[2];
+            health = 7;
+            attackDamage = 3;
+        }
+    }
 
     void Start()
     {

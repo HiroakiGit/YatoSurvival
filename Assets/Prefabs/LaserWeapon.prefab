@@ -45,9 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e80e66cac779c43b03853cb2be0567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vector2s: []
   playerTransform: {fileID: 0}
   lineRenderer: {fileID: 3827635961760491715}
-  laserLength: 2
+  laserLength: 1
   laserDuration: 0.15
   damage: 1
 --- !u!1 &3827635961760491714
@@ -133,23 +134,14 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.05356902
+        time: 0.004081726
+        value: 0.024157703
         inSlope: 0.09033364
         outSlope: 0.09033364
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.19771864
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: -0.27808514
-        outSlope: -0.27808514
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.29686683
-        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4

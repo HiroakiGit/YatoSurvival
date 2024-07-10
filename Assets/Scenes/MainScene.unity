@@ -5047,7 +5047,7 @@ MonoBehaviour:
   _player: {fileID: 1061298081}
   enemyPrefab: {fileID: 7726196693310552489, guid: e964f9d8d7a22094d81964934f8b6d71, type: 3}
   enemySpawnPoint: {fileID: 1082271258}
-  spawnInterval: 1
+  spawnInterval: 30
   _MapManager: {fileID: 66239154}
 --- !u!114 &1907327853
 MonoBehaviour:
@@ -5064,7 +5064,7 @@ MonoBehaviour:
   _player: {fileID: 1061298081}
   enemyPrefab: {fileID: 7726196693310552489, guid: e964f9d8d7a22094d81964934f8b6d71, type: 3}
   enemySpawnPoint: {fileID: 1082271258}
-  spawnInterval: 30
+  spawnInterval: 1
 --- !u!1 &1909818185
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,8 @@ public class ScreenEdgeEnemySpawner : Spawner
     {
         Vector2 spawnPosition = GetRandomPositionOnScreenEdge();
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, enemySpawnPoint);
-        enemy.GetComponent<EnemyAI>()._player = _player;
+        enemy.GetComponent<Enemy>().InitializeEnemyType(GetRandomEnemyType());
+        enemy.GetComponent<EnemyAI>()._Enemy._player = _player;
     }
 
     void Start()

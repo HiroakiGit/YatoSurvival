@@ -16,7 +16,8 @@ public class MapEdgeEnemySpawner : Spawner
     {
         Vector2 spawnPosition = GetRandomEdgePosition();
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, enemySpawnPoint);
-        enemy.GetComponent<EnemyAI>()._player = _player;
+        enemy.GetComponent<Enemy>().InitializeEnemyType(GetRandomEnemyType());
+        enemy.GetComponent<EnemyAI>()._Enemy._player = _player;
     }
     
     private void Update()
