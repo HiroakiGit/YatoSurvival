@@ -20,7 +20,7 @@ public class ArrowIndicator : MonoBehaviour
     void Update()
     {
         // プレイヤーの位置を基準にしたマウスカーソルの方向を取得する
-        Vector3 playerToMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        Vector3 playerToMouse = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
         float angle = Mathf.Atan2(playerToMouse.y, playerToMouse.x) * Mathf.Rad2Deg;
 
         // 矢印がマウスカーソルの方向を向くようにする

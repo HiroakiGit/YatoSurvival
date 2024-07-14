@@ -142,7 +142,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   spritesNormal:
   - {fileID: 21300000, guid: 6ebefb8137b777a47bd083ff4c12bf44, type: 3}
-  - {fileID: 21300000, guid: 6ac1de1fed88ae948b826a3da43c03d2, type: 3}
+  - {fileID: 21300000, guid: 45099bd90a167274dbc94f7887056899, type: 3}
   - {fileID: 21300000, guid: d3e72196da3def844b7fbe2b3c3fe2fe, type: 3}
   spritesWalk:
   - {fileID: 21300000, guid: 9840b41f99f77e546a80c7f72cc0764b, type: 3}

@@ -22,6 +22,11 @@ public class PlayerAttack : MonoBehaviour
     public GameObject chartWeaponPrefab;
     private ChartWeapon _ChartWeapon;
     private int numberOfRotatingWeapons = 3;
+    [Header("SetSquare")]
+    public GameObject setSquareWeaponPrefab;
+    private SetSquareWeapon _SetSquareWeapon;
+    public float setSquareFireRate = 0.5f;
+    private float nextSetSquareFireTime = 0f;
 
     public void GenerateInitialWeapon()
     {
@@ -39,6 +44,8 @@ public class PlayerAttack : MonoBehaviour
             int lazerWeaponsCount = i;
             GenerateWeapon(WeaponType.Laser, 0, lazerWeaponsCount);
         }
+
+        GenerateWeapon(WeaponType.SetSquare);
     }
 
     private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f, int lazerWeaponsCount = 0)
@@ -55,6 +62,9 @@ public class PlayerAttack : MonoBehaviour
                 break;
             case WeaponType.Chart:
                 weaponPrefab = chartWeaponPrefab;
+                break;
+            case WeaponType.SetSquare:
+                weaponPrefab = setSquareWeaponPrefab;
                 break;
         }
 
@@ -77,6 +87,9 @@ public class PlayerAttack : MonoBehaviour
                     // 回転武器の場合、初期角度を設定
                     _ChartWeapon = weapon.GetComponent<ChartWeapon>();
                     _ChartWeapon.startingAngle = startingAngle;
+                    break;
+                case WeaponType.SetSquare:
+                    _SetSquareWeapon = weapon.GetComponent<SetSquareWeapon>();
                     break;
             }
 
@@ -104,7 +117,7 @@ public class PlayerAttack : MonoBehaviour
 
     void HandleShooting()
     {
-        // 弾を発射するタイミングをチェック
+        // Suicaを発射するタイミングをチェック
         if (Time.time > nextSuicaFireTime)
         {
             FireSuica();
@@ -116,6 +129,13 @@ public class PlayerAttack : MonoBehaviour
         {
             FireLaser();
             nextLaserFireTime = Time.time + laserFireRate;
+        }
+
+        //三角定規を発射するタイミングをチェック
+        if (Time.time > nextSetSquareFireTime)
+        {
+            FireSetSquare();
+            nextSetSquareFireTime = Time.time + setSquareFireRate;
         }
     }
 
@@ -141,5 +161,12 @@ public class PlayerAttack : MonoBehaviour
                 _LaserWeapon[i].Fire();
             }
         }
+    }
+
+    void FireSetSquare()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePosition - transform.position).normalized;
+        _SetSquareWeapon.Fire(direction, transform);
     }
 }

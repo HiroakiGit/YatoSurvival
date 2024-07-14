@@ -3,6 +3,7 @@
     {
         Suica,
         Laser,
-        Chart
+        Chart,
+        SetSquare
     }
 
