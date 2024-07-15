@@ -4,6 +4,7 @@
         Suica,
         Laser,
         Chart,
-        SetSquare
+        SetSquare,
+        Portion
     }
 

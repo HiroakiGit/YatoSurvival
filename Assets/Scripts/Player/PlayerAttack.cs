@@ -1,3 +1,4 @@
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,11 @@ public class PlayerAttack : MonoBehaviour
     private SetSquareWeapon _SetSquareWeapon;
     public float setSquareFireRate = 0.5f;
     private float nextSetSquareFireTime = 0f;
+    [Header("Portion")]
+    public GameObject portionWeaponPrefab;
+    private PortionWeapon _PortionWeapon;
+    public float portionFireRate = 5f;
+    private float nextPortionFireTime = 0f;
 
     public void GenerateInitialWeapon()
     {
@@ -46,6 +52,7 @@ public class PlayerAttack : MonoBehaviour
         }
 
         GenerateWeapon(WeaponType.SetSquare);
+        GenerateWeapon(WeaponType.Portion);
     }
 
     private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f, int lazerWeaponsCount = 0)
@@ -65,6 +72,9 @@ public class PlayerAttack : MonoBehaviour
                 break;
             case WeaponType.SetSquare:
                 weaponPrefab = setSquareWeaponPrefab;
+                break;
+            case WeaponType.Portion:
+                weaponPrefab = portionWeaponPrefab;
                 break;
         }
 
@@ -90,6 +100,9 @@ public class PlayerAttack : MonoBehaviour
                     break;
                 case WeaponType.SetSquare:
                     _SetSquareWeapon = weapon.GetComponent<SetSquareWeapon>();
+                    break;
+                case WeaponType.Portion:
+                    _PortionWeapon = weapon.GetComponent<PortionWeapon>();
                     break;
             }
 
@@ -137,6 +150,13 @@ public class PlayerAttack : MonoBehaviour
             FireSetSquare();
             nextSetSquareFireTime = Time.time + setSquareFireRate;
         }
+
+        //ポーションを発射するタイミングをチェック
+        if (Time.time > nextPortionFireTime)
+        {
+            FirePortion();
+            nextPortionFireTime = Time.time + portionFireRate;
+        }
     }
 
     void FireSuica()
@@ -168,5 +188,11 @@ public class PlayerAttack : MonoBehaviour
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (mousePosition - transform.position).normalized;
         _SetSquareWeapon.Fire(direction, transform);
+    }
+
+    void FirePortion()
+    {
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        _PortionWeapon.Fire(mousePosition, transform);
     }
 }

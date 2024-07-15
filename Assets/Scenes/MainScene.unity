@@ -149,7 +149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 18954410}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.01, y: 5.015, z: 0}
+  m_LocalPosition: {x: -0.01, y: 4.97, z: 0}
   m_LocalScale: {x: 0.80569357, y: 9.96, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -516,7 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSizeMin: {x: -4.09, y: -4.15}
-  mapSizeMax: {x: 4.21, y: 4.59}
+  mapSizeMax: {x: 4.21, y: 4.56}
   edgeSizeMin: {x: -4.64, y: -4.7}
   edgeSizeMax: {x: 4.74, y: 5.34}
 --- !u!1 &80221916
@@ -3178,6 +3178,8 @@ MonoBehaviour:
   chartWeaponPrefab: {fileID: 4453244225170001436, guid: 109eb105705652745995ddedff2dd71c, type: 3}
   setSquareWeaponPrefab: {fileID: 1871192508547033001, guid: 663c0473823efec46a4a45d6869c8f4e, type: 3}
   setSquareFireRate: 3
+  portionWeaponPrefab: {fileID: 7660641728923411248, guid: f77ff6657865b3e41bc3951a5cf90e45, type: 3}
+  portionFireRate: 2
 --- !u!114 &1061298081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3275,6 +3277,7 @@ MonoBehaviour:
   arrowPrefab: {fileID: 2601911122140165385, guid: 8308d0719f4a59540b307725f4eb89f2, type: 3}
   distanceFromPlayer: 0.14
   movementSpeed: 5
+  circlePrefab: {fileID: 5704467362425668264, guid: eda0a49db6397cb43ba108df309ee4e9, type: 3}
 --- !u!1 &1082271257
 GameObject:
   m_ObjectHideFlags: 0
@@ -5049,7 +5052,7 @@ MonoBehaviour:
   _player: {fileID: 1061298081}
   enemyPrefab: {fileID: 7726196693310552489, guid: e964f9d8d7a22094d81964934f8b6d71, type: 3}
   enemySpawnPoint: {fileID: 1082271258}
-  spawnInterval: 30
+  spawnInterval: 1
   _MapManager: {fileID: 66239154}
 --- !u!114 &1907327853
 MonoBehaviour:

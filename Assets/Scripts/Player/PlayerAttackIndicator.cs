@@ -2,22 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowIndicator : MonoBehaviour
+public class PlayerAttackIndicator : MonoBehaviour
 {
-    public GameObject arrowPrefab; // 矢印のプレハブをInspectorで設定する
-    public float distanceFromPlayer = 1f; // プレイヤーからの距離
-    public float movementSpeed = 5f; // 矢印の移動速度
-
-    private GameObject arrowInstance; // 生成された矢印のインスタンス
+    [Header("Arrow")]
+    public GameObject arrowPrefab; 
+    public float distanceFromPlayer = 1f; 
+    public float movementSpeed = 5f; 
+    private GameObject arrowInstance;
+    [Header("Circle")]
+    public GameObject circlePrefab;
+    private GameObject circleInstance;
 
     void Start()
     {
         // 矢印のプレハブをプレイヤーの周りに生成する
         arrowInstance = Instantiate(arrowPrefab, transform.position, Quaternion.identity, transform);
-        arrowInstance.transform.localPosition = new Vector3(0f, distanceFromPlayer, 0f); // プレイヤーからの距離を設定
+        arrowInstance.transform.localPosition = new Vector3(0f, distanceFromPlayer, 0f); 
+
+        circleInstance = Instantiate(circlePrefab, transform.position, Quaternion.identity, transform);
     }
 
-    void Update()
+    void LateUpdate()
     {
         // プレイヤーの位置を基準にしたマウスカーソルの方向を取得する
         Vector3 playerToMouse = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
@@ -30,5 +35,8 @@ public class ArrowIndicator : MonoBehaviour
         Vector3 offset = Quaternion.Euler(0f, 0f, angle-90) * Vector3.up * distanceFromPlayer;
         Vector3 targetPosition = transform.position + offset;
         arrowInstance.transform.position = Vector3.MoveTowards(arrowInstance.transform.position, targetPosition, movementSpeed * Time.deltaTime);
+
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        circleInstance.transform.position = Vector2.MoveTowards(circleInstance.transform.position, mousePosition, movementSpeed * Time.deltaTime);
     }
 }
