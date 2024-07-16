@@ -11,6 +11,10 @@ public class PlayerHealth : MonoBehaviour
     public Text healthText;
     public Slider hpSlider;
 
+    [Header("Audio")]
+    public AudioSource playerAudioSource;
+    public AudioClip takeDamageSoundClip;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -26,6 +30,8 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
         UpdateHealthUI();
+
+        playerAudioSource.PlayOneShot(takeDamageSoundClip,0.25f);
     }
 
     public void Heal(int amount)
@@ -41,7 +47,7 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
         Debug.Log("Player is Dead!");
-        // €–S‚Ìˆ—
+        GameManager.Instance.EndGame();
     }
 
     void UpdateHealthUI()

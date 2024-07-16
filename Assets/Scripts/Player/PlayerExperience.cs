@@ -11,6 +11,10 @@ public class PlayerExperience : MonoBehaviour
     public Text levelText;
     public Slider experienceSlider;
 
+    [Header("Audio")]
+    public AudioSource playerAudioSource;
+    public AudioClip getExperienceSoundClip;
+
     void Start()
     {
         UpdateExperienceUI();
@@ -21,6 +25,8 @@ public class PlayerExperience : MonoBehaviour
         experiencePoints += amount;
         CheckLevelUp();
         UpdateExperienceUI();
+
+        playerAudioSource.PlayOneShot(getExperienceSoundClip, 0.1f);
     }
 
     private void CheckLevelUp()

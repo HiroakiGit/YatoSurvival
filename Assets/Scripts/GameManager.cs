@@ -8,9 +8,12 @@ public class GameManager : MonoBehaviour
     public LoginManager _loginManager;
     public MapEdgeEnemySpawner _enemyGenerater;
     public Player _Player;
+    public Timer _Timer;
+    public PlayerAttackIndicator _PlayerAttackIndicator;
 
     public bool isAutoLogin;
     private bool isGameStarted = false;
+    private bool isGameFinished = false;
 
     //GameManagerから各プログラムに処理をお願いする => 各プログラムから終了報告を受け取る
 
@@ -46,10 +49,18 @@ public class GameManager : MonoBehaviour
     {
         isGameStarted = true;
         _Player._PlayerAttack.GenerateInitialWeapon();
+        _Timer.TimeCountStart();
     }
 
-    public bool IsGameStarted()
+    public void EndGame()
     {
-        return isGameStarted;
+        isGameFinished = true;
+        _Timer.SubmitScore();
+        _PlayerAttackIndicator.enabled = false;
+        Time.timeScale = 0;
     }
+
+    public bool IsGameStarted() { return isGameStarted; }
+
+    public bool IsGameFinished() { return isGameFinished; }
 }

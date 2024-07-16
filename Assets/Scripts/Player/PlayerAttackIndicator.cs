@@ -7,8 +7,8 @@ public class PlayerAttackIndicator : MonoBehaviour
     [Header("Arrow")]
     public GameObject arrowPrefab; 
     public float distanceFromPlayer = 1f; 
-    public float movementSpeed = 5f; 
     private GameObject arrowInstance;
+    public float movementSpeed = 5f;
     [Header("Circle")]
     public GameObject circlePrefab;
     private GameObject circleInstance;
@@ -37,6 +37,6 @@ public class PlayerAttackIndicator : MonoBehaviour
         arrowInstance.transform.position = Vector3.MoveTowards(arrowInstance.transform.position, targetPosition, movementSpeed * Time.deltaTime);
 
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        circleInstance.transform.position = Vector2.MoveTowards(circleInstance.transform.position, mousePosition, movementSpeed * Time.deltaTime);
+        circleInstance.transform.position = Vector2.MoveTowards(circleInstance.transform.position, mousePosition, 20 * Time.deltaTime);
     }
 }

@@ -34,6 +34,12 @@ public class PlayerAttack : MonoBehaviour
     public float portionFireRate = 5f;
     private float nextPortionFireTime = 0f;
 
+    [Header("Audio")]
+    public AudioSource playerAudioSource;
+    public AudioClip chartRotateSoundClip;
+    public AudioClip laserBeamSoundClip;
+    public AudioClip fireSuicaSoundClip;
+
     public void GenerateInitialWeapon()
     {
         // ‰Šú‚Ì‰ñ“]•Ší‚ğ¶¬
@@ -97,6 +103,7 @@ public class PlayerAttack : MonoBehaviour
                     // ‰ñ“]•Ší‚Ìê‡A‰ŠúŠp“x‚ğİ’è
                     _ChartWeapon = weapon.GetComponent<ChartWeapon>();
                     _ChartWeapon.startingAngle = startingAngle;
+                    StartCoroutine(PlayChartRotateSound());
                     break;
                 case WeaponType.SetSquare:
                     _SetSquareWeapon = weapon.GetComponent<SetSquareWeapon>();
@@ -168,6 +175,8 @@ public class PlayerAttack : MonoBehaviour
         {
             // Suica‚ğ”­Ë
             _SuicaWeapon.Fire(direction, transform);
+
+            playerAudioSource.PlayOneShot(fireSuicaSoundClip, 0.4f);
         }
     }
 
@@ -180,6 +189,8 @@ public class PlayerAttack : MonoBehaviour
             {
                 _LaserWeapon[i].Fire();
             }
+
+            playerAudioSource.PlayOneShot(laserBeamSoundClip, 0.15f);
         }
     }
 
@@ -194,5 +205,14 @@ public class PlayerAttack : MonoBehaviour
     {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _PortionWeapon.Fire(mousePosition, transform);
+    }
+
+    private IEnumerator PlayChartRotateSound()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.5f);
+            playerAudioSource.PlayOneShot(chartRotateSoundClip,0.08f);
+        }
     }
 }
