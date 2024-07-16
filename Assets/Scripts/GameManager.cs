@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Player _Player;
     public Timer _Timer;
     public PlayerAttackIndicator _PlayerAttackIndicator;
+    public PlayerAnimation _PlayerAnimation;
 
     public bool isAutoLogin;
     private bool isGameStarted = false;
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
         isGameFinished = true;
         _Timer.SubmitScore();
         _PlayerAttackIndicator.enabled = false;
+        _PlayerAnimation.enabled = false;
         Time.timeScale = 0;
     }
 

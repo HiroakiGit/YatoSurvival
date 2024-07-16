@@ -1333,6 +1333,7 @@ MonoBehaviour:
   _Player: {fileID: 1061298081}
   _Timer: {fileID: 1469376276}
   _PlayerAttackIndicator: {fileID: 1061298086}
+  _PlayerAnimation: {fileID: 1061298088}
   isAutoLogin: 1
 --- !u!4 &349899188
 Transform:
@@ -3234,6 +3235,7 @@ GameObject:
   - component: {fileID: 1061298077}
   - component: {fileID: 1061298080}
   - component: {fileID: 1061298086}
+  - component: {fileID: 1061298088}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3567,6 +3569,35 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1061298088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061298075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440e830e0bf6dd64c917e1ba82c355d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleUp: {fileID: 21300000, guid: d8158c55dc95f5c418444879f39fa925, type: 3}
+  walkUp:
+  - {fileID: 21300000, guid: 084c5735f8a129c40a1ada1e8b336727, type: 3}
+  - {fileID: 21300000, guid: 289de76e93d368e41872378009bceddf, type: 3}
+  idleDown: {fileID: 21300000, guid: 5595eda828f57874daccaca1cf82b077, type: 3}
+  walkDown:
+  - {fileID: 21300000, guid: eb0ef4164d6ae464b8ff03930b66b778, type: 3}
+  - {fileID: 21300000, guid: 438eeecae26521447b1a35e618acf62c, type: 3}
+  idleLeft: {fileID: 21300000, guid: ecd0bccdd2273934fab1211cbadf139d, type: 3}
+  walkLeft:
+  - {fileID: 21300000, guid: 5e24315cd05e83249b72ca7c68d0b4c0, type: 3}
+  - {fileID: 21300000, guid: 3e6b53343d931114086edf51cc1661ea, type: 3}
+  idleRight: {fileID: 21300000, guid: 72a321ef7c70ed641b6d6fd833f901e0, type: 3}
+  walkRight:
+  - {fileID: 21300000, guid: c63c8de08461b224da93bf8366436539, type: 3}
+  - {fileID: 21300000, guid: 9d2871b5088a9064783ecb082ed73779, type: 3}
+  frameRate: 0.3
 --- !u!1 &1082271257
 GameObject:
   m_ObjectHideFlags: 0

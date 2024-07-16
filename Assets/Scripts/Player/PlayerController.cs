@@ -18,12 +18,12 @@ public class PlayerController : MonoBehaviour
         //ŠJŽn‚Ü‚Å‘Ò‚Â
         if (!GameManager.Instance.IsGameStarted()) return;
 
-        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         moveVelocity = moveInput.normalized * speed;
     }
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
+        rb.velocity = moveVelocity;
     }
 }
