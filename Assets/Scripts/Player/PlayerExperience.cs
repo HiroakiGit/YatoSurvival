@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerExperience : MonoBehaviour
 {
+    public StrengtheningAndAddWeapon _StrengtheningAndAddWeapon;
     public int experiencePoints = 0;
     public int currentLevel = 1;
     public int experienceToNextLevel = 100;
@@ -12,7 +13,6 @@ public class PlayerExperience : MonoBehaviour
     public Slider experienceSlider;
 
     [Header("Audio")]
-    public AudioSource playerAudioSource;
     public AudioClip getExperienceSoundClip;
 
     void Start()
@@ -22,11 +22,11 @@ public class PlayerExperience : MonoBehaviour
 
     public void AddExperience(int amount)
     {
+        PlayerAudio.Instance.PlayOneShot(getExperienceSoundClip, 0.1f);
+
         experiencePoints += amount;
         CheckLevelUp();
         UpdateExperienceUI();
-
-        playerAudioSource.PlayOneShot(getExperienceSoundClip, 0.1f);
     }
 
     private void CheckLevelUp()
@@ -44,11 +44,14 @@ public class PlayerExperience : MonoBehaviour
     {
         Debug.Log("Level Up! Current Level: " + currentLevel);
         UpdateExperienceUI();
+
+        _StrengtheningAndAddWeapon.SelectAndShowStrengtheningAndAddWeaponDetails(currentLevel);
     }
 
     private int CalculateExperienceForNextLevel()
     {
-        return currentLevel * 2;
+        //return currentLevel * 2;
+        return 1;
     }
 
     private void UpdateExperienceUI()

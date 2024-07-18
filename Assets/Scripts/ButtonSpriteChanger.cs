@@ -6,25 +6,26 @@ using UnityEngine.UI;
 
 public class ButtonSpriteChanger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    Image btnImage;
+    public Image btnImage;
 
     public Sprite NormalSprite;
     public Sprite OnPointSprite;
 
-    void Start()
-    {
-        // Imageを所得
-        btnImage = this.GetComponent<Image>();
-    }
-
     //マウスカーソル乗ったとき
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log("On");
         btnImage.sprite = OnPointSprite;
     }
 
     //マウスカーソル離れたとき
     public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("Off");
+        btnImage.sprite = NormalSprite;
+    }
+
+    public void Reset()
     {
         btnImage.sprite = NormalSprite;
     }

@@ -581,6 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e1f1a2192c8364eb8ca2cc9761a493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  btnImage: {fileID: 963389232}
   NormalSprite: {fileID: 21300000, guid: 26837688896d35d48b1716fb42aff54b, type: 3}
   OnPointSprite: {fileID: 21300000, guid: 89711bc42fe9afb4792f9d43d9d4ac2a, type: 3}
 --- !u!114 &963389235

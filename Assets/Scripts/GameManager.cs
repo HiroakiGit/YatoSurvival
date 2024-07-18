@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //ログイン開始
-        if(isAutoLogin)_loginManager.AutoLogin();
+        if (isAutoLogin) _loginManager.AutoLogin();
         else _loginManager.StartLogin();
     }
 
@@ -53,13 +53,25 @@ public class GameManager : MonoBehaviour
         _Timer.TimeCountStart();
     }
 
-    public void EndGame()
+    public void PauseGame()
     {
-        isGameFinished = true;
-        _Timer.SubmitScore();
         _PlayerAttackIndicator.enabled = false;
         _PlayerAnimation.enabled = false;
         Time.timeScale = 0;
+    }
+
+    public void ContinueGame()
+    {
+        _PlayerAttackIndicator.enabled = true;
+        _PlayerAnimation.enabled = true;
+        Time.timeScale = 1;
+    }
+
+    public void EndGame()
+    {
+        PauseGame();
+        isGameFinished = true;
+        _Timer.SubmitScore();
     }
 
     public bool IsGameStarted() { return isGameStarted; }

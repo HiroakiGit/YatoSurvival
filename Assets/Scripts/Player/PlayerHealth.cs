@@ -12,7 +12,6 @@ public class PlayerHealth : MonoBehaviour
     public Slider hpSlider;
 
     [Header("Audio")]
-    public AudioSource playerAudioSource;
     public AudioClip takeDamageSoundClip;
 
     void Start()
@@ -31,7 +30,7 @@ public class PlayerHealth : MonoBehaviour
         }
         UpdateHealthUI();
 
-        playerAudioSource.PlayOneShot(takeDamageSoundClip,0.25f);
+        PlayerAudio.Instance.PlayOneShot(takeDamageSoundClip,0.25f);
     }
 
     public void Heal(int amount)

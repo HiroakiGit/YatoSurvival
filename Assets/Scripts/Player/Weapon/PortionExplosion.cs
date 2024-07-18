@@ -5,13 +5,11 @@ using UnityEngine;
 public class PortionExplosion : MonoBehaviour
 {
     [Header("Audio")]
-    public AudioSource playerAudioSource;
     public AudioClip explosionSoundClip;
 
     private void Start()
     {
-        playerAudioSource = GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>();
-        playerAudioSource.PlayOneShot(explosionSoundClip, 0.07f);
+        PlayerAudio.Instance.PlayOneShot(explosionSoundClip, 0.07f);
     }
 
     public void OnAnimationEnd()

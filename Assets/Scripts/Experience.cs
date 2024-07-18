@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Experience : Item
 {
+    public SpriteRenderer spriteRenderer;
+    public Sprite Sprite;
     private ObjectPool pool;
 
     void Start()
@@ -23,7 +25,10 @@ public class Experience : Item
     {
         if (other.CompareTag("Player"))
         {
+            spriteRenderer.sprite = null;
             other.GetComponent<Player>()._PlayerExperience.AddExperience(1);
+            spriteRenderer.sprite = Sprite;
+
             pool.ReturnObject(gameObject);
         }
     }

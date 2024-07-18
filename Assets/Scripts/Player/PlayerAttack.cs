@@ -1,12 +1,16 @@
 using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
     public Player _Player;
     public Transform weaponSpawnPoint;
+    public List<WeaponType> existWeapontypes = new List<WeaponType>();
+    public StrengtheningAndAddWeapon _StrengtheningAndAddWeapon;
+    public int maxWeaponCount = 5;
 
     [Header("Suica")]
     public GameObject suicaWeaponPrefab;
@@ -15,14 +19,16 @@ public class PlayerAttack : MonoBehaviour
     private float nextSuicaFireTime = 0f;
     [Header("LaserBeam")]
     public GameObject laserWeaponPrefab;
-    private LaserWeapon[] _LaserWeapon = new LaserWeapon[4];
+    public List<LaserWeapon> _LaserWeapon = new List<LaserWeapon>();
     public float laserFireRate = 0.75f;
     private float nextLaserFireTime = 0f;
-    private int numberOfLaserWeapons = 4;
+    private int numberOfLaserWeapons = 2;
     [Header("Chart")]
     public GameObject chartWeaponPrefab;
-    private ChartWeapon _ChartWeapon;
-    private int numberOfRotatingWeapons = 3;
+    public List<ChartWeapon> _ChartWeapon = new List<ChartWeapon>();
+    private List<GameObject> chartWeaponPrefabs = new List<GameObject>();
+    private int numberOfChartWeapons = 3;
+    private float nextRotationSpeed = 200f;
     [Header("SetSquare")]
     public GameObject setSquareWeaponPrefab;
     private SetSquareWeapon _SetSquareWeapon;
@@ -35,7 +41,6 @@ public class PlayerAttack : MonoBehaviour
     private float nextPortionFireTime = 0f;
 
     [Header("Audio")]
-    public AudioSource playerAudioSource;
     public AudioClip chartRotateSoundClip;
     public AudioClip laserBeamSoundClip;
     public AudioClip fireSuicaSoundClip;
@@ -43,10 +48,11 @@ public class PlayerAttack : MonoBehaviour
     public void GenerateInitialWeapon()
     {
         // 初期の回転武器を生成
-        for (int i = 0; i < numberOfRotatingWeapons; i++)
+        for (int i = 0; i < numberOfChartWeapons; i++)
         {
-            float angle = i * (360f / numberOfRotatingWeapons);
-            GenerateWeapon(WeaponType.Chart, angle);
+            int chartWeaponsCount = i;
+            float angle = i * (360f / numberOfChartWeapons);
+            GenerateWeapon(WeaponType.Chart, angle, chartWeaponsCount);
         }
 
         GenerateWeapon(WeaponType.Suica);
@@ -54,16 +60,17 @@ public class PlayerAttack : MonoBehaviour
         for (int i = 0; i < numberOfLaserWeapons; i++)
         {
             int lazerWeaponsCount = i;
-            GenerateWeapon(WeaponType.Laser, 0, lazerWeaponsCount);
+            GenerateWeapon(WeaponType.Laser, 0, 0,lazerWeaponsCount);
         }
 
         GenerateWeapon(WeaponType.SetSquare);
         GenerateWeapon(WeaponType.Portion);
     }
 
-    private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f, int lazerWeaponsCount = 0)
+    private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f, int chartWeaponsCount = 0,int lazerWeaponsCount = 0)
     {
         GameObject weaponPrefab = null;
+        AddWeaponType(weaponType);
 
         switch (weaponType)
         {
@@ -95,15 +102,17 @@ public class PlayerAttack : MonoBehaviour
                     _SuicaWeapon = weapon.GetComponent<SuicaWeapon>();
                     break;
                 case WeaponType.Laser:
-                    _LaserWeapon[lazerWeaponsCount] = weapon.GetComponent<LaserWeapon>();
+                    _LaserWeapon.Add(weapon.GetComponent<LaserWeapon>());
                     //レーザーの場合、向きを設定
                     _LaserWeapon[lazerWeaponsCount].direction = _LaserWeapon[lazerWeaponsCount].directions[lazerWeaponsCount]; 
                     break;
                 case WeaponType.Chart:
                     // 回転武器の場合、初期角度を設定
-                    _ChartWeapon = weapon.GetComponent<ChartWeapon>();
-                    _ChartWeapon.startingAngle = startingAngle;
-                    StartCoroutine(PlayChartRotateSound());
+                    _ChartWeapon.Add(weapon.GetComponent<ChartWeapon>());
+                    chartWeaponPrefabs.Add(weapon);
+                    _ChartWeapon[chartWeaponsCount].startingAngle = startingAngle;
+                    _ChartWeapon[chartWeaponsCount].rotationSpeed = nextRotationSpeed;
+                    if(numberOfChartWeapons == 1) StartCoroutine(PlayChartRotateSound());
                     break;
                 case WeaponType.SetSquare:
                     _SetSquareWeapon = weapon.GetComponent<SetSquareWeapon>();
@@ -117,13 +126,75 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    public void AddChartWeapon()
+    private void AddWeaponType(WeaponType type)
     {
-        numberOfRotatingWeapons++;
-        for (int i = 0; i < numberOfRotatingWeapons; i++)
+        _StrengtheningAndAddWeapon.AddCanSelectStrengtheningDetails(type);
+
+        if (existWeapontypes.Count != 0)
         {
-            float angle = i * (360f / numberOfRotatingWeapons);
-            GenerateWeapon(WeaponType.Chart, angle);
+            bool isExisted = false;
+
+            for (int i = 0; i < existWeapontypes.Count; i++)
+            {
+                if (existWeapontypes[i] == type) isExisted = true;
+            }
+            if (!isExisted)
+            {
+                existWeapontypes.Add(type);
+            }
+        }
+        else
+        {
+            existWeapontypes.Add(type);
+        }
+    }
+
+    public void AddWeapon(WeaponType type)
+    {
+        switch (type)
+        {
+            case WeaponType.Chart:
+                foreach (GameObject chart in chartWeaponPrefabs)
+                {
+                    Destroy(chart.gameObject);
+                }
+                _ChartWeapon.Clear();
+
+                numberOfChartWeapons++;
+                for (int i = 0; i < numberOfChartWeapons; i++)
+                {
+                    int chartWeaponsCount = i;
+                    float angle = i * (360f / numberOfChartWeapons);
+                    GenerateWeapon(WeaponType.Chart, angle, chartWeaponsCount);
+                }
+                break;
+        }
+    }
+
+    public void DecreaseAttackInterval(WeaponType type, float strengtheningRatio)
+    {
+        switch (type) 
+        {
+            case WeaponType.Suica:
+                suicaFireRate = suicaFireRate * strengtheningRatio;
+                break;
+            case WeaponType.Laser:
+                laserFireRate = laserFireRate * strengtheningRatio;
+                break;
+            case WeaponType.Chart:
+                nextRotationSpeed = nextRotationSpeed * strengtheningRatio;
+
+                for (int i = 0; i < numberOfChartWeapons; i++)
+                {
+                    _ChartWeapon[i].rotationSpeed = nextRotationSpeed;
+                }
+                break;
+            case WeaponType.SetSquare:
+                setSquareFireRate = setSquareFireRate * strengtheningRatio;
+                break;
+            case WeaponType.Portion:
+                portionFireRate = portionFireRate * strengtheningRatio;
+                break;
         }
     }
 
@@ -171,18 +242,18 @@ public class PlayerAttack : MonoBehaviour
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (mousePosition - transform.position).normalized;
 
-        if(_SuicaWeapon != null)
+        if(IsExistWeapon(WeaponType.Suica))
         {
             // Suicaを発射
             _SuicaWeapon.Fire(direction, transform);
 
-            playerAudioSource.PlayOneShot(fireSuicaSoundClip, 0.4f);
+            PlayerAudio.Instance.PlayOneShot(fireSuicaSoundClip, 0.4f);
         }
     }
 
     void FireLaser()
     {
-        if (_LaserWeapon != null)
+        if (IsExistWeapon(WeaponType.Laser))
         {
             // レーザービームを発射
             for(int i = 0; i < numberOfLaserWeapons; i++)
@@ -190,29 +261,47 @@ public class PlayerAttack : MonoBehaviour
                 _LaserWeapon[i].Fire();
             }
 
-            playerAudioSource.PlayOneShot(laserBeamSoundClip, 0.15f);
+            PlayerAudio.Instance.PlayOneShot(laserBeamSoundClip, 0.15f);
         }
     }
 
     void FireSetSquare()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePosition - transform.position).normalized;
-        _SetSquareWeapon.Fire(direction, transform);
+        if (IsExistWeapon(WeaponType.SetSquare))
+        {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 direction = (mousePosition - transform.position).normalized;
+            _SetSquareWeapon.Fire(direction, transform);
+        }
     }
 
     void FirePortion()
     {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        _PortionWeapon.Fire(mousePosition, transform);
+        if (IsExistWeapon(WeaponType.Portion))
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            _PortionWeapon.Fire(mousePosition, transform);
+        }
     }
 
     private IEnumerator PlayChartRotateSound()
     {
-        while (true)
+        while (IsExistWeapon(WeaponType.Chart))
         {
             yield return new WaitForSeconds(0.5f);
-            playerAudioSource.PlayOneShot(chartRotateSoundClip,0.08f);
+            PlayerAudio.Instance.PlayOneShot(chartRotateSoundClip,0.08f);
         }
+    }
+
+    private bool IsExistWeapon(WeaponType type)
+    {
+        bool exist = false;
+
+        for (int i = 0; i < existWeapontypes.Count; i++)
+        {
+            if (existWeapontypes[i] == type) exist = true;
+        }
+
+        return exist;
     }
 }
