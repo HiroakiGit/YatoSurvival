@@ -16,6 +16,7 @@ public class LaserWeapon : Weapon
     public override void Initialize(Transform playerT)
     {
         playerTransform = playerT;
+        lineRenderer.enabled = false;
     }
 
     public void Fire()

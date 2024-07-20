@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerExperience : MonoBehaviour
 {
-    public StrengtheningAndAddWeapon _StrengtheningAndAddWeapon;
+    public StrengtheningManager _StrengtheningManager;
     public int experiencePoints = 0;
     public int currentLevel = 1;
     public int experienceToNextLevel = 100;
@@ -42,10 +42,9 @@ public class PlayerExperience : MonoBehaviour
 
     private void OnLevelUp()
     {
-        Debug.Log("Level Up! Current Level: " + currentLevel);
         UpdateExperienceUI();
 
-        _StrengtheningAndAddWeapon.SelectAndShowStrengtheningAndAddWeaponDetails(currentLevel);
+        _StrengtheningManager.StartStrengthening(currentLevel);
     }
 
     private int CalculateExperienceForNextLevel()

@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Timer _Timer;
     public PlayerAttackIndicator _PlayerAttackIndicator;
     public PlayerAnimation _PlayerAnimation;
+    public StrengtheningManager _StrengtheningManager;
+    public QuestionManager _QuestionManager;
 
     public bool isAutoLogin;
     private bool isGameStarted = false;
@@ -69,6 +71,8 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
+        _StrengtheningManager.StrengtheningCanvas.SetActive(false);
+        _QuestionManager.QuestionCanvas.SetActive(false);
         PauseGame();
         isGameFinished = true;
         _Timer.SubmitScore();
