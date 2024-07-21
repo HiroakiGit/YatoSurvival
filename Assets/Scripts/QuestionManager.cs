@@ -15,6 +15,10 @@ public class QuestionManager : MonoBehaviour
     public Text questionContentText;
     private System.Action<bool> onAnswered;
 
+    [Header("Audio")]
+    public AudioClip collectSoundClip;
+    public AudioClip inCollectSoundClip;
+
     private void Start()
     {
         QuestionCanvas.SetActive(false);
@@ -22,6 +26,7 @@ public class QuestionManager : MonoBehaviour
 
     public void StartQuestion()
     {
+        GameManager.Instance.PauseGame();
         Question question = GetRandomQuestion();
         ShowQuestion(question, OnQuestionAnswered);
     }
@@ -59,11 +64,13 @@ public class QuestionManager : MonoBehaviour
         {
             //Ž©•ª‚ð‹­‰»
             Debug.Log("Correct!");
+            PlayerAudio.Instance.PlayOneShot(collectSoundClip, 0.2f);
         }
         else
         {
             //“G‚ðˆê’èŽžŠÔ‹­‰»
             Debug.Log("InCorrect");
+            PlayerAudio.Instance.PlayOneShot(inCollectSoundClip, 0.2f);
         }
 
         GameManager.Instance.ContinueGame();

@@ -176,18 +176,31 @@ public class StrengtheningManager : MonoBehaviour
             case 0:
                 //追加
                 _PlayerAttack.AddWeapon(clickedData.WeaponType);
+                LogManager.Instance.AddLogs($"{clickedData.WeaponType}を入手した！");
                 break;
             case 1:
                 //レート上昇
                 _PlayerAttack.DecreaseAttackInterval(clickedData.WeaponType, clickedData.decreaseAttackIntervalRatio);
+                LogManager.Instance.AddLogs($"{clickedData.WeaponType}のレートが上昇した！");
                 break;
             case 2:
                 //攻撃力増加
+                LogManager.Instance.AddLogs($"{clickedData.WeaponType}の攻撃力が増加した！");
                 break;
         }
 
         StrengtheningCanvas.SetActive(false);
         selectedStrengtheningDetailsList.Clear();
-        _QuestionManager.StartQuestion();
+
+        LogManager.Instance.AddLogs($"まもなく問題が来る...");
+        LogManager.Instance.AddLogs($"正解したらいいことあるかも！\n不正解だったら...");
+        //FadeOut
+        FadeUI.Instance.StartFadeOut(6.8f);
+
+        //Log
+        LogManager.Instance.Log(2, () =>
+        {
+            _QuestionManager.StartQuestion();
+        }); 
     }
 }

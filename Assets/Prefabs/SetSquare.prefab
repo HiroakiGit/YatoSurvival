@@ -64,7 +64,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4169778512448367577}
   - component: {fileID: 6153031069360567829}
-  - component: {fileID: 8344340066304743540}
+  - component: {fileID: 8303460244880507048}
   - component: {fileID: 5254725150490675226}
   m_Layer: 0
   m_Name: Image
@@ -140,7 +140,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!60 &8344340066304743540
+--- !u!60 &8303460244880507048
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -181,9 +181,16 @@ PolygonCollider2D:
       - {x: 4.0625, y: -0.9375}
       - {x: 2.96875, y: 0.078125}
       - {x: 2.0703125, y: 1.0546875}
-    - - {x: -0.625, y: -0.15625}
-      - {x: 0.7421875, y: -0.15625}
-      - {x: 0.7421875, y: -0.46875}
+    - - {x: 0.13945468, y: -0.23168209}
+      - {x: 0.7992629, y: -0.064866066}
+      - {x: 0.71953183, y: 0.5729628}
+      - {x: 2.0418313, y: -0.2729051}
+      - {x: 2.672894, y: -0.79233676}
+      - {x: 1.5380723, y: -0.97625244}
+      - {x: 0.6947114, y: -1.034264}
+      - {x: 0.46494398, y: -0.18497956}
+      - {x: 0.23129393, y: -0.23831841}
+      - {x: -2.368998, y: -1.0475752}
       - {x: -0.625, y: -0.46875}
 --- !u!114 &5254725150490675226
 MonoBehaviour:
