@@ -63,13 +63,11 @@ public class QuestionManager : MonoBehaviour
         if (isCorrect)
         {
             //Ž©•ª‚ð‹­‰»
-            Debug.Log("Correct!");
             PlayerAudio.Instance.PlayOneShot(collectSoundClip, 0.2f);
         }
         else
         {
             //“G‚ðˆê’èŽžŠÔ‹­‰»
-            Debug.Log("InCorrect");
             PlayerAudio.Instance.PlayOneShot(inCollectSoundClip, 0.2f);
         }
 
