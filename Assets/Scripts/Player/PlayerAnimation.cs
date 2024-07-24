@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
+    [Header("Walk")]
     public Sprite idleUp;
     public Sprite[] walkUp;
     public Sprite idleDown;
@@ -14,6 +16,11 @@ public class PlayerAnimation : MonoBehaviour
     public Sprite[] walkRight;
 
     public float frameRate = 0.1f; // アニメーションのフレームレート
+
+    [Header("Dead")]
+    public float rotateSpeed;
+    public float targetAngle;
+    Quaternion targetRotation;
 
     private SpriteRenderer spriteRenderer;
     private int currentFrame;
@@ -96,5 +103,23 @@ public class PlayerAnimation : MonoBehaviour
                 spriteRenderer.sprite = isMoving ? walkRight[currentFrame] : idleRight;
             }
         }
+    }
+
+    public IEnumerator PlayerDead()
+    {
+        spriteRenderer.sprite = idleLeft;
+
+        Quaternion startRotation = transform.rotation;
+        Quaternion endRotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, targetAngle);
+
+        float t = 0;
+        while (t < 1)
+        {
+            t += Time.unscaledDeltaTime * rotateSpeed;
+            transform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
+            yield return null;
+        }
+
+        transform.rotation = endRotation; // 最終的にぴったりと目標角度にする
     }
 }

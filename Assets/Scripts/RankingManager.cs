@@ -1,30 +1,112 @@
 using PlayFab.ClientModels;
 using PlayFab;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class RankingManager : MonoBehaviour
 {
-    public void OnClickGetLeaderboardButton()
+    public Timer _Timer;
+    public GameObject RankingCanvas;
+    public List<Rank> rankingList = new List<Rank>();
+    public List<GameObject> rankingObjList = new List<GameObject>();
+
+    [Header("UI")]
+    public GameObject RankPrefab;
+    public Transform rankingListParent;
+
+    private void Start()
     {
-        GetLeaderboard();
+        RankingCanvas.SetActive(false);
     }
 
-    public void GetLeaderboard()
+    public void SubmitScore()
     {
-        PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest
+        PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest
         {
-            StatisticName = "HighScore"
+            Statistics = new List<StatisticUpdate>
+            {
+                new StatisticUpdate
+                {
+                    StatisticName = "HighScore",
+                    Value = _Timer.aliveTime
+                }
+            }
         }, result =>
         {
-            foreach (var item in result.Leaderboard)
-            {
-                Debug.Log($"{item.Position + 1}位:{item.DisplayName} " + $"スコア {item.StatValue}");
-            }
+            Debug.Log($"スコア {_Timer.aliveTime} 送信完了！");
         }, error =>
         {
             Debug.Log(error.GenerateErrorReport());
         });
+    }
+
+    public async void OnClickGetLeaderboardButton()
+    {
+        await GetLeaderboard();
+        ShowLeaderboard();
+    }
+
+    private async Task GetLeaderboard()
+    {
+        var request = new GetLeaderboardRequest
+        {
+            StatisticName = "HighScore"
+        };
+
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+
+        PlayFabClientAPI.GetLeaderboard(request, result =>
+        {
+            for (int i = 0; i <  result.Leaderboard.Count; i++)
+            {
+                Rank r = new Rank((result.Leaderboard[i].Position + 1).ToString(), result.Leaderboard[i].DisplayName, result.Leaderboard[i].StatValue);
+
+                rankingList.Add(r);
+            }
+            taskCompletionSource.SetResult(true);
+        }, error =>
+        {
+            Debug.Log(error.GenerateErrorReport());
+            taskCompletionSource.SetResult(false);
+        });
+
+        await taskCompletionSource.Task;
+    }
+
+    private void ShowLeaderboard()
+    {
+        for (int i = 0; i < rankingList.Count; i++)
+        {
+            GameObject obj = Instantiate(RankPrefab, rankingListParent);
+            rankingObjList.Add(obj);
+
+            RankUI ui = obj.GetComponent<RankUI>();
+            ui.positionText.text = rankingList[i].position.ToString();
+            ui.playerNameText.text = rankingList[i].playerName;
+            ui.scoreText.text = ((int)rankingList[i].time / 60).ToString("d2")+ ":" + ((int)rankingList[i].time % 60).ToString("d2");
+            obj = null;
+            ui = null;
+        }
+
+        RankingCanvas.SetActive(true);
+    }
+
+    public void OnClickBackButton()
+    {
+        RankingCanvas.SetActive(false);
+        Initalize();
+        GameManager.Instance.EndGame();
+    }
+
+    private void Initalize()
+    {
+        rankingList.Clear();
+        for (int i = 0; i < rankingObjList.Count; i++)
+        {
+            Destroy(rankingObjList[i].gameObject);
+        }
+
+        rankingObjList.Clear();
     }
 }

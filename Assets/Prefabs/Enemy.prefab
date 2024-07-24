@@ -152,7 +152,7 @@ MonoBehaviour:
   spriteWalk: {fileID: 0}
   health: 3
   experiencePool: {fileID: 0}
-  attackRange: 0.2
+  attackRange: 0.22
   attackDamage: 10
   attackInterval: 5
 --- !u!114 &-1948042322869360024

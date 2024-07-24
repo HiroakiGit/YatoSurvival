@@ -7,9 +7,15 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
+    public GameObject TimerCanvas;
     public int aliveTime;
-    [SerializeField] Text minText;
-    [SerializeField] Text secText;
+    public Text minText;
+    public Text secText;
+
+    private void Start()
+    {
+        TimerCanvas.SetActive(true);
+    }
 
     public void TimeCountStart()
     {
@@ -31,26 +37,5 @@ public class Timer : MonoBehaviour
     public float GenerateRandomTime(float minTime, float maxTime)
     {
         return Random.Range(minTime, maxTime);
-    }
-
-    public void SubmitScore()
-    {
-        PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest
-        {
-            Statistics = new List<StatisticUpdate>
-            {
-                new StatisticUpdate
-                {
-                    StatisticName = "HighScore",
-                    Value = aliveTime
-                }
-            }
-        }, result =>
-        {
-            Debug.Log($"スコア {aliveTime} 送信完了！");
-        }, error =>
-        {
-            Debug.Log(error.GenerateErrorReport());
-        });
     }
 }

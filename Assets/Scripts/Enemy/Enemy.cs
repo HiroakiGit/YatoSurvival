@@ -28,21 +28,21 @@ public class Enemy : MonoBehaviour
             spriteNormal = spritesNormal[0];
             spriteWalk = spritesWalk[0];
             health = 1;
-            attackDamage = 1;
+            attackDamage = 10;
         }
         else if (enemyType == EnemyType.Medium)
         {
             spriteNormal = spritesNormal[1];
             spriteWalk = spritesWalk[1];
             health = 1;
-            attackDamage = 2;
+            attackDamage = 20;
         }
         else if (enemyType == EnemyType.Strong)
         {
             spriteNormal = spritesNormal[2];
             spriteWalk = spritesWalk[2];
             health = 1;
-            attackDamage = 3;
+            attackDamage = 30;
         }
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,12 +12,16 @@ public class GameManager : MonoBehaviour
     public Timer _Timer;
     public PlayerAttackIndicator _PlayerAttackIndicator;
     public PlayerAnimation _PlayerAnimation;
-    public StrengtheningManager _StrengtheningManager;
-    public QuestionManager _QuestionManager;
+    public RankingManager _RankingManager;
 
     public bool isAutoLogin;
     private bool isGameStarted = false;
     private bool isGameFinished = false;
+
+    [Header("GameOverUI")]
+    public GameObject GameOverCanvas;
+    public Text scoreText;
+    public List<GameObject> gameOverNonActiveCanvasList = new List<GameObject>();
 
     //GameManagerから各プログラムに処理をお願いする => 各プログラムから終了報告を受け取る
 
@@ -37,6 +42,8 @@ public class GameManager : MonoBehaviour
     //一番最初
     private void Start()
     {
+        GameOverCanvas.SetActive(false);
+
         //ログイン開始
         if (isAutoLogin) _loginManager.AutoLogin();
         else _loginManager.StartLogin();
@@ -71,11 +78,20 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        _StrengtheningManager.StrengtheningCanvas.SetActive(false);
-        _QuestionManager.QuestionCanvas.SetActive(false);
-        PauseGame();
+        Time.timeScale = 0;
+        _PlayerAttackIndicator.enabled = false;
+        StartCoroutine(_PlayerAnimation.PlayerDead());
+
+        GameOverCanvas.SetActive(true);
+        scoreText.text = $"生存時間[分:秒]\n{_Timer.minText.text}:{_Timer.secText.text}";
+
+        for(int i = 0; i < gameOverNonActiveCanvasList.Count; i++)
+        {
+            gameOverNonActiveCanvasList[i].gameObject.SetActive(false);
+        }
+
         isGameFinished = true;
-        _Timer.SubmitScore();
+        _RankingManager.SubmitScore();
     }
 
     public bool IsGameStarted() { return isGameStarted; }
