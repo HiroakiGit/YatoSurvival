@@ -14,7 +14,7 @@ public class SuicaWeapon : Weapon
 
     public void Fire(Vector2 direction, Transform origin)
     {
-        GameObject suica = Instantiate(suicaPrefab, origin.position, Quaternion.identity);
+        GameObject suica = Instantiate(suicaPrefab, origin.position, Quaternion.identity, transform);
         suica.GetComponent<Rigidbody2D>().velocity = direction.normalized * suicaSpeed;
     }
 }

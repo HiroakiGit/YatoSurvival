@@ -10,18 +10,17 @@ public class GameManager : MonoBehaviour
     public MapEdgeEnemySpawner _enemyGenerater;
     public Player _Player;
     public Timer _Timer;
-    public PlayerAttackIndicator _PlayerAttackIndicator;
-    public PlayerAnimation _PlayerAnimation;
     public RankingManager _RankingManager;
 
     public bool isAutoLogin;
     private bool isGameStarted = false;
     private bool isGameFinished = false;
 
-    [Header("GameOverUI")]
+    [Header("GameOver")]
     public GameObject GameOverCanvas;
     public Text scoreText;
     public List<GameObject> gameOverNonActiveCanvasList = new List<GameObject>();
+    public AudioClip gameOverSoundClip;
 
     //GameManagerから各プログラムに処理をお願いする => 各プログラムから終了報告を受け取る
 
@@ -64,34 +63,45 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
-        _PlayerAttackIndicator.enabled = false;
-        _PlayerAnimation.enabled = false;
+        _Player._PlayerAttackIndicator.enabled = false;
+        _Player._PlayerAnimation.enabled = false;
         Time.timeScale = 0;
     }
 
     public void ContinueGame()
     {
-        _PlayerAttackIndicator.enabled = true;
-        _PlayerAnimation.enabled = true;
+        _Player._PlayerAttackIndicator.enabled = true;
+        _Player._PlayerAnimation.enabled = true;
         Time.timeScale = 1;
     }
 
-    public void EndGame()
+    public async void EndGame()
     {
+        isGameFinished = true;
+        BGMAndSEAudio.Instance.PauseBGM();
+        PlayerAudio.Instance.PauseBGM();
         Time.timeScale = 0;
-        _PlayerAttackIndicator.enabled = false;
-        StartCoroutine(_PlayerAnimation.PlayerDead());
 
-        GameOverCanvas.SetActive(true);
-        scoreText.text = $"生存時間[分:秒]\n{_Timer.minText.text}:{_Timer.secText.text}";
+        foreach (Transform obj in _Player.playerTransform)
+        {
+            obj.gameObject.SetActive(false);
+        }
 
-        for(int i = 0; i < gameOverNonActiveCanvasList.Count; i++)
+        for (int i = 0; i < gameOverNonActiveCanvasList.Count; i++)
         {
             gameOverNonActiveCanvasList[i].gameObject.SetActive(false);
         }
 
-        isGameFinished = true;
         _RankingManager.SubmitScore();
+
+        await _Player._PlayerAnimation.PlayerDead();
+
+        BGMAndSEAudio.Instance.PlayBGM(gameOverSoundClip);
+        BGMAndSEAudio.Instance.BGMAndSEAudioSource.loop = false;
+
+        GameOverCanvas.SetActive(true);
+        scoreText.text = $"生存時間[分:秒]\n{_Timer.minText.text}:{_Timer.secText.text}";
+
     }
 
     public bool IsGameStarted() { return isGameStarted; }

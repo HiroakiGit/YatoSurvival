@@ -304,7 +304,7 @@ public class PlayerAttack : MonoBehaviour
         while (IsExistWeapon(WeaponType.Chart))
         {
             yield return new WaitForSeconds(0.5f);
-            PlayerAudio.Instance.PlayOneShot(chartRotateSoundClip,0.08f);
+            PlayerAudio.Instance.PlayOneShot(chartRotateSoundClip,0.3f);
         }
     }
 

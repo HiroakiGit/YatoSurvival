@@ -96,7 +96,6 @@ public class RankingManager : MonoBehaviour
     {
         RankingCanvas.SetActive(false);
         Initalize();
-        GameManager.Instance.EndGame();
     }
 
     private void Initalize()

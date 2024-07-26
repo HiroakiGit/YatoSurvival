@@ -19,6 +19,11 @@ public class PlayerAudio : MonoBehaviour
         }
     }
 
+    public void PauseBGM()
+    {
+        playerAudioSource.Pause();
+    }
+
     public void PlayOneShot(AudioClip clip, float volume)
     {
         playerAudioSource.PlayOneShot(clip, volume);

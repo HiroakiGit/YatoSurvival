@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ButtonSpriteChanger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     Button buttton;
     Image btnImage;
 
     public Sprite NormalSprite;
     public Sprite OnPointSprite;
+    public AudioClip choiceButtonSoundClip;
+    public AudioClip pushedButtonSoundClip;
 
     void Start()
     {
@@ -23,6 +25,7 @@ public class ButtonSpriteChanger : MonoBehaviour, IPointerEnterHandler, IPointer
     //マウスカーソル乗ったとき
     public void OnPointerEnter(PointerEventData eventData)
     {
+        BGMAndSEAudio.Instance.PlayOneShot(choiceButtonSoundClip, 0.2f);
         btnImage.sprite = OnPointSprite;
     }
 
@@ -34,6 +37,7 @@ public class ButtonSpriteChanger : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnClickThisButton()
     {
+        BGMAndSEAudio.Instance.PlayOneShot(pushedButtonSoundClip, 0.5f);
         Reset();
     }
 

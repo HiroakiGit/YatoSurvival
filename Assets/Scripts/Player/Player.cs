@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public PlayerAttack _PlayerAttack;
     public PlayerHealth _PlayerHealth;
     public PlayerExperience _PlayerExperience;
+    public PlayerAttackIndicator _PlayerAttackIndicator;
+    public PlayerAnimation _PlayerAnimation;
     public string SUserName;
     public string SPassWord;
     public string SDisplayName;

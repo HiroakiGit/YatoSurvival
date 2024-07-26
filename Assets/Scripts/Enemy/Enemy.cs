@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
             spriteNormal = spritesNormal[0];
             spriteWalk = spritesWalk[0];
             health = 1;
-            attackDamage = 10;
+            attackDamage = 20;
         }
         else if (enemyType == EnemyType.Medium)
         {
@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
             spriteNormal = spritesNormal[2];
             spriteWalk = spritesWalk[2];
             health = 1;
-            attackDamage = 30;
+            attackDamage = 20;
         }
     }
 
