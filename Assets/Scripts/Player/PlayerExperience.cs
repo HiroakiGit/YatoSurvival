@@ -22,7 +22,7 @@ public class PlayerExperience : MonoBehaviour
 
     public void AddExperience(int amount)
     {
-        PlayerAudio.Instance.PlayOneShot(getExperienceSoundClip, 0.1f);
+        SEAudio.Instance.PlayOneShot(getExperienceSoundClip, 0.1f);
 
         experiencePoints += amount;
         CheckLevelUp();

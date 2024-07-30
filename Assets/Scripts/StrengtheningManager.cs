@@ -169,6 +169,8 @@ public class StrengtheningManager : MonoBehaviour
     //ƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚½‚Æ‚«
     public void OnClickStrengtheningButton(int k)
     {
+        StrengtheningCanvas.SetActive(false);
+
         var clickedData = selectedStrengtheningDetailsList[k];
 
         switch (clickedData.state)
@@ -189,7 +191,6 @@ public class StrengtheningManager : MonoBehaviour
                 break;
         }
 
-        StrengtheningCanvas.SetActive(false);
         selectedStrengtheningDetailsList.Clear();
 
         LogManager.Instance.AddLogs($"‚Ü‚à‚È‚­–â‘è‚ª—ˆ‚é...");

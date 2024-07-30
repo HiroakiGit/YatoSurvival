@@ -63,12 +63,12 @@ public class QuestionManager : MonoBehaviour
         if (isCorrect)
         {
             //Ž©•ª‚ð‹­‰»
-            PlayerAudio.Instance.PlayOneShot(collectSoundClip, 0.2f);
+            SEAudio.Instance.PlayOneShot(collectSoundClip, 0.2f);
         }
         else
         {
             //“G‚ðˆê’èŽžŠÔ‹­‰»
-            PlayerAudio.Instance.PlayOneShot(inCollectSoundClip, 0.2f);
+            SEAudio.Instance.PlayOneShot(inCollectSoundClip, 0.2f);
         }
 
         GameManager.Instance.ContinueGame();

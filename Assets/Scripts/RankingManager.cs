@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 public class RankingManager : MonoBehaviour
 {
     public Timer _Timer;
-    public GameObject RankingCanvas;
     public List<Rank> rankingList = new List<Rank>();
     public List<GameObject> rankingObjList = new List<GameObject>();
 
     [Header("UI")]
+    public GameObject RankingCanvas;
+    public GameObject BackButton;
     public GameObject RankPrefab;
     public Transform rankingListParent;
 
     private void Start()
     {
-        RankingCanvas.SetActive(false);
+        Initalize();
     }
 
     public void SubmitScore()
@@ -43,8 +44,16 @@ public class RankingManager : MonoBehaviour
 
     public async void OnClickGetLeaderboardButton()
     {
+        GameManager.Instance.isProcessing = true;
+
+        RankingCanvas.SetActive(true);
+        GameManager.Instance.CurrentState = GameState.SubMenuState;
+
         await GetLeaderboard();
         ShowLeaderboard();
+        BackButton.SetActive(true);
+
+        GameManager.Instance.isProcessing = false;
     }
 
     private async Task GetLeaderboard()
@@ -88,18 +97,19 @@ public class RankingManager : MonoBehaviour
             obj = null;
             ui = null;
         }
-
-        RankingCanvas.SetActive(true);
     }
 
     public void OnClickBackButton()
     {
-        RankingCanvas.SetActive(false);
         Initalize();
+        GameManager.Instance.CurrentState = GameState.PauseState;
     }
 
     private void Initalize()
     {
+        RankingCanvas.SetActive(false);
+        BackButton.SetActive(false);
+
         rankingList.Clear();
         for (int i = 0; i < rankingObjList.Count; i++)
         {

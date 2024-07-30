@@ -30,7 +30,7 @@ public class PlayerHealth : MonoBehaviour
         }
         UpdateHealthUI();
 
-        PlayerAudio.Instance.PlayOneShot(takeDamageSoundClip,0.25f);
+        SEAudio.Instance.PlayOneShot(takeDamageSoundClip,0.25f);
     }
 
     public void Heal(int amount)

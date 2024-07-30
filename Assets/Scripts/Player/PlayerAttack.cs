@@ -245,7 +245,7 @@ public class PlayerAttack : MonoBehaviour
                 // Suica‚ð”­ŽË
                 _SuicaWeapon.Fire(direction, transform);
 
-                PlayerAudio.Instance.PlayOneShot(fireSuicaSoundClip, 0.4f);
+                SEAudio.Instance.PlayOneShot(fireSuicaSoundClip, 0.4f);
 
                 yield return new WaitForSeconds(0.1f);
             }
@@ -262,7 +262,7 @@ public class PlayerAttack : MonoBehaviour
                 _LaserWeapon[i].Fire();
             }
 
-            PlayerAudio.Instance.PlayOneShot(laserBeamSoundClip, 0.15f);
+            SEAudio.Instance.PlayOneShot(laserBeamSoundClip, 0.15f);
         }
     }
 
@@ -304,7 +304,7 @@ public class PlayerAttack : MonoBehaviour
         while (IsExistWeapon(WeaponType.Chart))
         {
             yield return new WaitForSeconds(0.5f);
-            PlayerAudio.Instance.PlayOneShot(chartRotateSoundClip,0.3f);
+            SEAudio.Instance.PlayOneShot(chartRotateSoundClip,0.3f);
         }
     }
 

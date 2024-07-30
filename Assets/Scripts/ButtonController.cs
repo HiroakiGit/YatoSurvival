@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    Button buttton;
+    Button button;
     Image btnImage;
 
     public Sprite NormalSprite;
@@ -16,16 +16,16 @@ public class ButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     void Start()
     {
-        buttton = GetComponent<Button>();
+        button = GetComponent<Button>();
         btnImage = GetComponent<Image>();
         //メソッドを登録
-        buttton.onClick.AddListener(OnClickThisButton);
+        button.onClick.AddListener(OnClickThisButton);
     }
 
     //マウスカーソル乗ったとき
     public void OnPointerEnter(PointerEventData eventData)
     {
-        BGMAndSEAudio.Instance.PlayOneShot(choiceButtonSoundClip, 0.2f);
+        SEAudio.Instance.PlayOneShot(choiceButtonSoundClip, 0.1f);
         btnImage.sprite = OnPointSprite;
     }
 
@@ -37,11 +37,11 @@ public class ButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnClickThisButton()
     {
-        BGMAndSEAudio.Instance.PlayOneShot(pushedButtonSoundClip, 0.5f);
-        Reset();
+        SEAudio.Instance.PlayOneShot(pushedButtonSoundClip, 0.2f);
+        Initalize();
     }
 
-    public void Reset()
+    public void Initalize()
     {
         btnImage.sprite = NormalSprite;
     }

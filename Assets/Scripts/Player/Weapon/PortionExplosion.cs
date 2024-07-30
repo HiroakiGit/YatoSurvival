@@ -9,7 +9,7 @@ public class PortionExplosion : MonoBehaviour
 
     private void Start()
     {
-        PlayerAudio.Instance.PlayOneShot(explosionSoundClip, 0.07f);
+        SEAudio.Instance.PlayOneShot(explosionSoundClip, 0.07f);
     }
 
     public void OnAnimationEnd()
