@@ -155,6 +155,7 @@ MonoBehaviour:
   attackRange: 0.22
   attackDamage: 10
   attackInterval: 5
+  takeDamageSoundClip: {fileID: 8300000, guid: 73b54038e938d5b4c8485e233984ec0a, type: 3}
 --- !u!114 &-1948042322869360024
 MonoBehaviour:
   m_ObjectHideFlags: 0

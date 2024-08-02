@@ -5,7 +5,7 @@ using UnityEngine;
 public class SetSquaer : MonoBehaviour
 {
     public float rotationSpeed;
-    public int damage = 1; //与えるダメージ
+    public float damage = 1; //与えるダメージ
 
     private void LateUpdate()
     {

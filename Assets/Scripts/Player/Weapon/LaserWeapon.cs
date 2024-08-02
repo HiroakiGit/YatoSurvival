@@ -11,7 +11,6 @@ public class LaserWeapon : Weapon
     public Vector2 direction;
     public float laserLength;
     public float laserDuration = 0.2f;
-    public int damage = 1; //—^‚¦‚éƒ_ƒ[ƒW
 
     public override void Initialize(Transform playerT)
     {
@@ -19,12 +18,12 @@ public class LaserWeapon : Weapon
         lineRenderer.enabled = false;
     }
 
-    public void Fire()
+    public void Fire(float damage)
     {
-        StartCoroutine(FireLaser());
+        StartCoroutine(FireLaser(damage));
     }
 
-    private IEnumerator FireLaser()
+    private IEnumerator FireLaser(float damage)
     {
         RaycastHit2D[] hits = Physics2D.RaycastAll((Vector2)playerTransform.position, direction.normalized * laserLength);
         // Raycast‚ğ‰Â‹‰»

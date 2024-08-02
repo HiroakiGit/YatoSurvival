@@ -5,24 +5,24 @@ using UnityEngine;
 public class SetSquareWeapon : Weapon
 {
     public GameObject setSquarePrefab;
-    public float throwSpeed = 10f;
     public float maxDistance = 5f;
 
-    public void Fire(Vector2 direction, Transform origin)
+    public void Fire(Vector2 direction, Transform origin, float speed, float damage)
     {
-        StartCoroutine(ThrowSetSquare(direction, origin));
+        StartCoroutine(ThrowSetSquare(direction, origin, speed, damage));
     }
 
-    private IEnumerator ThrowSetSquare(Vector2 direction, Transform origin)
+    private IEnumerator ThrowSetSquare(Vector2 direction, Transform origin, float speed, float damage)
     {
         GameObject setsquare = Instantiate(setSquarePrefab, origin.position, Quaternion.identity);
+        setsquare.transform.GetChild(0).GetComponent<SetSquaer>().damage = damage;
         Rigidbody2D rb = setsquare.GetComponent<Rigidbody2D>();
         Vector2 startPosition = origin.position;
 
         // Move towards the target
         while (Vector2.Distance(startPosition, setsquare.transform.position) < maxDistance)
         {
-            rb.velocity = direction.normalized * throwSpeed;
+            rb.velocity = direction.normalized * speed;
             yield return null;
         }
 
@@ -30,7 +30,7 @@ public class SetSquareWeapon : Weapon
         while (Vector2.Distance(origin.position, setsquare.transform.position) > 0.1f)
         {
             Vector2 returnDirection = (origin.position - setsquare.transform.position).normalized;
-            rb.velocity = returnDirection * throwSpeed;
+            rb.velocity = returnDirection * speed;
             yield return null;
         }
 

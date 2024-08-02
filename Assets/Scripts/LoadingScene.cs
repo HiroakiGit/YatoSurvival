@@ -24,7 +24,7 @@ public class LoadingScene : MonoBehaviour
     IEnumerator LoadScene(string SceneName)
     {
         isloadingScene = true;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSecondsRealtime(1);
         AsyncOperation async = SceneManager.LoadSceneAsync(SceneName);
         async.allowSceneActivation = false;
         while (!async.isDone)
@@ -32,7 +32,7 @@ public class LoadingScene : MonoBehaviour
             _slider.value = async.progress;
             if (async.progress >= 0.9f)
             {
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSecondsRealtime(1);
                 _slider.value = 1;
                 async.allowSceneActivation = true;
             }

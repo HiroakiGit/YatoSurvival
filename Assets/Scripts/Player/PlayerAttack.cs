@@ -15,27 +15,33 @@ public class PlayerAttack : MonoBehaviour
     public GameObject suicaWeaponPrefab;
     private SuicaWeapon _SuicaWeapon;
     public float suicaFireRate = 0.5f;
+    public float suicaDamage = 1;
+    public float suicaSpeed = 3;
     public int maxSuicaCount;
     private float nextSuicaFireTime = 0f;
-    private int numberOfSuicaWeapons = 1;
+    private int numberOfSuicaWeapons = 0;
     [Header("LaserBeam")]
     public GameObject laserWeaponPrefab;
     public List<LaserWeapon> _LaserWeapon = new List<LaserWeapon>();
     public float laserFireRate = 0.75f;
+    public float laserDamage = 1;
     public int maxLaserCount;
     private float nextLaserFireTime = 0f;
     private int numberOfLaserWeapons = 0;
     [Header("Chart")]
     public GameObject chartWeaponPrefab;
     public List<ChartWeapon> _ChartWeapon = new List<ChartWeapon>();
+    public float chartDamage = 1;
     public int maxChartCount;
     private List<GameObject> chartWeaponPrefabs = new List<GameObject>();
-    private float nextRotationSpeed = 200f;
+    public float nextRotationSpeed = 200f;
     private int numberOfChartWeapons = 0;
     [Header("SetSquare")]
     public GameObject setSquareWeaponPrefab;
     private SetSquareWeapon _SetSquareWeapon;
     public float setSquareFireRate = 0.5f;
+    public float setSquareDamage = 1;
+    public float setSquareSpeed = 10f;
     public int maxSetSquareCount;
     private float nextSetSquareFireTime = 0f;
     private int numberOfSetSquareWeapons = 0;
@@ -43,6 +49,8 @@ public class PlayerAttack : MonoBehaviour
     public GameObject portionWeaponPrefab;
     private PortionWeapon _PortionWeapon;
     public float portionFireRate = 5f;
+    public float portionDamage = 1;
+    public float portionSpeed = 10f;
     public int maxPortionCount;
     private float nextPortionFireTime = 0f;
     private int numberOfPortionWeapons = 0;
@@ -51,11 +59,15 @@ public class PlayerAttack : MonoBehaviour
     public AudioClip chartRotateSoundClip;
     public AudioClip laserBeamSoundClip;
     public AudioClip fireSuicaSoundClip;
+    public AudioClip fireSetSquareSoundClip;
+    public AudioClip firePortionSoundClip;
 
     //初期武器
     public void GenerateInitialWeapon()
     {
-        GenerateWeapon(WeaponType.Suica);
+        AddWeapon(WeaponType.Suica);
+        AddWeapon(WeaponType.SetSquare);
+        AddWeapon(WeaponType.Portion);
     }
 
     private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f, int chartWeaponsCount = 0,int lazerWeaponsCount = 0)
@@ -167,18 +179,18 @@ public class PlayerAttack : MonoBehaviour
     }
 
     //レート上昇
-    public void DecreaseAttackInterval(WeaponType type, float strengtheningRatio)
+    public void DecreaseAttackInterval(WeaponType type, float dtime)
     {
         switch (type) 
         {
             case WeaponType.Suica:
-                suicaFireRate = suicaFireRate * strengtheningRatio;
+                suicaFireRate = suicaFireRate - dtime;
                 break;
             case WeaponType.Laser:
-                laserFireRate = laserFireRate * strengtheningRatio;
+                laserFireRate = laserFireRate - dtime;
                 break;
             case WeaponType.Chart:
-                nextRotationSpeed = nextRotationSpeed * strengtheningRatio;
+                nextRotationSpeed = nextRotationSpeed * dtime;
 
                 for (int i = 0; i < numberOfChartWeapons; i++)
                 {
@@ -186,10 +198,38 @@ public class PlayerAttack : MonoBehaviour
                 }
                 break;
             case WeaponType.SetSquare:
-                setSquareFireRate = setSquareFireRate * strengtheningRatio;
+                setSquareFireRate = setSquareFireRate - dtime;
                 break;
             case WeaponType.Portion:
-                portionFireRate = portionFireRate * strengtheningRatio;
+                portionFireRate = portionFireRate - dtime;
+                break;
+        }
+    }
+
+    //ダメージ上昇
+    public void IncreaseDamage(WeaponType type, float ddamage)
+    {
+        switch (type)
+        {
+            case WeaponType.Suica:
+                suicaDamage = suicaDamage + ddamage;
+                break;
+            case WeaponType.Laser:
+                laserDamage = laserDamage + ddamage;
+                break;
+            case WeaponType.Chart:
+                chartDamage = chartDamage + ddamage;
+
+                for (int i = 0; i < numberOfChartWeapons; i++)
+                {
+                    _ChartWeapon[i].damage = chartDamage;
+                }
+                break;
+            case WeaponType.SetSquare:
+                setSquareDamage = setSquareDamage + ddamage;
+                break;
+            case WeaponType.Portion:
+                portionDamage = portionDamage + ddamage;
                 break;
         }
     }
@@ -243,7 +283,7 @@ public class PlayerAttack : MonoBehaviour
             for(int i = 0; i < numberOfSuicaWeapons; i++)
             {
                 // Suicaを発射
-                _SuicaWeapon.Fire(direction, transform);
+                _SuicaWeapon.Fire(direction, transform, suicaSpeed,suicaDamage);
 
                 SEAudio.Instance.PlayOneShot(fireSuicaSoundClip, 0.4f);
 
@@ -259,7 +299,7 @@ public class PlayerAttack : MonoBehaviour
             // レーザービームを発射
             for(int i = 0; i < numberOfLaserWeapons; i++)
             {
-                _LaserWeapon[i].Fire();
+                _LaserWeapon[i].Fire(laserDamage);
             }
 
             SEAudio.Instance.PlayOneShot(laserBeamSoundClip, 0.15f);
@@ -275,8 +315,8 @@ public class PlayerAttack : MonoBehaviour
 
             for (int i = 0; i < numberOfSetSquareWeapons; i++)
             {
-                _SetSquareWeapon.Fire(direction, transform);
-                //TODO:Audio
+                _SetSquareWeapon.Fire(direction, transform, setSquareSpeed, setSquareDamage);
+                SEAudio.Instance.PlayOneShot(fireSetSquareSoundClip, 0.15f);
 
                 yield return new WaitForSeconds(0.1f);
             }
@@ -291,8 +331,8 @@ public class PlayerAttack : MonoBehaviour
 
             for (int i = 0; i < numberOfPortionWeapons; i++)
             {
-                _PortionWeapon.Fire(mousePosition, transform);
-                //TODO:Audio
+                _PortionWeapon.Fire(mousePosition, transform, portionSpeed, portionDamage);
+                SEAudio.Instance.PlayOneShot(firePortionSoundClip, 0.4f);
 
                 yield return new WaitForSeconds(0.1f);
             }

@@ -7,7 +7,7 @@ public class ChartWeapon : Weapon
     public Transform playerTransform;
     public float rotationSpeed = 200f; // 回転速度
     public float distanceFromPlayer = 2f; // プレイヤーからの距離
-    public int damage = 1; // 武器のダメージ量
+    public float damage = 1; // 武器のダメージ量
     public float startingAngle = 0f; // 武器の初期角度
 
     private Quaternion initialRotation;

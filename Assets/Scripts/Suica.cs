@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Suica : MonoBehaviour
 {
-    public int damage = 1; //与えるダメージ
+    public float damage = 1; //与えるダメージ
 
     void OnTriggerEnter2D(Collider2D other)
     {

@@ -11,7 +11,7 @@ public class Portion : MonoBehaviour
     public float enemyMoveSpeed = 100f;
     public Vector2 targetPosition;
     public float explosionDistanceThreshold = 0.1f; // –Ú•WˆÊ’u‚É‚Ç‚ê‚­‚ç‚¢‹ß‚Ã‚¢‚½‚ç”š”­‚·‚é‚©
-    public int damage;
+    public float damage;
 
     private void Update()
     {

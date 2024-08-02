@@ -178,23 +178,23 @@ public class StrengtheningManager : MonoBehaviour
             case 0:
                 //追加
                 _PlayerAttack.AddWeapon(clickedData.WeaponType);
-                LogManager.Instance.AddLogs($"{clickedData.WeaponType}を入手した！");
+                LogManager.Instance.AddLogs($"{WeaponName(clickedData.WeaponType)}を入手した！");
                 break;
             case 1:
                 //レート上昇
                 _PlayerAttack.DecreaseAttackInterval(clickedData.WeaponType, clickedData.decreaseAttackIntervalRatio);
-                LogManager.Instance.AddLogs($"{clickedData.WeaponType}のレートが上昇した！");
+                LogManager.Instance.AddLogs($"{WeaponName(clickedData.WeaponType)}のレートが上昇した！");
                 break;
             case 2:
                 //攻撃力増加
-                LogManager.Instance.AddLogs($"{clickedData.WeaponType}の攻撃力が増加した！");
+                LogManager.Instance.AddLogs($"{WeaponName(clickedData.WeaponType)}の攻撃力が増加した！");
                 break;
         }
 
         selectedStrengtheningDetailsList.Clear();
 
         LogManager.Instance.AddLogs($"まもなく問題が来る...");
-        LogManager.Instance.AddLogs($"正解したらいいことあるかも！\n不正解だったら...");
+        LogManager.Instance.AddLogs($"正解したらいいことあるかも！\r\n不正解だったら...");
         //FadeOut
         FadeUI.Instance.StartFadeOut(6.8f);
 
@@ -203,5 +203,23 @@ public class StrengtheningManager : MonoBehaviour
         {
             _QuestionManager.StartQuestion();
         }); 
+    }
+
+    private string WeaponName(WeaponType type)
+    {
+        switch (type)
+        {
+            case WeaponType.Suica:
+                return "スイカ";
+            case WeaponType.Laser:
+                return "ガスバーナー";
+            case WeaponType.Chart:
+                return "チャート";
+            case WeaponType.SetSquare:
+                return "三角定規";
+            case WeaponType.Portion:
+                return "ポーション";
+        }
+        return null;
     }
 }

@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     public Sprite[] spritesWalk;
     [HideInInspector] public Sprite spriteNormal;
     [HideInInspector] public Sprite spriteWalk;
-    public int health = 3;
+    public float health = 3;
 
     public ObjectPool experiencePool;
 
@@ -18,6 +18,9 @@ public class Enemy : MonoBehaviour
     public float attackRange = 0.5f;
     public int attackDamage = 10;
     public float attackInterval = 5f;
+
+    [Header("Audio")]
+    public AudioClip takeDamageSoundClip;
 
     public void InitializeEnemyType(EnemyType type)
     {
@@ -51,13 +54,15 @@ public class Enemy : MonoBehaviour
         experiencePool = GameObject.FindObjectOfType<ObjectPool>();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
         if (health <= 0)
         {
             Die();
         }
+
+        SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.15f);
     }
 
     void Die()

@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public Player _Player;
     public Timer _Timer;
     public RankingManager _RankingManager;
+    public LoadingScene _LoadingScene;
 
     public bool isAutoLogin;
     private bool isGameStarted = false;
@@ -25,11 +26,14 @@ public class GameManager : MonoBehaviour
 
     [Header("UI")]
     public GameState CurrentState;
+    public GameObject ReallyUI;
+    public Text ReallyText;
     public AudioClip pushedButtonSoundClip;
     public bool isProcessing = false;
 
     [Header("GamePause")]
     public GameObject GamePauseCanvas;
+    public AudioClip pauseBGMSoundClip;
 
     [Header("GameOver")]
     public GameObject GameOverCanvas;
@@ -38,6 +42,8 @@ public class GameManager : MonoBehaviour
     public AudioClip gameOverSoundClip;
 
     [Header("GameSetting")]
+    public GameObject BGMMuteImageObj;
+    public GameObject SEMuteImageObj;
     public Slider BGMVolumeSlider;
     public Slider SEVolumeSlider;
 
@@ -49,21 +55,22 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
 
     //初期化
     private void Start()
     {
+        Time.timeScale = 1;
+
         CurrentState = GameState.MainState;
 
         GameOverCanvas.SetActive(false);
         GamePauseCanvas.SetActive(false);
+        BGMMuteImageObj.SetActive(false);
+        SEMuteImageObj.SetActive(false);
+
+        ReallyUI.SetActive(false);
 
         // スライダーの初期値をオーディオソースの音量に設定
         BGMVolumeSlider.value = 0.5f;
@@ -139,12 +146,15 @@ public class GameManager : MonoBehaviour
         _Player._PlayerAttackIndicator.enabled = false;
         _Player._PlayerAnimation.enabled = false;
 
+        BGMAudio.Instance.PlayBGM(pauseBGMSoundClip);
+
         Time.timeScale = 0;
     }
 
     private void CloseSubMenu()
     {
         _RankingManager.OnClickBackButton();
+        ReallyUI.SetActive(false);
         CurrentState = GameState.PauseState;
     }
 
@@ -157,13 +167,15 @@ public class GameManager : MonoBehaviour
         _Player._PlayerAttackIndicator.enabled = true;
         _Player._PlayerAnimation.enabled = true;
 
+        BGMAudio.Instance.PlayBGM(null);
+
         Time.timeScale = 1;
     }
 
     public async void EndGame()
     {
         isGameFinished = true;
-        CurrentState = GameState.MainState;
+        CurrentState = GameState.PauseState;
 
         BGMAudio.Instance.PauseBGM();
         Time.timeScale = 0;
@@ -194,14 +206,108 @@ public class GameManager : MonoBehaviour
         GameOverCanvas.SetActive(true);
     }
 
+    public void OnClickResumeButton()
+    {
+        HandleEscapePress();
+    }
+
+    public void OnClickRetryButton()
+    {
+        ReallyText.text = "本当にリトライしますか？";
+        ReallyUI.SetActive(true);
+        CurrentState = GameState.SubMenuState;
+    }
+    
+    public void OnClickBackTitleButton()
+    {
+        ReallyText.text = "本当にタイトルに戻りますか？";
+        ReallyUI.SetActive(true);
+        CurrentState = GameState.SubMenuState;
+    }
+    
+    public void OnClickCancelButton()
+    {
+        HandleEscapePress();
+    }
+
+    public void OnClickNextSceneButton()
+    {
+        if (ReallyText.text.Contains("リトライ"))
+        {
+            _LoadingScene.LoadNextScene("GameScene");
+        }
+        else if (ReallyText.text.Contains("タイトル"))
+        {
+            _LoadingScene.LoadNextScene("LobbyScene");
+        }
+    }
+
+    bool isMuteBGM = false;
+    public void OnClickMuteBGMVolume()
+    {
+        isMuteBGM = !isMuteBGM;
+        if (isMuteBGM) 
+        {
+            BGMAudio.Instance.BGMAudioSource.mute = true;
+            BGMMuteImageObj.SetActive(true);
+        }
+        else
+        {
+            BGMAudio.Instance.BGMAudioSource.mute = false;
+            BGMMuteImageObj.SetActive(false);
+        }
+    }
+    
+    bool isMuteSE = false;
+    public void OnClickMuteSEVolume()
+    {
+        isMuteSE = !isMuteSE;
+        if (isMuteSE)
+        {
+            SEAudio.Instance.SEAudioSource.mute = true;
+            SEMuteImageObj.SetActive(true);
+        }
+        else
+        {
+            SEAudio.Instance.SEAudioSource.mute = false;
+            SEMuteImageObj.SetActive(false);
+        }
+    }
+
     public void SetBGMVolume(float value)
     {
         BGMAudio.Instance.BGMAudioSource.volume = 0.08f * value * 2;
+
+        if (value <= 0)
+        {
+            isMuteBGM = true;
+            BGMAudio.Instance.BGMAudioSource.mute = true;
+            BGMMuteImageObj.SetActive(true);
+        }
+        else
+        {
+            isMuteBGM = false;
+            BGMAudio.Instance.BGMAudioSource.mute = false;
+            BGMMuteImageObj.SetActive(false);
+        }
     } 
     
     public void SetSEVolume(float value)
     {
         SEAudio.Instance.SEAudioSource.volume = 0.3f * value * 2;
+
+        if (value <= 0)
+        {
+            isMuteSE = true;
+            SEAudio.Instance.SEAudioSource.mute = true;
+            SEMuteImageObj.SetActive(true);
+        }
+        else
+        {
+            isMuteSE = false;
+            SEAudio.Instance.SEAudioSource.mute = false;
+            SEMuteImageObj.SetActive(false);
+        }
     }
 
     public bool IsGameStarted() { return isGameStarted; }
