@@ -48,7 +48,7 @@ public class PlayerHealth : MonoBehaviour
         if (GameManager.Instance.IsGameFinished()) return;
 
         Debug.Log("Player is Dead!");
-        GameManager.Instance.EndGame();
+        GameManager.Instance.GameOver();
     }
 
     void UpdateHealthUI()

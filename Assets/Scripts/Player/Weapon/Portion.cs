@@ -10,6 +10,7 @@ public class Portion : MonoBehaviour
     public float explosionForce = 500f;
     public float enemyMoveSpeed = 100f;
     public Vector2 targetPosition;
+    public Transform playerTransform;
     public float explosionDistanceThreshold = 0.1f; // 目標位置にどれくらい近づいたら爆発するか
     public float damage;
 
@@ -27,7 +28,7 @@ public class Portion : MonoBehaviour
         // 爆発エフェクトを生成
         if (explosionEffect != null)
         {
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Instantiate(explosionEffect, transform.position, Quaternion.identity, playerTransform);
         }
 
         // 爆発の範囲内の敵を探す

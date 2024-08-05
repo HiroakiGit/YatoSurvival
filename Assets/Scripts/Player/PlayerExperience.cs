@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerExperience : MonoBehaviour
 {
-    public StrengtheningManager _StrengtheningManager;
+    public BuffAndDeBuffManager _BuffAndDeBuff;
     public int experiencePoints = 0;
     public int currentLevel = 1;
     public int experienceToNextLevel = 100;
@@ -44,7 +44,7 @@ public class PlayerExperience : MonoBehaviour
     {
         UpdateExperienceUI();
 
-        _StrengtheningManager.StartStrengthening(currentLevel);
+        _BuffAndDeBuff.StartWeaponBuffProcess(currentLevel);
     }
 
     private int CalculateExperienceForNextLevel()

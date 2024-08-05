@@ -14,7 +14,7 @@ public class SetSquareWeapon : Weapon
 
     private IEnumerator ThrowSetSquare(Vector2 direction, Transform origin, float speed, float damage)
     {
-        GameObject setsquare = Instantiate(setSquarePrefab, origin.position, Quaternion.identity);
+        GameObject setsquare = Instantiate(setSquarePrefab, origin.position, Quaternion.identity, transform);
         setsquare.transform.GetChild(0).GetComponent<SetSquaer>().damage = damage;
         Rigidbody2D rb = setsquare.GetComponent<Rigidbody2D>();
         Vector2 startPosition = origin.position;
@@ -36,7 +36,7 @@ public class SetSquareWeapon : Weapon
 
         // Stop the boomerang and destroy it
         rb.velocity = Vector2.zero;
-        Destroy(setsquare);
+        Destroy(setsquare.gameObject);
     }
 
     public override void Initialize(Transform playerTransform)

@@ -9,7 +9,7 @@ public class PlayerAttack : MonoBehaviour
 {
     public Player _Player;
     public Transform weaponSpawnPoint;
-    public StrengtheningManager _StrengtheningManager;
+    public BuffAndDeBuffManager _BuffAndDeBuff;
 
     [Header("Suica")]
     public GameObject suicaWeaponPrefab;
@@ -34,7 +34,7 @@ public class PlayerAttack : MonoBehaviour
     public float chartDamage = 1;
     public int maxChartCount;
     private List<GameObject> chartWeaponPrefabs = new List<GameObject>();
-    public float nextRotationSpeed = 200f;
+    public float chartRotateFireRate = 200f;
     private int numberOfChartWeapons = 0;
     [Header("SetSquare")]
     public GameObject setSquareWeaponPrefab;
@@ -73,7 +73,7 @@ public class PlayerAttack : MonoBehaviour
     private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f, int chartWeaponsCount = 0,int lazerWeaponsCount = 0)
     {
         GameObject weaponPrefab = null;
-        _StrengtheningManager.AddCanSelectStrengtheningDetails(weaponType);
+        _BuffAndDeBuff.AddCanSelectWeaponBuffList(weaponType);
 
         switch (weaponType)
         {
@@ -114,7 +114,7 @@ public class PlayerAttack : MonoBehaviour
                     _ChartWeapon.Add(weapon.GetComponent<ChartWeapon>());
                     chartWeaponPrefabs.Add(weapon);
                     _ChartWeapon[chartWeaponsCount].startingAngle = startingAngle;
-                    _ChartWeapon[chartWeaponsCount].rotationSpeed = nextRotationSpeed;
+                    _ChartWeapon[chartWeaponsCount].rotationSpeed = chartRotateFireRate;
                     if(numberOfChartWeapons == 1) StartCoroutine(PlayChartRotateSound());
                     break;
                 case WeaponType.SetSquare:
@@ -190,11 +190,11 @@ public class PlayerAttack : MonoBehaviour
                 laserFireRate = laserFireRate - dtime;
                 break;
             case WeaponType.Chart:
-                nextRotationSpeed = nextRotationSpeed * dtime;
+                chartRotateFireRate = chartRotateFireRate * dtime;
 
                 for (int i = 0; i < numberOfChartWeapons; i++)
                 {
-                    _ChartWeapon[i].rotationSpeed = nextRotationSpeed;
+                    _ChartWeapon[i].rotationSpeed = chartRotateFireRate;
                 }
                 break;
             case WeaponType.SetSquare:
@@ -278,7 +278,7 @@ public class PlayerAttack : MonoBehaviour
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (mousePosition - transform.position).normalized;
 
-        if(IsExistWeapon(WeaponType.Suica))
+        if(WeaponCount(WeaponType.Suica) > 0)
         {
             for(int i = 0; i < numberOfSuicaWeapons; i++)
             {
@@ -294,7 +294,7 @@ public class PlayerAttack : MonoBehaviour
 
     void FireLaser()
     {
-        if (IsExistWeapon(WeaponType.Laser))
+        if (WeaponCount(WeaponType.Laser) > 0)
         {
             // レーザービームを発射
             for(int i = 0; i < numberOfLaserWeapons; i++)
@@ -308,7 +308,7 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator FireSetSquare()
     {
-        if (IsExistWeapon(WeaponType.SetSquare))
+        if (WeaponCount(WeaponType.SetSquare) > 0)
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 direction = (mousePosition - transform.position).normalized;
@@ -325,7 +325,7 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator FirePortion()
     {
-        if (IsExistWeapon(WeaponType.Portion))
+        if (WeaponCount(WeaponType.Portion) > 0)
         {
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -341,11 +341,29 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator PlayChartRotateSound()
     {
-        while (IsExistWeapon(WeaponType.Chart))
+        while (WeaponCount(WeaponType.Chart) > 0)
         {
             yield return new WaitForSeconds(0.5f);
             SEAudio.Instance.PlayOneShot(chartRotateSoundClip,0.3f);
         }
+    }
+
+    public int WeaponCount(WeaponType type)
+    {
+        switch (type)
+        {
+            case WeaponType.Suica:
+                return numberOfSuicaWeapons;
+            case WeaponType.Laser:
+                return numberOfLaserWeapons;
+            case WeaponType.Chart:
+                return numberOfChartWeapons;
+            case WeaponType.SetSquare:
+                return numberOfSetSquareWeapons;
+            case WeaponType.Portion:
+                return numberOfPortionWeapons;
+        }
+        return 0;
     }
 
     public bool IsFullWeapon(WeaponType type)
@@ -366,20 +384,20 @@ public class PlayerAttack : MonoBehaviour
         return false;
     }
 
-    public bool IsExistWeapon(WeaponType type)
+    public bool IsMaxRateIncrease(WeaponType type)
     {
         switch (type)
         {
             case WeaponType.Suica:
-                return numberOfSuicaWeapons > 0;
+                return suicaFireRate <= 0.1f;
             case WeaponType.Laser:
-                return numberOfLaserWeapons > 0;
+                return laserFireRate <= 0.1f;
             case WeaponType.Chart:
-                return numberOfChartWeapons > 0;
+                return chartRotateFireRate >= 500;
             case WeaponType.SetSquare:
-                return numberOfSetSquareWeapons > 0;
+                return setSquareFireRate <= 0.1f;
             case WeaponType.Portion:
-                return numberOfPortionWeapons > 0;
+                return portionFireRate <= 0.1f;
         }
         return false;
     }

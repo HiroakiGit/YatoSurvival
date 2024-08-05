@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class QuestionManager : MonoBehaviour
 {
+    public BuffAndDeBuffManager _BuffAndDeBuffManager;
     public List<Question> normalQuestions;
     public List<Question> hardQuestions;
     [Range(0, 1)] public float hardQuestionChance = 0.2f;
@@ -26,7 +27,9 @@ public class QuestionManager : MonoBehaviour
 
     public void StartQuestion()
     {
-        GameManager.Instance.PauseGame();
+        Time.timeScale = 0;
+        GameManager.Instance.isProcessing = true;
+
         Question question = GetRandomQuestion();
         ShowQuestion(question, OnQuestionAnswered);
     }
@@ -69,8 +72,12 @@ public class QuestionManager : MonoBehaviour
         {
             //“G‚ðˆê’èŽžŠÔ‹­‰»
             SEAudio.Instance.PlayOneShot(inCollectSoundClip, 0.2f);
+
+            //ƒfƒoƒt•t—^
+            _BuffAndDeBuffManager.StartDeBuffProcess();
         }
 
+        GameManager.Instance.isProcessing = false;
         GameManager.Instance.ContinueGame();
     }
 }

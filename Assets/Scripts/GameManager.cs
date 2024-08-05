@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public MapEdgeEnemySpawner _enemyGenerater;
     public Player _Player;
     public Timer _Timer;
+    public BuffAndDeBuffManager _BuffAndDeBuffManager;
     public RankingManager _RankingManager;
     public LoadingScene _LoadingScene;
 
@@ -99,6 +100,11 @@ public class GameManager : MonoBehaviour
         _Player._PlayerAttack.GenerateInitialWeapon();
         //時間測定開始
         _Timer.TimeCountStart();
+        //初期化
+        for (int i = 0; i < _BuffAndDeBuffManager.weaponBuffList.Count; i++)
+        {
+            _BuffAndDeBuffManager.weaponBuffList[i].Initalize(_BuffAndDeBuffManager._PlayerAttack.WeaponCount(_BuffAndDeBuffManager.weaponBuffList[i].WeaponType));
+        }
     }
 
     private void Update()
@@ -112,12 +118,14 @@ public class GameManager : MonoBehaviour
 
     private void HandleEscapePress()
     {
+        if (isProcessing) return;
+
         switch (CurrentState)
         {
             case GameState.MainState:
 
                 if (isGameFinished) return;
-                PauseGame();
+                PauseGame(true);
                 SEAudio.Instance.PlayOneShot(pushedButtonSoundClip, 0.1f);
                 break;
 
@@ -130,23 +138,22 @@ public class GameManager : MonoBehaviour
 
             case GameState.SubMenuState:
 
-                if(isProcessing) return;
                 CloseSubMenu();
                 SEAudio.Instance.PlayOneShot(pushedButtonSoundClip, 0.1f);
                 break;
         }
     }
 
-    public void PauseGame()
+    public void PauseGame(bool canvasActive)
     {
-        GamePauseCanvas.SetActive(true);
+        GamePauseCanvas.SetActive(canvasActive);
         CurrentState = GameState.PauseState;
 
         //TimeScaleに影響されないスクリプトで、非有効にしたいプログラムを非有効にする
         _Player._PlayerAttackIndicator.enabled = false;
         _Player._PlayerAnimation.enabled = false;
 
-        BGMAudio.Instance.PlayBGM(pauseBGMSoundClip);
+        if(canvasActive) BGMAudio.Instance.PlayBGM(pauseBGMSoundClip);
 
         Time.timeScale = 0;
     }
@@ -172,7 +179,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    public async void EndGame()
+    public async void GameOver()
     {
         isGameFinished = true;
         CurrentState = GameState.PauseState;
