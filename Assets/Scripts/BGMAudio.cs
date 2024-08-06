@@ -60,14 +60,9 @@ public class BGMAudio : MonoBehaviour
         }
     }
 
-    public void PauseBGM()
+    public void Stop()
     {
-        BGMAudioSource.Pause();
-    }
-    
-    public void UnPauseBGM()
-    {
-        BGMAudioSource.UnPause();
+        BGMAudioSource.Stop();
     }
 
     public void PlayOneShot(AudioClip clip, float volume)

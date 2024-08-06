@@ -32,6 +32,11 @@ public class GameManager : MonoBehaviour
     public AudioClip pushedButtonSoundClip;
     public bool isProcessing = false;
 
+    [Header("GameStart")]
+    public GameObject ExplainAndGameStartingCanvas;
+    public Text startingText;
+    public Text countDownText;
+
     [Header("GamePause")]
     public GameObject GamePauseCanvas;
     public AudioClip pauseBGMSoundClip;
@@ -88,7 +93,31 @@ public class GameManager : MonoBehaviour
     //ログイン終了時
     public void OnLoginEnd()
     {
-        //TODO: 開始までDelayいれる
+        StartCoroutine(ExplainAndStartingGame());
+    }
+
+    //説明とカウントダウン
+    public IEnumerator ExplainAndStartingGame()
+    {
+        ExplainAndGameStartingCanvas.SetActive(true);
+        _BuffAndDeBuffManager.BuffStateCanvas.SetActive(false);
+
+        for (int i = 1; i >= 0; i--)
+        {
+            countDownText.text = i.ToString();
+            
+            if(i <= 0)
+            {
+                startingText.text = "スタート！";
+                countDownText.text = string.Empty;
+            }
+
+            yield return new WaitForSeconds(1);
+        }
+
+        ExplainAndGameStartingCanvas.SetActive(false);
+        _BuffAndDeBuffManager.BuffStateCanvas.SetActive(true);
+
         StartGame();
     }
 
@@ -100,7 +129,7 @@ public class GameManager : MonoBehaviour
         _Player._PlayerAttack.GenerateInitialWeapon();
         //時間測定開始
         _Timer.TimeCountStart();
-        //初期化
+        //バフデバフの簡易表示初期化
         for (int i = 0; i < _BuffAndDeBuffManager.weaponBuffList.Count; i++)
         {
             _BuffAndDeBuffManager.weaponBuffList[i].Initalize(_BuffAndDeBuffManager._PlayerAttack.WeaponCount(_BuffAndDeBuffManager.weaponBuffList[i].WeaponType));
@@ -184,7 +213,7 @@ public class GameManager : MonoBehaviour
         isGameFinished = true;
         CurrentState = GameState.PauseState;
 
-        BGMAudio.Instance.PauseBGM();
+        BGMAudio.Instance.Stop();
         Time.timeScale = 0;
 
         //プレイヤーの子オブジェクトを非表示

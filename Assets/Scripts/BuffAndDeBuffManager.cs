@@ -42,7 +42,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     private void Start()
     {
         BuffCanvas.SetActive(false);
-        BuffStateCanvas.SetActive(true);
+        BuffStateCanvas.SetActive(false);
     }
 
     //既に存在する武器の強化ができるListを作成

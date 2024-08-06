@@ -14,11 +14,12 @@ public class Timer : MonoBehaviour
 
     private void Start()
     {
-        TimerCanvas.SetActive(true);
+        TimerCanvas.SetActive(false);
     }
 
     public void TimeCountStart()
     {
+        TimerCanvas.SetActive(true);
         StartCoroutine(TimeCounter());
     }
 
@@ -34,6 +35,7 @@ public class Timer : MonoBehaviour
             secText.text = ((int)aliveTime % 60).ToString("d2");
         }
     }
+
     public float GenerateRandomTime(float minTime, float maxTime)
     {
         return Random.Range(minTime, maxTime);

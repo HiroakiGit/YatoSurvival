@@ -21,16 +21,6 @@ public class SEAudio : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        //SetParent();
-    }
-
-    //public void OnLevelWasLoaded()
-    //{
-        //SetParent();
-    //}
-
     private void SetParent()
     {
         if (SceneManager.GetActiveScene().name.Contains("Game"))
