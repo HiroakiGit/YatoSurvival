@@ -6,6 +6,7 @@ using UnityEngine;
 public class Question
 {
     public string questionText;
-    public bool isCorrect; 
+    public bool isCorrect;
+    public string answerText;
 }
 

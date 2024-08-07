@@ -9,12 +9,17 @@ public class QuestionManager : MonoBehaviour
     public List<Question> normalQuestions;
     public List<Question> hardQuestions;
     [Range(0, 1)] public float hardQuestionChance = 0.2f;
+    [Range(0, 1)] public float probabilityGetDeBuff = 0.6f;
     private Question currentQuestion;
 
     [Header("UI")]
     public GameObject QuestionCanvas;
-    public Text questionContentText;
-    private System.Action<bool> onAnswered;
+    public GameObject QuestionUI;
+    public GameObject AnswerUI;
+    public Text questionAndAnswerText;
+    public Text questionAndAnswerContentText;
+    public Image MaruAndBatsuImage;
+    public Sprite[] MaruAndBatsuSprites;
 
     [Header("Audio")]
     public AudioClip collectSoundClip;
@@ -23,15 +28,18 @@ public class QuestionManager : MonoBehaviour
     private void Start()
     {
         QuestionCanvas.SetActive(false);
+        InitalizeUI();
     }
 
     public void StartQuestion()
     {
+        InitalizeUI();
+
         Time.timeScale = 0;
         GameManager.Instance.isProcessing = true;
 
         Question question = GetRandomQuestion();
-        ShowQuestion(question, OnQuestionAnswered);
+        ShowQuestion(question);
     }
 
     private Question GetRandomQuestion()
@@ -41,43 +49,85 @@ public class QuestionManager : MonoBehaviour
         return selectedList[index];
     }
 
-    private void ShowQuestion(Question question, System.Action<bool> onAnsweredCallback)
+    private void ShowQuestion(Question question)
     {
         currentQuestion = question;
-        onAnswered = onAnsweredCallback;
-        questionContentText.text = question.questionText;
+
+        questionAndAnswerText.text = "問題";
+        questionAndAnswerContentText.text = question.questionText;
+
         QuestionCanvas.SetActive(true);
+        QuestionUI.SetActive(true);
     }
 
     public void OnClickYesButton()
     {
-        onAnswered.Invoke(currentQuestion.isCorrect);
-        QuestionCanvas.SetActive(false);
+        StartCoroutine(OnQuestionAnswered(currentQuestion.isCorrect));
     }
 
     public void OnClickNoButton()
     {
-        onAnswered.Invoke(!currentQuestion.isCorrect);
-        QuestionCanvas.SetActive(false);
+        StartCoroutine(OnQuestionAnswered(!currentQuestion.isCorrect));
     }
 
-    private void OnQuestionAnswered(bool isCorrect)
+    private IEnumerator OnQuestionAnswered(bool isCorrect)
     {
+        InitalizeUI();
+        AnswerUI.SetActive(true);
+
         if (isCorrect)
         {
-            //自分を強化
+            //マル
+            MaruAndBatsuImage.sprite = MaruAndBatsuSprites[0];
             SEAudio.Instance.PlayOneShot(collectSoundClip, 0.2f);
         }
         else
         {
-            //敵を一定時間強化
+            //バツ
+            MaruAndBatsuImage.sprite = MaruAndBatsuSprites[1];
             SEAudio.Instance.PlayOneShot(inCollectSoundClip, 0.2f);
 
-            //デバフ付与
-            _BuffAndDeBuffManager.StartDeBuffProcess();
+            //答えがある => 答えを表示 => 終了
+            //　　　ない => 終了
+            if (currentQuestion.answerText != string.Empty)
+            {
+                yield return new WaitForSecondsRealtime(1.5f);
+                InitalizeUI();
+                questionAndAnswerText.text = "答え";
+                questionAndAnswerContentText.text = currentQuestion.answerText;
+            }
+        }
+
+        yield return new WaitForSecondsRealtime(1.5f);
+        InitalizeUI();
+        QuestionCanvas.SetActive(false);
+
+        //デバフ付与
+        if (!isCorrect) 
+        {
+            float r = Random.Range(0f, 1f);
+
+            if(r <= probabilityGetDeBuff)
+            {
+                _BuffAndDeBuffManager.StartDeBuffProcess();
+            }
+            else
+            {
+                LogManager.Instance.AddLogs("何も起こらなかった...");
+                LogManager.Instance.Log(2f,null);
+            }
         }
 
         GameManager.Instance.isProcessing = false;
         GameManager.Instance.ContinueGame();
+    }
+
+    private void InitalizeUI()
+    {
+        QuestionUI.SetActive(false);
+        AnswerUI.SetActive(false);
+        questionAndAnswerText.text = string.Empty;
+        questionAndAnswerContentText.text = string.Empty;
+        MaruAndBatsuImage.sprite = null;
     }
 }

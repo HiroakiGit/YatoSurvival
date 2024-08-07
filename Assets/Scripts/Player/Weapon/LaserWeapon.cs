@@ -25,25 +25,38 @@ public class LaserWeapon : Weapon
 
     private IEnumerator FireLaser(float damage)
     {
-        RaycastHit2D[] hits = Physics2D.RaycastAll((Vector2)playerTransform.position, direction.normalized * laserLength);
-        // Raycastを可視化
-        Debug.DrawRay((Vector2)playerTransform.position, direction.normalized * laserLength, Color.red);
+        float elapsedTime = 0f;
 
+        // LineRenderer を有効化
         lineRenderer.enabled = true;
-        yield return new WaitForSeconds(laserDuration);
-        lineRenderer.enabled = false;
 
-        foreach (RaycastHit2D hit in hits)
+        while (elapsedTime < laserDuration)
         {
-            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+            RaycastHit2D[] hits = Physics2D.RaycastAll((Vector2)playerTransform.position, direction.normalized * laserLength);
+            // Raycastを可視化
+            Debug.DrawRay((Vector2)playerTransform.position, direction.normalized * laserLength, Color.red);
+
+            foreach (RaycastHit2D hit in hits)
             {
-                Enemy enemy = hit.collider.GetComponent<Enemy>();
-                if (enemy != null)
+                if (hit.collider != null && hit.collider.CompareTag("Enemy"))
                 {
-                    enemy.TakeDamage(damage);
+                    Enemy enemy = hit.collider.GetComponent<Enemy>();
+                    if (enemy != null)
+                    {
+                        enemy.TakeDamage(damage);
+                    }
                 }
             }
+
+            // インターバルの間待機
+            yield return new WaitForSeconds(laserDuration);
+
+            // 経過時間を更新
+            elapsedTime += laserDuration;
         }
+
+        // LineRenderer を無効化
+        lineRenderer.enabled = false;
     }
 
     private void LateUpdate()

@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
         ExplainAndGameStartingCanvas.SetActive(true);
         _BuffAndDeBuffManager.BuffStateCanvas.SetActive(false);
 
-        for (int i = 1; i >= 0; i--)
+        for (int i = 3; i >= 0; i--)
         {
             countDownText.text = i.ToString();
             

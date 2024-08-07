@@ -294,8 +294,8 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
         //TODO
         GameObject p = Instantiate(BeBuffStateUIPrefab, DuBuffStateParent);
-        p.transform.GetChild(0).GetComponent<Image>().sprite = debuff.Sprite;
-        Slider debuffDurationSlider = p.transform.GetChild(1).GetComponent<Slider>();
+        p.transform.GetChild(1).GetComponent<Image>().sprite = debuff.Sprite;
+        Slider debuffDurationSlider = p.transform.GetChild(2).GetComponent<Slider>();
 
         debuffDurationSlider.maxValue = duration;
         float elapsed = 0;
