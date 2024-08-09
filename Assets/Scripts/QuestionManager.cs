@@ -15,6 +15,7 @@ public class QuestionManager : MonoBehaviour
     [Header("UI")]
     public GameObject QuestionCanvas;
     public GameObject QuestionUI;
+    public GameObject[] HardQuestionUIs;
     public GameObject AnswerUI;
     public Text questionAndAnswerText;
     public Text questionAndAnswerContentText;
@@ -22,6 +23,7 @@ public class QuestionManager : MonoBehaviour
     public Sprite[] MaruAndBatsuSprites;
 
     [Header("Audio")]
+    public AudioClip[] HardQuestionBGMSoundClips;
     public AudioClip collectSoundClip;
     public AudioClip inCollectSoundClip;
 
@@ -58,6 +60,21 @@ public class QuestionManager : MonoBehaviour
 
         QuestionCanvas.SetActive(true);
         QuestionUI.SetActive(true);
+
+        //‚“ïˆÕ“x
+        if (currentQuestion.isHard)
+        {
+            BGMAudio.Instance.BGMAudioSource.loop = false;
+            BGMAudio.Instance.PlayBGM(HardQuestionBGMSoundClips[0], false);
+            StartCoroutine(BGMAudio.Instance.CheckingIsPlaying(() => {
+                BGMAudio.Instance.PlayBGM(HardQuestionBGMSoundClips[1], true);
+            }));
+
+            for (int i = 0; i < HardQuestionUIs.Length; i++)
+            {
+                HardQuestionUIs[i].SetActive(true);
+            }
+        }
     }
 
     public void OnClickYesButton()
@@ -99,6 +116,7 @@ public class QuestionManager : MonoBehaviour
         }
 
         yield return new WaitForSecondsRealtime(1.5f);
+        currentQuestion = null;
         InitalizeUI();
         QuestionCanvas.SetActive(false);
 
@@ -125,6 +143,37 @@ public class QuestionManager : MonoBehaviour
     private void InitalizeUI()
     {
         QuestionUI.SetActive(false);
+        for (int i = 0; i < HardQuestionUIs.Length; i++)
+        {
+            //–â‘è‚ ‚é‚Æ‚«
+            if (currentQuestion != null) 
+            {
+                //“ïˆÕ“x‚‚Ì‚Æ‚«
+                if (currentQuestion.isHard)
+                {
+                    if (i == 0)
+                    {
+                        //BG‚ÍŽc‚·
+                        HardQuestionUIs[i].SetActive(true);
+                    }
+                    else
+                    {
+                        HardQuestionUIs[i].SetActive(false);
+                    }
+                }
+                //•’Ê‚Ì‚Æ‚«
+                else
+                {
+                    HardQuestionUIs[i].SetActive(false);
+                }
+
+            }
+            //‚È‚¢‚Æ‚«
+            else
+            {
+                HardQuestionUIs[i].SetActive(false);
+            }
+        }
         AnswerUI.SetActive(false);
         questionAndAnswerText.text = string.Empty;
         questionAndAnswerContentText.text = string.Empty;

@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator ExplainAndStartingGame()
     {
         ExplainAndGameStartingCanvas.SetActive(true);
-        _BuffAndDeBuffManager.BuffStateCanvas.SetActive(false);
+        _BuffAndDeBuffManager.BuffAndDeBuffStateCanvas.SetActive(false);
 
         for (int i = 3; i >= 0; i--)
         {
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
         }
 
         ExplainAndGameStartingCanvas.SetActive(false);
-        _BuffAndDeBuffManager.BuffStateCanvas.SetActive(true);
+        _BuffAndDeBuffManager.BuffAndDeBuffStateCanvas.SetActive(true);
 
         StartGame();
     }
@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
         _Player._PlayerAttackIndicator.enabled = false;
         _Player._PlayerAnimation.enabled = false;
 
-        if(canvasActive) BGMAudio.Instance.PlayBGM(pauseBGMSoundClip);
+        if(canvasActive) BGMAudio.Instance.PlayBGM(pauseBGMSoundClip, true);
 
         Time.timeScale = 0;
     }
@@ -203,7 +203,7 @@ public class GameManager : MonoBehaviour
         _Player._PlayerAttackIndicator.enabled = true;
         _Player._PlayerAnimation.enabled = true;
 
-        BGMAudio.Instance.PlayBGM(null);
+        BGMAudio.Instance.PlayBGM(null, true);
 
         Time.timeScale = 1;
     }
@@ -236,8 +236,7 @@ public class GameManager : MonoBehaviour
         await _Player._PlayerAnimation.PlayerDead();
 
         //ゲームオーバーのBGM再生
-        BGMAudio.Instance.PlayBGM(gameOverSoundClip);
-        BGMAudio.Instance.BGMAudioSource.loop = false;
+        BGMAudio.Instance.PlayBGM(gameOverSoundClip, false);
 
         GameOverCanvas.SetActive(true);
     }
@@ -312,7 +311,7 @@ public class GameManager : MonoBehaviour
 
     public void SetBGMVolume(float value)
     {
-        BGMAudio.Instance.BGMAudioSource.volume = 0.08f * value * 2;
+        BGMAudio.Instance.BGMAudioSource.volume = 0.05f * value * 2;
 
         if (value <= 0)
         {

@@ -11,6 +11,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public QuestionManager _QuestionManager;
 
     [Header("WeaponBuff")]
+    [Space(10)]
     public List<WeaponBuff> weaponBuffList = new List<WeaponBuff>();
     private List<WeaponBuff> canSelectWeaponBuffList = new List<WeaponBuff>();
     public int weaponBuffLevel = 5;
@@ -19,30 +20,40 @@ public class BuffAndDeBuffManager : MonoBehaviour
     [Range(0, 1)] public float probabilityStrengthenWeapon = 0.4f;
     public int showCount;
     private List<WeaponBuff> selectedWeaponBuffList = new List<WeaponBuff>();
+    [Space(30)]
 
     [Header("DeBuff")]
+    [Space(10)]
     public List<DeBuff> deBuffList = new List<DeBuff>();
     public List<DeBuff> activeDebuffList = new List<DeBuff>();
     public float duration = 30f;
+    [Space(30)]
 
     [Header("WeaponBuffUI")]
+    [Space(10)]
     public GameObject BuffCanvas;
     public Image[] weaponTypeImages;
     public Image[] infoImages;
     public Sprite[] infoSprites;
     public Text[] texts;
+    [Space(30)]
 
-    [Header("BuffStateUI")]
-    public GameObject BuffStateCanvas;
+    [Header("DeBuffUI")]
+    [Space(10)]
+    public GameObject BlindCanvas;
+    [Space(30)]
 
-    [Header("DeBuffStateUI")]
+    [Header("BuffAndDeBuffStateUI")]
+    [Space(10)]
+    public GameObject BuffAndDeBuffStateCanvas;
     public GameObject BeBuffStateUIPrefab;
     public Transform DuBuffStateParent;
 
     private void Start()
     {
         BuffCanvas.SetActive(false);
-        BuffStateCanvas.SetActive(false);
+        BlindCanvas.SetActive(false);
+        BuffAndDeBuffStateCanvas.SetActive(false);
     }
 
     //既に存在する武器の強化ができるListを作成
@@ -261,6 +272,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
         LogManager.Instance.AddLogs($"まもなく問題が来る...");
         LogManager.Instance.AddLogs($"正解したらいいことあるかも！\r\n不正解だったら...");
+        //TODO : 下の内容
         //FadeOut
         FadeUI.Instance.StartFadeOut(1f);//6.8s
 
@@ -284,33 +296,60 @@ public class BuffAndDeBuffManager : MonoBehaviour
         var debuff = deBuffList[r];
 
         //デバフを選んだ後、実行
-        StartCoroutine(ApplyDebuff(debuff, duration));
+        if (activeDebuffList.Contains(debuff))
+        {
+            Debug.Log("もうある");
+            StartCoroutine(ApplyDebuff(debuff, true, duration));
+        }
+        else
+        {
+            activeDebuffList.Add(debuff);
+            StartCoroutine(ApplyDebuff(debuff, false, duration));
+        }
     }
 
-    private IEnumerator ApplyDebuff(DeBuff debuff, float duration)
+    private IEnumerator ApplyDebuff(DeBuff debuff, bool isRestart, float duration)
     {
-        activeDebuffList.Add(debuff);
-        StartDeBuff(debuff);
+        GameObject stateUI = null;
 
         //TODO
-        GameObject p = Instantiate(BeBuffStateUIPrefab, DuBuffStateParent);
-        p.transform.GetChild(1).GetComponent<Image>().sprite = debuff.Sprite;
-        Slider debuffDurationSlider = p.transform.GetChild(2).GetComponent<Slider>();
+        if (isRestart)
+        {
+            stateUI = debuff.stateUI;
+        }
+        else 
+        {
+            stateUI = Instantiate(BeBuffStateUIPrefab, DuBuffStateParent);
+            debuff.stateUI = stateUI;
+            StartDeBuff(debuff);
+        }
 
-        debuffDurationSlider.maxValue = duration;
-        float elapsed = 0;
+        stateUI.transform.GetChild(1).GetComponent<Image>().sprite = debuff.Sprite;
+        Slider debuffDurationSlider = stateUI.transform.GetChild(2).GetComponent<Slider>();
 
-        while (elapsed < duration)
+        if (isRestart)
+        {
+            debuff.duration = debuff.duration + duration;
+        }
+        else
+        {
+            debuff.duration = duration;
+        }
+
+        debuffDurationSlider.maxValue = debuff.duration;
+
+
+        float elapsed = 0f;
+        while (elapsed < debuff.duration)
         {
             elapsed += Time.deltaTime;
-            debuffDurationSlider.value = duration - elapsed;
+            debuffDurationSlider.value = debuff.duration - elapsed;
             yield return null;
         }
 
-        FinishDeBuff(debuff.DeBuffType);
+        FinishDeBuff(debuff);
+        Destroy(stateUI);
         activeDebuffList.Remove(debuff);
-
-        Destroy(p);
     }
 
     private void StartDeBuff(DeBuff debuff)
@@ -323,23 +362,27 @@ public class BuffAndDeBuffManager : MonoBehaviour
             case DeBuffType.WalkSlow:
                 break;
             case DeBuffType.Blind:
+                BlindCanvas.SetActive(true);
                 break;
             case DeBuffType.EnemySpawnRateIncrease:
                 break;
         }
     }
 
-    private void FinishDeBuff(DeBuffType type)
+    private void FinishDeBuff(DeBuff debuff)
     {
-        switch (type)
+        switch (debuff.DeBuffType)
         {
             case DeBuffType.WalkSlow:
                 break;
             case DeBuffType.Blind:
+                BlindCanvas.SetActive(false);
                 break;
             case DeBuffType.EnemySpawnRateIncrease:
                 break;
         }
+
+        debuff.duration = 0;
     }
 
     //SHOW STATE===============================================================

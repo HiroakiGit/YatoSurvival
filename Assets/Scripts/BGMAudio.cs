@@ -27,17 +27,17 @@ public class BGMAudio : MonoBehaviour
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        PlayBGM(null);
+        PlayBGM(null, true);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        PlayBGM(null);
+        PlayBGM(null, true);
     }
 
-    public void PlayBGM(AudioClip clip)
+    public void PlayBGM(AudioClip clip, bool loop)
     {
-        BGMAudioSource.loop = true;
+        BGMAudioSource.loop = loop;
 
         if (clip != null) 
         {
@@ -56,6 +56,30 @@ public class BGMAudio : MonoBehaviour
             {
                 BGMAudioSource.clip = GameBGM;
                 BGMAudioSource.Play();
+            }
+        }
+    }
+
+    public delegate void functionType();
+    public IEnumerator CheckingIsPlaying(functionType callback)
+    {
+        bool canprocess = true;
+        while (canprocess)
+        {
+            yield return new WaitForSecondsRealtime(0.01f);
+
+            if (!BGMAudioSource.isPlaying)
+            {
+                if (!GameManager.Instance.IsGameFinished() || !GameManager.Instance.isProcessing)
+                {
+                    callback();
+                    break;
+                }
+                else
+                {
+                    Debug.Log("‚Þ‚è");
+                    canprocess = false;
+                }
             }
         }
     }
