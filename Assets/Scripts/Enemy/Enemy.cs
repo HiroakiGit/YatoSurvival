@@ -6,46 +6,57 @@ public class Enemy : MonoBehaviour
 {
     public EnemyType enemyType;
     public Player _player;
-    public Sprite[] spritesNormal;
-    public Sprite[] spritesWalk;
-    [HideInInspector] public Sprite spriteNormal;
-    [HideInInspector] public Sprite spriteWalk;
+
+    [Header("Stats")]
+    public EnemyStats weakEnemyStats;
+    public EnemyStats mediumEnemyStats;
+    public EnemyStats strongEnemyStats;
+    public EnemyStats slimeEnemyStats;
+
+    [Header("Content")]
+    public EnemyStats stats;
     public float health = 3;
-
-    public ObjectPool experiencePool;
-
-    [Header("Attack")]
     public float attackRange = 0.5f;
-    public int attackDamage = 10;
+    public float attackDamage = 10;
     public float attackInterval = 5f;
+
+    [Header("UI")]
+    public Sprite spriteNormal;
+    public Sprite spriteWalk;
 
     [Header("Audio")]
     public AudioClip takeDamageSoundClip;
 
-    public void InitializeEnemyType(EnemyType type)
+    [HideInInspector]public ObjectPool experiencePool;
+
+    public void InitializeEnemyType(EnemyType type, float damageRATIO)
     {
         enemyType = type;
 
-        if(enemyType == EnemyType.Weak)
+        switch (enemyType)
         {
-            spriteNormal = spritesNormal[0];
-            spriteWalk = spritesWalk[0];
-            health = 1;
-            attackDamage = 10;
+            case EnemyType.Weak:
+                stats = weakEnemyStats;
+                break;
+            case EnemyType.Medium:
+                stats = mediumEnemyStats;
+                break;
+            case EnemyType.Strong:
+                stats = strongEnemyStats;
+                break;
+            case EnemyType.Slime:
+                stats = slimeEnemyStats;
+                break;
         }
-        else if (enemyType == EnemyType.Medium)
+
+        if (stats != null)
         {
-            spriteNormal = spritesNormal[1];
-            spriteWalk = spritesWalk[1];
-            health = 1;
-            attackDamage = 10;
-        }
-        else if (enemyType == EnemyType.Strong)
-        {
-            spriteNormal = spritesNormal[2];
-            spriteWalk = spritesWalk[2];
-            health = 1;
-            attackDamage = 10;
+            health = stats.hp;
+            attackRange = stats.attackRange;
+            attackDamage = stats.attackDamage * damageRATIO;
+            attackInterval = stats.attackInterval;
+            spriteNormal = stats.spriteNormal;
+            spriteWalk = stats.spriteWalk;
         }
     }
 

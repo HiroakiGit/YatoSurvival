@@ -3,5 +3,6 @@
     {
         Weak,
         Medium,
-        Strong
+        Strong,
+        Slime
     }

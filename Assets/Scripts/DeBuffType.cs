@@ -3,5 +3,6 @@
     {
         WalkSlow,
         Blind,
-        EnemySpawnRateIncrease
+        IncreaseEnemyDamage,
+        DecreaseHP
     }

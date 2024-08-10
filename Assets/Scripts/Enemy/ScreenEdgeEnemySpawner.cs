@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ScreenEdgeEnemySpawner : Spawner
 {
+    public EnemySpawnerManager _EnemySpawnerManager;
     public Player _player;
     public GameObject enemyPrefab;
     public Transform enemySpawnPoint;
-    public float spawnInterval = 2f;
 
     private float timeSinceLastSpawn;
     private Camera mainCamera;
@@ -16,8 +16,8 @@ public class ScreenEdgeEnemySpawner : Spawner
     {
         Vector2 spawnPosition = GetRandomPositionOnScreenEdge();
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, enemySpawnPoint);
-        enemy.GetComponent<Enemy>().InitializeEnemyType(GetRandomEnemyType());
-        enemy.GetComponent<EnemyAI>()._Enemy._player = _player;
+        enemy.GetComponent<Enemy>().InitializeEnemyType(_EnemySpawnerManager.GetRandomEnemyType(), _EnemySpawnerManager.EnemyDamageRATIO);
+        enemy.GetComponent<EnemyMoveAndAnime>()._Enemy._player = _player;
     }
 
     void Start()
@@ -32,7 +32,7 @@ public class ScreenEdgeEnemySpawner : Spawner
 
         timeSinceLastSpawn += Time.deltaTime;
 
-        if (timeSinceLastSpawn >= spawnInterval)
+        if (timeSinceLastSpawn >= _EnemySpawnerManager.ScreenEdgeSpawnInterval)
         {
             Spawn();
             timeSinceLastSpawn = 0f;

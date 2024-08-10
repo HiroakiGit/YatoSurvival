@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ public class LogManager : MonoBehaviour
     public static LogManager Instance;
     [SerializeField] GameObject LogCanvas;
     [SerializeField] Text LogText;
-    public List<string> logs = new List<string>();
+    public ConcurrentBag<string> logList = new ConcurrentBag<string>();
 
 
     void Awake()
@@ -27,7 +28,7 @@ public class LogManager : MonoBehaviour
 
     public void AddLogs(string log)
     {
-        logs.Add(log);
+        logList.Add(log);
     }
 
     public void Log(float sec, System.Action onComplete)
@@ -37,7 +38,7 @@ public class LogManager : MonoBehaviour
 
     public IEnumerator Show(float sec, System.Action onComplete) 
     {
-        foreach (string log in logs)
+        foreach (string log in logList)
         {
             LogText.text = log;
             LogCanvas.SetActive(true);
@@ -45,7 +46,7 @@ public class LogManager : MonoBehaviour
             LogText.text = string.Empty;
             LogCanvas.SetActive(false);
         }
-        logs.Clear();
+        logList.Clear();
 
         onComplete?.Invoke();
     }

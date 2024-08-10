@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class MapEdgeEnemySpawner : Spawner
 {
+    public EnemySpawnerManager _EnemySpawnerManager;
     public Player _player;
     public GameObject enemyPrefab;
     public Transform enemySpawnPoint;
-    public float spawnInterval = 5f;
 
     private float timeSinceLastSpawn;
     public MapManager _MapManager;
@@ -16,8 +16,8 @@ public class MapEdgeEnemySpawner : Spawner
     {
         Vector2 spawnPosition = GetRandomEdgePosition();
         GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, enemySpawnPoint);
-        enemy.GetComponent<Enemy>().InitializeEnemyType(GetRandomEnemyType());
-        enemy.GetComponent<EnemyAI>()._Enemy._player = _player;
+        enemy.GetComponent<Enemy>().InitializeEnemyType(_EnemySpawnerManager.GetRandomEnemyType(), _EnemySpawnerManager.EnemyDamageRATIO);
+        enemy.GetComponent<Enemy>()._player = _player;
     }
     
     private void Update()
@@ -27,7 +27,7 @@ public class MapEdgeEnemySpawner : Spawner
 
         timeSinceLastSpawn += Time.deltaTime;
 
-        if (timeSinceLastSpawn >= spawnInterval)
+        if (timeSinceLastSpawn >= _EnemySpawnerManager.MapEdgeSpawnInterval)
         {
             Spawn();
             timeSinceLastSpawn = 0f;

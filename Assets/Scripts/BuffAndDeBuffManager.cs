@@ -24,8 +24,14 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
     [Header("DeBuff")]
     [Space(10)]
+    public Player _Player;
+    public EnemySpawnerManager _EnemySpawnerManager;
+    public PlayerHealth _PlayerHealth;
     public List<DeBuff> deBuffList = new List<DeBuff>();
-    public List<DeBuff> activeDebuffList = new List<DeBuff>();
+    public float decreaseMoveSpeedRATIO;
+    public float increaseEnemyDamageRATIO;
+    public float decreaseHpRATIO;
+    private List<DeBuff> activeDebuffList = new List<DeBuff>();
     public float duration = 30f;
     [Space(30)]
 
@@ -46,8 +52,8 @@ public class BuffAndDeBuffManager : MonoBehaviour
     [Header("BuffAndDeBuffStateUI")]
     [Space(10)]
     public GameObject BuffAndDeBuffStateCanvas;
-    public GameObject BeBuffStateUIPrefab;
-    public Transform DuBuffStateParent;
+    public GameObject BuffAndDeBuffStateUIPrefab;
+    public Transform BuffAndDeBuffStateParent;
 
     private void Start()
     {
@@ -296,30 +302,44 @@ public class BuffAndDeBuffManager : MonoBehaviour
         var debuff = deBuffList[r];
 
         //デバフを選んだ後、実行
+        ApplyingDebuff(debuff);
+    }
+
+    private void ApplyingDebuff(DeBuff debuff)
+    {
+        LogManager.Instance.AddLogs(debuff.Name);
+        LogManager.Instance.Log(2f, null);
+
+        if (debuff.DeBuffType == DeBuffType.DecreaseHP)
+        {
+            StartDeBuff(debuff);
+            return;
+        }
+
         if (activeDebuffList.Contains(debuff))
         {
             Debug.Log("もうある");
-            StartCoroutine(ApplyDebuff(debuff, true, duration));
+            StartCoroutine(ApplyDebuffCoroutine(debuff, true, duration));
         }
         else
         {
             activeDebuffList.Add(debuff);
-            StartCoroutine(ApplyDebuff(debuff, false, duration));
+            StartCoroutine(ApplyDebuffCoroutine(debuff, false, duration));
         }
     }
 
-    private IEnumerator ApplyDebuff(DeBuff debuff, bool isRestart, float duration)
+    private IEnumerator ApplyDebuffCoroutine(DeBuff debuff, bool alreadyExist, float duration)
     {
         GameObject stateUI = null;
 
-        //TODO
-        if (isRestart)
+        if (alreadyExist)
         {
+            //すでにリストの中にある
             stateUI = debuff.stateUI;
         }
         else 
         {
-            stateUI = Instantiate(BeBuffStateUIPrefab, DuBuffStateParent);
+            stateUI = Instantiate(BuffAndDeBuffStateUIPrefab, BuffAndDeBuffStateParent);
             debuff.stateUI = stateUI;
             StartDeBuff(debuff);
         }
@@ -327,8 +347,9 @@ public class BuffAndDeBuffManager : MonoBehaviour
         stateUI.transform.GetChild(1).GetComponent<Image>().sprite = debuff.Sprite;
         Slider debuffDurationSlider = stateUI.transform.GetChild(2).GetComponent<Slider>();
 
-        if (isRestart)
+        if (alreadyExist)
         {
+            //時間延長
             debuff.duration = debuff.duration + duration;
         }
         else
@@ -337,7 +358,6 @@ public class BuffAndDeBuffManager : MonoBehaviour
         }
 
         debuffDurationSlider.maxValue = debuff.duration;
-
 
         float elapsed = 0f;
         while (elapsed < debuff.duration)
@@ -354,17 +374,19 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
     private void StartDeBuff(DeBuff debuff)
     {
-        LogManager.Instance.AddLogs(debuff.Name);
-        LogManager.Instance.Log(2f, null);
-
         switch (debuff.DeBuffType)
         {
             case DeBuffType.WalkSlow:
+                _Player._PlayerController.ChangeSpeed(decreaseMoveSpeedRATIO);
                 break;
             case DeBuffType.Blind:
                 BlindCanvas.SetActive(true);
                 break;
-            case DeBuffType.EnemySpawnRateIncrease:
+            case DeBuffType.IncreaseEnemyDamage:
+                _EnemySpawnerManager.ChangeEnemyDamageRATIO(increaseEnemyDamageRATIO);
+                break;
+            case DeBuffType.DecreaseHP:
+                _PlayerHealth.TakeDamage(_PlayerHealth.currentHealth * decreaseHpRATIO);
                 break;
         }
     }
@@ -374,11 +396,13 @@ public class BuffAndDeBuffManager : MonoBehaviour
         switch (debuff.DeBuffType)
         {
             case DeBuffType.WalkSlow:
+                _Player._PlayerController.ChangeSpeed(1);
                 break;
             case DeBuffType.Blind:
                 BlindCanvas.SetActive(false);
                 break;
-            case DeBuffType.EnemySpawnRateIncrease:
+            case DeBuffType.IncreaseEnemyDamage:
+                _EnemySpawnerManager.ChangeEnemyDamageRATIO(1);
                 break;
         }
 

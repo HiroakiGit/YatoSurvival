@@ -1353,7 +1353,6 @@ Transform:
   - {fileID: 493638390}
   - {fileID: 1469376275}
   - {fileID: 532860583}
-  - {fileID: 603182841}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5380,7 +5379,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LogCanvas: {fileID: 1416094248}
   LogText: {fileID: 201174360}
-  logs: []
 --- !u!1 &552297360
 GameObject:
   m_ObjectHideFlags: 0
@@ -5993,37 +5991,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\xD71"
---- !u!1 &603182840
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 603182841}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &603182841
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 603182840}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 80221917}
-  m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &604828170
 GameObject:
   m_ObjectHideFlags: 0
@@ -6644,7 +6611,7 @@ GameObject:
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &665168560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7199,13 +7166,33 @@ MonoBehaviour:
   probabilityRateIncreaseWeapon: 0.4
   probabilityStrengthenWeapon: 0.4
   showCount: 3
+  _Player: {fileID: 1061298081}
+  _EnemySpawnerManager: {fileID: 1907327854}
+  _PlayerHealth: {fileID: 1061298084}
   deBuffList:
+  - stateUI: {fileID: 0}
+    Name: "\u8DB3\u304C\u9045\u304F\u306A\u3063\u305F\uFF01"
+    DeBuffType: 0
+    Sprite: {fileID: 21301216, guid: d21555ce72e390f49ba41fd54c373b1b, type: 3}
+    duration: 0
   - stateUI: {fileID: 0}
     Name: "\u307E\u308F\u308A\u304C\u898B\u3065\u3089\u304F\u306A\u3063\u305F\uFF01"
     DeBuffType: 1
     Sprite: {fileID: 21300000, guid: 70e3ce8ad01f39248a3ea97a35bcf238, type: 3}
     duration: 0
-  activeDebuffList: []
+  - stateUI: {fileID: 0}
+    Name: "\u6575\u306E\u30C0\u30E1\u30FC\u30B8\u304C\u4E0A\u6607\u3057\u305F\uFF01"
+    DeBuffType: 2
+    Sprite: {fileID: 21300000, guid: 401d7863028c84a4988285a5389f1d79, type: 3}
+    duration: 0
+  - stateUI: {fileID: 0}
+    Name: "HP\u304C\u6E1B\u3063\u305F\uFF01"
+    DeBuffType: 3
+    Sprite: {fileID: 21300502, guid: d21555ce72e390f49ba41fd54c373b1b, type: 3}
+    duration: 0
+  decreaseMoveSpeedRATIO: 0.6
+  increaseEnemyDamageRATIO: 1.1
+  decreaseHpRATIO: 0.05
   duration: 10
   BuffCanvas: {fileID: 1416647100}
   weaponTypeImages:
@@ -7227,8 +7214,8 @@ MonoBehaviour:
   - {fileID: 1164897689}
   BlindCanvas: {fileID: 665168559}
   BuffAndDeBuffStateCanvas: {fileID: 1181809295}
-  BeBuffStateUIPrefab: {fileID: 6899486135952662169, guid: cf47e2a89fb664d41883887785678f55, type: 3}
-  DuBuffStateParent: {fileID: 852164286}
+  BuffAndDeBuffStateUIPrefab: {fileID: 6899486135952662169, guid: cf47e2a89fb664d41883887785678f55, type: 3}
+  BuffAndDeBuffStateParent: {fileID: 852164286}
 --- !u!1 &793375292
 GameObject:
   m_ObjectHideFlags: 0
@@ -7559,7 +7546,7 @@ GameObject:
   - component: {fileID: 852164286}
   - component: {fileID: 852164287}
   m_Layer: 0
-  m_Name: DeBuffState
+  m_Name: BuffAndDeBuffState
   m_TagString: Untagged
   m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -10230,7 +10217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa354b2edff3f34a894224c0987c767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.6
+  normalSpeed: 0.6
+  currentSpeed: 5
   walkSoundClip:
   - {fileID: 8300000, guid: 6075914d076698b42aa908513ab538bf, type: 3}
   - {fileID: 8300000, guid: d83c2321616d2284fb7f6c1f70d69700, type: 3}
@@ -17969,6 +17957,7 @@ GameObject:
   - component: {fileID: 1907327851}
   - component: {fileID: 1907327852}
   - component: {fileID: 1907327853}
+  - component: {fileID: 1907327854}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -18004,10 +17993,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d919549879ec5d419bd7ac5056e83ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _EnemySpawnerManager: {fileID: 1907327854}
   _player: {fileID: 1061298081}
   enemyPrefab: {fileID: 7726196693310552489, guid: e964f9d8d7a22094d81964934f8b6d71, type: 3}
   enemySpawnPoint: {fileID: 1082271258}
-  spawnInterval: 1
   _MapManager: {fileID: 66239154}
 --- !u!114 &1907327853
 MonoBehaviour:
@@ -18021,10 +18010,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c47e5246566c584abc6bf5a03ee6aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _EnemySpawnerManager: {fileID: 1907327854}
   _player: {fileID: 1061298081}
   enemyPrefab: {fileID: 7726196693310552489, guid: e964f9d8d7a22094d81964934f8b6d71, type: 3}
   enemySpawnPoint: {fileID: 1082271258}
-  spawnInterval: 0.4
+--- !u!114 &1907327854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907327850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ae8bcd5eb6c85c4ca1b4dee0b72c1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MapEdgeSpawnInterval: 30
+  ScreenEdgeSpawnInterval: 3
+  EnemyDamageRATIO: 1
 --- !u!1 &1909818185
 GameObject:
   m_ObjectHideFlags: 0
@@ -19056,7 +19060,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2043347801}
   m_Layer: 0
-  m_Name: BuffState
+  m_Name: WeaponBuffState
   m_TagString: Untagged
   m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

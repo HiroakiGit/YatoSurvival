@@ -6,9 +6,9 @@ using UnityEngine;
 [System.Serializable]
 public class DeBuff
 {
-    public GameObject stateUI;
+    [HideInInspector]public GameObject stateUI;
     public string Name;
     public DeBuffType DeBuffType;
     public Sprite Sprite;
-    public float duration;
+    [HideInInspector]public float duration;
 }

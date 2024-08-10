@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5.0f;
+    public float normalSpeed;
+    public float currentSpeed;
     [Header("Audio")]
     public AudioClip[] walkSoundClip;
     public float stepInterval = 1f;
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        currentSpeed = normalSpeed;
     }
 
     void Update()
@@ -24,7 +26,7 @@ public class PlayerController : MonoBehaviour
         if (!GameManager.Instance.IsGameStarted()) return;
 
         Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        moveVelocity = moveInput.normalized * speed;
+        moveVelocity = moveInput.normalized * currentSpeed;
 
         //“®‚¢‚Ä‚¢‚é‚Æ‚«
         if(rb.velocity.magnitude > 0.1f)
@@ -47,5 +49,10 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         rb.velocity = moveVelocity;
+    }
+
+    public void ChangeSpeed(float speedRATIO)
+    {
+        currentSpeed = normalSpeed * speedRATIO;
     }
 }

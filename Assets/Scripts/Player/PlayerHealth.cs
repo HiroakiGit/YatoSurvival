@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 100;
-    public int currentHealth;
+    public float maxHealth = 100;
+    public float currentHealth;
 
     public Text healthText;
     public Slider hpSlider;
@@ -20,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
         UpdateHealthUI();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         if (currentHealth <= 0)
@@ -33,7 +33,7 @@ public class PlayerHealth : MonoBehaviour
         SEAudio.Instance.PlayOneShot(takeDamageSoundClip,0.25f);
     }
 
-    public void Heal(int amount)
+    public void Heal(float amount)
     {
         currentHealth += amount;
         if (currentHealth > maxHealth)
