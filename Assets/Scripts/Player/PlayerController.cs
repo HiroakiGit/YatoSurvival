@@ -53,6 +53,22 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeSpeed(float speedRATIO)
     {
-        currentSpeed = normalSpeed * speedRATIO;
+        if(speedRATIO == 1)
+        {
+            currentSpeed = normalSpeed * speedRATIO;
+        }
+        else
+        {
+            currentSpeed = currentSpeed * speedRATIO;
+
+            if((currentSpeed + 0.3f) < normalSpeed)
+            {
+                currentSpeed = normalSpeed - 0.3f;
+            }
+            else if(normalSpeed < (currentSpeed - 0.3f))
+            {
+                currentSpeed = normalSpeed + 0.3f;
+            }
+        }
     }
 }

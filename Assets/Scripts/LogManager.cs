@@ -9,7 +9,7 @@ public class LogManager : MonoBehaviour
     public static LogManager Instance;
     [SerializeField] GameObject LogCanvas;
     [SerializeField] Text LogText;
-    public ConcurrentBag<string> logList = new ConcurrentBag<string>();
+    public List<string> logList = new List<string>();
 
 
     void Awake()
@@ -38,7 +38,7 @@ public class LogManager : MonoBehaviour
 
     public IEnumerator Show(float sec, System.Action onComplete) 
     {
-        foreach (string log in logList)
+        foreach (string log in logList.ToArray())
         {
             LogText.text = log;
             LogCanvas.SetActive(true);

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
+    public EnemySpawnerManager _EnemySpawnerManager;
     public GameObject TimerCanvas;
     public int aliveTime;
     public Text minText;
@@ -33,6 +34,12 @@ public class Timer : MonoBehaviour
             aliveTime++;
             minText.text = ((int)(aliveTime / 60)).ToString("d2");
             secText.text = ((int)aliveTime % 60).ToString("d2");
+
+            //TODO
+            if(aliveTime % _EnemySpawnerManager.bossSpawnTimeIntervalMin == 0)
+            {
+                _EnemySpawnerManager.StartBossSpawnProcess();
+            }
         }
     }
 

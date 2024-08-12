@@ -9,6 +9,7 @@ public class QuestionManager : MonoBehaviour
     public List<Question> normalQuestions;
     public List<Question> hardQuestions;
     [Range(0, 1)] public float hardQuestionChance = 0.2f;
+    [Range(0, 1)] public float probabilityGetBuff = 0.2f;
     [Range(0, 1)] public float probabilityGetDeBuff = 0.6f;
     private Question currentQuestion;
 
@@ -24,6 +25,7 @@ public class QuestionManager : MonoBehaviour
 
     [Header("Audio")]
     public AudioClip[] HardQuestionBGMSoundClips;
+    public AudioClip questionSoundClip;
     public AudioClip collectSoundClip;
     public AudioClip inCollectSoundClip;
 
@@ -75,6 +77,8 @@ public class QuestionManager : MonoBehaviour
                 HardQuestionUIs[i].SetActive(true);
             }
         }
+
+        SEAudio.Instance.PlayOneShot(questionSoundClip, 0.2f);
     }
 
     public void OnClickYesButton()
@@ -120,19 +124,29 @@ public class QuestionManager : MonoBehaviour
         InitalizeUI();
         QuestionCanvas.SetActive(false);
 
-        //デバフ付与
-        if (!isCorrect) 
+        //バフ付与
+        if (isCorrect) 
         {
             float r = Random.Range(0f, 1f);
 
-            if(r <= probabilityGetDeBuff)
+            if (r <= probabilityGetBuff)
+            {
+                _BuffAndDeBuffManager.StartBuffProcess();
+            }
+        }
+        //デバフ付与
+        else
+        {
+            float r = Random.Range(0f, 1f);
+
+            if (r <= probabilityGetDeBuff)
             {
                 _BuffAndDeBuffManager.StartDeBuffProcess();
             }
             else
             {
                 LogManager.Instance.AddLogs("何も起こらなかった...");
-                LogManager.Instance.Log(2f,null);
+                LogManager.Instance.Log(2f, null);
             }
         }
 

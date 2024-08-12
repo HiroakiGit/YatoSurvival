@@ -13,6 +13,7 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Audio")]
     public AudioClip takeDamageSoundClip;
+    public AudioClip healSoundClip;
 
     void Start()
     {
@@ -41,6 +42,8 @@ public class PlayerHealth : MonoBehaviour
             currentHealth = maxHealth;
         }
         UpdateHealthUI();
+
+        SEAudio.Instance.PlayOneShot(healSoundClip, 0.25f);
     }
 
     void Die()

@@ -66,8 +66,6 @@ public class PlayerAttack : MonoBehaviour
     public void GenerateInitialWeapon()
     {
         AddWeapon(WeaponType.Suica);
-        AddWeapon(WeaponType.SetSquare);
-        AddWeapon(WeaponType.Laser);
     }
 
     private void GenerateWeapon(WeaponType weaponType, float startingAngle = 0f, int chartWeaponsCount = 0,int lazerWeaponsCount = 0)

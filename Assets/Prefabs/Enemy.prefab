@@ -173,7 +173,7 @@ MonoBehaviour:
     spriteNormal: {fileID: 0}
     spriteWalk: {fileID: 0}
     hp: 10
-    moveSpeed: 50
+    moveSpeed: 5
     attackRange: 0.22
     attackDamage: 5
     attackInterval: 0.8
@@ -210,3 +210,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 868f0790898c4fb4d90d9b8a5b6729ab, type: 3}
   - {fileID: 21300000, guid: 46253f3621b165247b3c11e700814bf4, type: 3}
   - {fileID: 21300000, guid: 485dcbbcf26fa9643ad9d75532abd929, type: 3}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  increaseDamageColor: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}

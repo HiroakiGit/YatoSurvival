@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,17 +23,25 @@ public class BuffAndDeBuffManager : MonoBehaviour
     private List<WeaponBuff> selectedWeaponBuffList = new List<WeaponBuff>();
     [Space(30)]
 
+    [Header("Buff")]
+    [Space(10)]
+    public List<Buff> BuffList = new List<Buff>();
+    public float increaseMoveSpeedRATIO;
+    public float increaseHp;
+    private List<Buff> activeBuffList = new List<Buff>();
+    public float durationBuff = 30f;
+    [Space(30)]
+
     [Header("DeBuff")]
     [Space(10)]
     public Player _Player;
     public EnemySpawnerManager _EnemySpawnerManager;
-    public PlayerHealth _PlayerHealth;
     public List<DeBuff> deBuffList = new List<DeBuff>();
     public float decreaseMoveSpeedRATIO;
     public float increaseEnemyDamageRATIO;
     public float decreaseHpRATIO;
     private List<DeBuff> activeDebuffList = new List<DeBuff>();
-    public float duration = 30f;
+    public float durationDeBuff = 30f;
     [Space(30)]
 
     [Header("WeaponBuffUI")]
@@ -118,6 +127,11 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
                 //追加または強化またはレート上昇
                 AddBuff(weaponBuffList, i, n);
+
+                if (n == 1) Debug.Log("表示回数オーバー:レート");
+                else if(n == 0)Debug.Log("表示回数オーバー:追加");
+                else Debug.Log("表示回数オーバー:強化");
+
                 continue;
             }
 
@@ -146,6 +160,10 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
                 //追加または強化またはレート上昇
                 AddBuff(weaponBuffList, i, n);
+
+                if (n == 0) Debug.Log("追加");
+                else if(n == 1)Debug.Log("武器数オーバー:レート");
+                else if(n == 2)Debug.Log("武器数オーバー:強化");
             }
             else if (probabilityAddWeapon < r && r <= (probabilityAddWeapon + probabilityRateIncreaseWeapon)) //0.2 ~ 0.6
             {
@@ -176,11 +194,15 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
                 //レート上昇または追加または強化
                 AddBuff(canSelectWeaponBuffList, i, n);
+                if (n == 1) Debug.Log("レート");
+                else if (n == 0) Debug.Log("レートオーバー:追加");
+                else if (n == 2) Debug.Log("レートオーバーもしくは武器数オーバー:強化");
             }
             else //0.6 ~ 1
             {
                 //====強化====
                 AddBuff(canSelectWeaponBuffList, i, 2);
+                Debug.Log("強化");
             }
         }
 
@@ -238,36 +260,34 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public void OnClickWeaponBuffButton(int k)
     {
         BuffCanvas.SetActive(false);
-
-        var clickedData = selectedWeaponBuffList[k];
         int n = 0;
 
         for (int j = 0; j < weaponBuffList.Count; j++)
         {
-            if (weaponBuffList[j].WeaponType == clickedData.WeaponType)
+            if (weaponBuffList[j].WeaponType == selectedWeaponBuffList[k].WeaponType)
             {
                 n = j;
             }
         }
 
-        switch (clickedData.state)
+        switch (selectedWeaponBuffList[k].state)
         {
             case 0:
                 //追加
-                _PlayerAttack.AddWeapon(clickedData.WeaponType);
-                LogManager.Instance.AddLogs($"{clickedData.WeaponName}を入手した！");
+                _PlayerAttack.AddWeapon(weaponBuffList[n].WeaponType);
+                LogManager.Instance.AddLogs($"{weaponBuffList[n].WeaponName}を入手した！");
                 break;
             case 1:
                 //レート上昇
-                _PlayerAttack.DecreaseAttackInterval(clickedData.WeaponType, clickedData.increaseRate);
+                _PlayerAttack.DecreaseAttackInterval(weaponBuffList[n].WeaponType, weaponBuffList[n].increaseRate);
                 weaponBuffList[n].BuffStateCountUp(1,0);
-                LogManager.Instance.AddLogs($"{clickedData.WeaponName}のレートが上昇した！");
+                LogManager.Instance.AddLogs($"{weaponBuffList[n].WeaponName}のレートが上昇した！");
                 break;
             case 2:
                 //攻撃力増加
-                _PlayerAttack.IncreaseDamage(clickedData.WeaponType, clickedData.increaseDamage);
+                _PlayerAttack.IncreaseDamage(weaponBuffList[n].WeaponType, weaponBuffList[n].increaseDamage);
                 weaponBuffList[n].BuffStateCountUp(0,1);
-                LogManager.Instance.AddLogs($"{clickedData.WeaponName}の攻撃力が増加した！");
+                LogManager.Instance.AddLogs($"{weaponBuffList[n].WeaponName}の攻撃力が増加した！");
                 break;
         }
 
@@ -277,16 +297,142 @@ public class BuffAndDeBuffManager : MonoBehaviour
         selectedWeaponBuffList.Clear();
 
         LogManager.Instance.AddLogs($"まもなく問題が来る...");
-        LogManager.Instance.AddLogs($"正解したらいいことあるかも！\r\n不正解だったら...");
+        LogManager.Instance.AddLogs($"正解したらいいことあるかも！不正解だったら...");
         //TODO : 下の内容
         //FadeOut
-        FadeUI.Instance.StartFadeOut(1f);//6.8s
+        FadeUI.Instance.StartFadeOut(6.8f);//6.8s
 
         //Log
-        LogManager.Instance.Log(.1f, () => //2s
+        LogManager.Instance.Log(2f, () => //2s
         {
             _QuestionManager.StartQuestion();
         }); 
+    }
+
+    //BUFF=========================================================================
+    public void StartBuffProcess()
+    {
+        SelectBuff();
+    }
+
+    private void SelectBuff()
+    {
+        //バフをランダムに選ぶ
+        int r = UnityEngine.Random.Range(0, BuffList.Count);
+        var buff = BuffList[r];
+
+        //MaxHPだったら歩く速度上昇
+        if (_Player._PlayerHealth.currentHealth >= _Player._PlayerHealth.maxHealth)
+        {
+            for(int i = 0; i < BuffList.Count; i++)
+            {
+                if (BuffList[i].BuffType == BuffType.WalkFast)
+                {
+                    buff = BuffList[i];
+                }
+            }
+        }
+
+        //バフを選んだ後、実行
+        ApplyingBuff(buff);
+    }
+
+    private void ApplyingBuff(Buff buff)
+    {
+        LogManager.Instance.AddLogs(buff.Name);
+        LogManager.Instance.Log(2f, null);
+
+        //HP上昇だったらコルーチン処理しない
+        if (buff.BuffType == BuffType.IncreaseHP)
+        {
+            StartBuff(buff);
+            return;
+        }
+        //足の速度上昇だったらコルーチン処理する
+        else if (buff.BuffType == BuffType.WalkFast)
+        {
+            StartBuff(buff);
+        }
+
+        if (activeBuffList.Contains(buff))
+        {
+            Debug.Log("もうある");
+            StartCoroutine(ApplyBuffCoroutine(buff, true, durationBuff));
+        }
+        else
+        {
+            activeBuffList.Add(buff);
+            StartCoroutine(ApplyBuffCoroutine(buff, false, durationBuff));
+        }
+    }
+
+    private IEnumerator ApplyBuffCoroutine(Buff buff, bool alreadyExist, float duration)
+    {
+        GameObject stateUI = null;
+
+        if (alreadyExist)
+        {
+            //すでにリストの中にある
+            stateUI = buff.stateUI;
+        }
+        else
+        {
+            stateUI = Instantiate(BuffAndDeBuffStateUIPrefab, BuffAndDeBuffStateParent);
+            buff.stateUI = stateUI;
+            StartBuff(buff);
+        }
+
+        stateUI.transform.GetChild(1).GetComponent<Image>().sprite = buff.Sprite;
+        Slider buffDurationSlider = stateUI.transform.GetChild(2).GetComponent<Slider>();
+
+        if (alreadyExist)
+        {
+            //時間延長
+            buff.duration = buff.duration + duration;
+        }
+        else
+        {
+            buff.duration = duration;
+        }
+
+        buffDurationSlider.maxValue = buff.duration;
+
+        float elapsed = 0f;
+        while (elapsed < buff.duration)
+        {
+            elapsed += Time.deltaTime;
+            buffDurationSlider.value = buff.duration - elapsed;
+            yield return null;
+        }
+
+        FinishBuff(buff);
+        Destroy(stateUI);
+        activeBuffList.Remove(buff);
+    }
+
+    private void StartBuff(Buff buff)
+    {
+        switch (buff.BuffType)
+        {
+            case BuffType.WalkFast:
+                _Player._PlayerController.ChangeSpeed(increaseMoveSpeedRATIO);
+                break;
+            case BuffType.IncreaseHP:
+                _Player._PlayerHealth.Heal(increaseHp);
+                break;
+        }
+    }
+
+    private void FinishBuff(Buff buff)
+    {
+        switch (buff.BuffType)
+        {
+            case BuffType.WalkFast:
+                _Player._PlayerController.ChangeSpeed(1);
+                break;
+            case BuffType.IncreaseHP:
+                break;
+        }
     }
 
     //DEBUFF=======================================================================
@@ -310,21 +456,27 @@ public class BuffAndDeBuffManager : MonoBehaviour
         LogManager.Instance.AddLogs(debuff.Name);
         LogManager.Instance.Log(2f, null);
 
+        //HP減少だったらコルーチン処理しない
         if (debuff.DeBuffType == DeBuffType.DecreaseHP)
         {
             StartDeBuff(debuff);
             return;
         }
+        //足の速度減少だったらコルーチン処理をする
+        else if (debuff.DeBuffType == DeBuffType.WalkSlow)
+        {
+            StartDeBuff(debuff);
+        }
 
         if (activeDebuffList.Contains(debuff))
         {
             Debug.Log("もうある");
-            StartCoroutine(ApplyDebuffCoroutine(debuff, true, duration));
+            StartCoroutine(ApplyDebuffCoroutine(debuff, true, durationDeBuff));
         }
         else
         {
             activeDebuffList.Add(debuff);
-            StartCoroutine(ApplyDebuffCoroutine(debuff, false, duration));
+            StartCoroutine(ApplyDebuffCoroutine(debuff, false, durationDeBuff));
         }
     }
 
@@ -386,7 +538,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
                 _EnemySpawnerManager.ChangeEnemyDamageRATIO(increaseEnemyDamageRATIO);
                 break;
             case DeBuffType.DecreaseHP:
-                _PlayerHealth.TakeDamage(_PlayerHealth.currentHealth * decreaseHpRATIO);
+                _Player._PlayerHealth.TakeDamage(_Player._PlayerHealth.currentHealth * decreaseHpRATIO);
                 break;
         }
     }
