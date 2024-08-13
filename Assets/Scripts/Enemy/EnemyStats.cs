@@ -7,6 +7,7 @@ public class EnemyStats
 {
     public Sprite spriteNormal;
     public Sprite spriteWalk;
+    public Color normalColor;
     public float hp;
     public float moveSpeed;
     public float attackRange;

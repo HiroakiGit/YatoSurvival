@@ -12,6 +12,7 @@ public class RankingManager : MonoBehaviour
 
     [Header("UI")]
     public GameObject RankingCanvas;
+    public GameObject LoadingObj;
     public GameObject BackButton;
     public GameObject RankPrefab;
     public Transform rankingListParent;
@@ -58,6 +59,8 @@ public class RankingManager : MonoBehaviour
 
     private async Task GetLeaderboard()
     {
+        LoadingObj.SetActive(true);
+
         var request = new GetLeaderboardRequest
         {
             StatisticName = "HighScore"
@@ -81,6 +84,10 @@ public class RankingManager : MonoBehaviour
         });
 
         await taskCompletionSource.Task;
+
+        await Task.Delay(1000);
+
+        LoadingObj.SetActive(false);
     }
 
     private void ShowLeaderboard()
@@ -108,6 +115,7 @@ public class RankingManager : MonoBehaviour
     private void Initalize()
     {
         RankingCanvas.SetActive(false);
+        LoadingObj.SetActive(false);
         BackButton.SetActive(false);
 
         rankingList.Clear();

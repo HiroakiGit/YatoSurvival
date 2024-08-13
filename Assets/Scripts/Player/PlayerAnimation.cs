@@ -24,6 +24,9 @@ public class PlayerAnimation : MonoBehaviour
     private Vector3 pivotOffset;
     Quaternion targetRotation;
 
+    [Header("Audio")]
+    public AudioClip playerDeadSoundClip;
+
     private SpriteRenderer spriteRenderer;
     private int currentFrame;
     private float frameTimer;
@@ -135,6 +138,8 @@ public class PlayerAnimation : MonoBehaviour
 
         transform.rotation = endRotation; // 最終的にぴったりと目標角度にする
         transform.position = endPosition + pivotOffset; // 最終的な位置を調整
+
+        SEAudio.Instance.PlayOneShot(playerDeadSoundClip, 0.6f);
 
         await Task.Delay(1000);
     }

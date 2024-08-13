@@ -9,5 +9,5 @@ public class Buff
     public string Name;
     public BuffType BuffType;
     public Sprite Sprite;
-    [HideInInspector] public float duration;
+    public float duration;
 }

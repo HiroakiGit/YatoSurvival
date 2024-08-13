@@ -174,6 +174,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6017517575384773985, guid: 3f965be90d9716c409c2d6d00a457cf2, type: 3}
+      propertyPath: Mute
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6017517575384774014, guid: 3f965be90d9716c409c2d6d00a457cf2, type: 3}
       propertyPath: m_Name
       value: BGMAndSEAudioSource
@@ -460,7 +464,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 185}
-  m_SizeDelta: {x: 500, y: 100}
+  m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &963389231
 MonoBehaviour:
@@ -538,7 +542,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5efaec0be7651144092b8a7c8b66fd5c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1c053e529b848b240919b58c83d1a2f7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -568,8 +572,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e1f1a2192c8364eb8ca2cc9761a493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalSprite: {fileID: 21300000, guid: 5efaec0be7651144092b8a7c8b66fd5c, type: 3}
-  OnPointSprite: {fileID: 21300000, guid: ed857c33ffea33244b55994bba737388, type: 3}
+  NormalSprite: {fileID: 21300000, guid: 1c053e529b848b240919b58c83d1a2f7, type: 3}
+  OnPointSprite: {fileID: 21300000, guid: ece4ccdb3ec63fc4bb05d314dd5b281f, type: 3}
+  isNormal: 1
   choiceButtonSoundClip: {fileID: 8300000, guid: 08d1cb9916b688f4fb1b7f55c17c9684, type: 3}
   pushedButtonSoundClip: {fileID: 8300000, guid: a8542f01924bb5c4f94ba61a12858e88, type: 3}
 --- !u!1 &1431361905
@@ -784,12 +789,12 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 1a6dc3e3ac2f7d84390258344adb088e, type: 3}
-    m_FontSize: 64
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 6
+    m_MinSize: 3
     m_MaxSize: 80
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0

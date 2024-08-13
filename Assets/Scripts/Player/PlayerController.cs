@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     {
         //開始まで待つ
         if (!GameManager.Instance.IsGameStarted()) return;
+        //ゲームが終わっていたら何もしない
+        if(GameManager.Instance.IsGameFinished()) return;
 
         Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         moveVelocity = moveInput.normalized * currentSpeed;

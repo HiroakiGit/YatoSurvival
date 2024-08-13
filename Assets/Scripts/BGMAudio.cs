@@ -70,7 +70,7 @@ public class BGMAudio : MonoBehaviour
 
             if (!BGMAudioSource.isPlaying)
             {
-                if (!GameManager.Instance.IsGameFinished() || !GameManager.Instance.isProcessing)
+                if (!GameManager.Instance.IsGameFinished() && !GameManager.Instance.isProcessing)
                 {
                     callback();
                     break;

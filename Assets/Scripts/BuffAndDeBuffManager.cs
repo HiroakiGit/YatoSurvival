@@ -20,7 +20,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     [Range(0, 1)] public float probabilityRateIncreaseWeapon = 0.4f;
     [Range(0, 1)] public float probabilityStrengthenWeapon = 0.4f;
     public int showCount;
-    private List<WeaponBuff> selectedWeaponBuffList = new List<WeaponBuff>();
+    public List<WeaponBuff> selectedWeaponBuffList = new List<WeaponBuff>();
     [Space(30)]
 
     [Header("Buff")]
@@ -29,7 +29,6 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public float increaseMoveSpeedRATIO;
     public float increaseHp;
     private List<Buff> activeBuffList = new List<Buff>();
-    public float durationBuff = 30f;
     [Space(30)]
 
     [Header("DeBuff")]
@@ -41,7 +40,6 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public float increaseEnemyDamageRATIO;
     public float decreaseHpRATIO;
     private List<DeBuff> activeDebuffList = new List<DeBuff>();
-    public float durationDeBuff = 30f;
     [Space(30)]
 
     [Header("WeaponBuffUI")]
@@ -50,7 +48,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public Image[] weaponTypeImages;
     public Image[] infoImages;
     public Sprite[] infoSprites;
-    public Text[] texts;
+    public Text[] weaponNameTexts;
     [Space(30)]
 
     [Header("DeBuffUI")]
@@ -215,9 +213,10 @@ public class BuffAndDeBuffManager : MonoBehaviour
     {
         WeaponBuff a = new WeaponBuff
         {
-            state = state,
+            WeaponName = sourceList[index].WeaponName,
             WeaponType = sourceList[index].WeaponType,
             Sprite = sourceList[index].Sprite,
+            state = state,
             increaseRate = sourceList[index].increaseRate
         };
         selectedWeaponBuffList.Add(a);
@@ -229,10 +228,10 @@ public class BuffAndDeBuffManager : MonoBehaviour
         for (int n = 0; n < showCount; n++)
         {
             weaponTypeImages[n].sprite = selectedWeaponBuffList[n].Sprite;
+            weaponNameTexts[n].text = selectedWeaponBuffList[n].WeaponName;
 
             if (selectedWeaponBuffList[n].state == 0)
             {
-                texts[n].text = "追加";
                 if (!(_PlayerAttack.WeaponCount(selectedWeaponBuffList[n].WeaponType) > 0))
                 {
                     //New Weapon
@@ -245,12 +244,10 @@ public class BuffAndDeBuffManager : MonoBehaviour
             }
             else if (selectedWeaponBuffList[n].state == 1)
             {
-                texts[n].text = "レート上昇";
                 infoImages[n].sprite = infoSprites[2];
             }
             else
             {
-                texts[n].text = "強化";
                 infoImages[n].sprite = infoSprites[3];
             }
         }
@@ -300,10 +297,10 @@ public class BuffAndDeBuffManager : MonoBehaviour
         LogManager.Instance.AddLogs($"正解したらいいことあるかも！不正解だったら...");
         //TODO : 下の内容
         //FadeOut
-        FadeUI.Instance.StartFadeOut(6.8f);//6.8s
+        FadeUI.Instance.StartFadeOut(2f);//6.8s
 
         //Log
-        LogManager.Instance.Log(2f, () => //2s
+        LogManager.Instance.Log(0.1f, () => //2s
         {
             _QuestionManager.StartQuestion();
         }); 
@@ -342,11 +339,11 @@ public class BuffAndDeBuffManager : MonoBehaviour
         LogManager.Instance.AddLogs(buff.Name);
         LogManager.Instance.Log(2f, null);
 
-        //HP上昇だったらコルーチン処理しない
+        //HP上昇だったら
         if (buff.BuffType == BuffType.IncreaseHP)
         {
             StartBuff(buff);
-            return;
+            buff.duration = 5;
         }
         //足の速度上昇だったらコルーチン処理する
         else if (buff.BuffType == BuffType.WalkFast)
@@ -357,12 +354,12 @@ public class BuffAndDeBuffManager : MonoBehaviour
         if (activeBuffList.Contains(buff))
         {
             Debug.Log("もうある");
-            StartCoroutine(ApplyBuffCoroutine(buff, true, durationBuff));
+            StartCoroutine(ApplyBuffCoroutine(buff, true, buff.duration));
         }
         else
         {
             activeBuffList.Add(buff);
-            StartCoroutine(ApplyBuffCoroutine(buff, false, durationBuff));
+            StartCoroutine(ApplyBuffCoroutine(buff, false, buff.duration));
         }
     }
 
@@ -456,11 +453,11 @@ public class BuffAndDeBuffManager : MonoBehaviour
         LogManager.Instance.AddLogs(debuff.Name);
         LogManager.Instance.Log(2f, null);
 
-        //HP減少だったらコルーチン処理しない
+        //HP減少だったら
         if (debuff.DeBuffType == DeBuffType.DecreaseHP)
         {
             StartDeBuff(debuff);
-            return;
+            debuff.duration = 5;
         }
         //足の速度減少だったらコルーチン処理をする
         else if (debuff.DeBuffType == DeBuffType.WalkSlow)
@@ -471,12 +468,12 @@ public class BuffAndDeBuffManager : MonoBehaviour
         if (activeDebuffList.Contains(debuff))
         {
             Debug.Log("もうある");
-            StartCoroutine(ApplyDebuffCoroutine(debuff, true, durationDeBuff));
+            StartCoroutine(ApplyDebuffCoroutine(debuff, true, debuff.duration));
         }
         else
         {
             activeDebuffList.Add(debuff);
-            StartCoroutine(ApplyDebuffCoroutine(debuff, false, durationDeBuff));
+            StartCoroutine(ApplyDebuffCoroutine(debuff, false, debuff.duration));
         }
     }
 

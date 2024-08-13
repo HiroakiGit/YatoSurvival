@@ -10,5 +10,5 @@ public class DeBuff
     public string Name;
     public DeBuffType DeBuffType;
     public Sprite Sprite;
-    [HideInInspector]public float duration;
+    public float duration;
 }

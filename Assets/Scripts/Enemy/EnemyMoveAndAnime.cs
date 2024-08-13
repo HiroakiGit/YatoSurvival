@@ -17,7 +17,6 @@ public class EnemyMoveAndAnime : MonoBehaviour
     private Vector3 originalScale;
 
     [Header("Color")]
-    public Color normalColor;
     public Color increaseDamageColor;
 
     private void Start()
@@ -66,7 +65,7 @@ public class EnemyMoveAndAnime : MonoBehaviour
             }
             else
             {
-                spriteRenderer.color= normalColor;
+                spriteRenderer.color= _Enemy.stats.normalColor;
             }
         }
     }
