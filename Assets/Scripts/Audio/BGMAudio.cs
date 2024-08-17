@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class BGMAudio : MonoBehaviour
 {
     public static BGMAudio Instance;
+    public float startVolume = 0.05f;
     public AudioClip LobbyBGM;
     public AudioClip GameBGM;
     public AudioSource BGMAudioSource;
@@ -32,6 +33,7 @@ public class BGMAudio : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        BGMAudioSource.volume = startVolume;
         PlayBGM(null, true);
     }
 

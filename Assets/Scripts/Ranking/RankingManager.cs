@@ -17,6 +17,9 @@ public class RankingManager : MonoBehaviour
     public GameObject RankPrefab;
     public Transform rankingListParent;
 
+    [Header("Audio")]
+    public AudioClip showDataSoundClip;
+
     private void Start()
     {
         Initalize();
@@ -60,6 +63,7 @@ public class RankingManager : MonoBehaviour
     private async Task GetLeaderboard()
     {
         LoadingObj.SetActive(true);
+        SEAudio.Instance.PlayOneShot(showDataSoundClip, 0.7f);
 
         var request = new GetLeaderboardRequest
         {
@@ -98,7 +102,7 @@ public class RankingManager : MonoBehaviour
             rankingObjList.Add(obj);
 
             RankUI ui = obj.GetComponent<RankUI>();
-            ui.positionText.text = rankingList[i].position.ToString();
+            ui.positionText.text = $"{rankingList[i].position}.";
             ui.playerNameText.text = rankingList[i].playerName;
             ui.scoreText.text = ((int)rankingList[i].time / 60).ToString("d2")+ ":" + ((int)rankingList[i].time % 60).ToString("d2");
             obj = null;

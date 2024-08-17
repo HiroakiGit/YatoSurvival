@@ -9,9 +9,9 @@ public class PlayerAttackIndicator : MonoBehaviour
     public float distanceFromPlayer = 1f; 
     private GameObject arrowInstance;
     public float movementSpeed = 5f;
-    [Header("Circle")]
-    public GameObject circlePrefab;
-    private GameObject circleInstance;
+    [Header("AttackCursor")]
+    public GameObject attackCursorPrefab;
+    private GameObject cursorInstance;
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class PlayerAttackIndicator : MonoBehaviour
         arrowInstance = Instantiate(arrowPrefab, transform.position, Quaternion.identity, transform);
         arrowInstance.transform.localPosition = new Vector3(0f, distanceFromPlayer, 0f); 
 
-        circleInstance = Instantiate(circlePrefab, transform.position, Quaternion.identity, transform);
+        cursorInstance = Instantiate(attackCursorPrefab, transform.position, Quaternion.identity, transform);
     }
 
     void LateUpdate()
@@ -37,6 +37,6 @@ public class PlayerAttackIndicator : MonoBehaviour
         arrowInstance.transform.position = Vector3.MoveTowards(arrowInstance.transform.position, targetPosition, movementSpeed * Time.deltaTime);
 
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        circleInstance.transform.position = Vector2.MoveTowards(circleInstance.transform.position, mousePosition, 20 * Time.deltaTime);
+        cursorInstance.transform.position = Vector2.MoveTowards(cursorInstance.transform.position, mousePosition, 20 * Time.deltaTime);
     }
 }

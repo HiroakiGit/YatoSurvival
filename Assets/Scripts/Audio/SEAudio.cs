@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SEAudio : MonoBehaviour
 {
     public static SEAudio Instance;
+    public float startVolume = 0.3f;
     public AudioSource SEAudioSource;
     void Awake()
     {
@@ -21,12 +22,14 @@ public class SEAudio : MonoBehaviour
         }
     }
 
-    private void SetParent()
+    private void Start()
     {
-        if (SceneManager.GetActiveScene().name.Contains("Game"))
-        {
-            transform.parent = GameObject.Find("Player").transform;
-        }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SEAudioSource.volume = startVolume;
     }
 
     public void PlayOneShot(AudioClip clip, float volume)

@@ -5,8 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyStats
 {
-    public Sprite spriteNormal;
-    public Sprite spriteWalk;
+    public Sprite[] sprites;
     public Color normalColor;
     public float hp;
     public float moveSpeed;

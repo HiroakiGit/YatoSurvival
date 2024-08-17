@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public EnemyType enemyType;
     public Player _player;
+    public EnemyMoveAndAttackAndAnime _EnemyMoveAndAttackAndAnime;
 
     [Header("Stats")]
     public EnemyStats weakEnemyStats;
@@ -19,19 +20,18 @@ public class Enemy : MonoBehaviour
     public float attackRange = 0.5f;
     public float attackDamage = 10;
     public float attackInterval = 5f;
-
-    [Header("UI")]
-    public Sprite spriteNormal;
-    public Sprite spriteWalk;
+    public Sprite[] sprites;
+    public bool isWave = false;
 
     [Header("Audio")]
     public AudioClip takeDamageSoundClip;
 
     [HideInInspector]public ObjectPool experiencePool;
 
-    public void InitializeEnemyType(EnemyType type, float damageRATIO)
+    public void InitializeEnemyType(EnemyType type, float damageRATIO, bool iswave = false)
     {
         enemyType = type;
+        isWave = iswave;
 
         switch (enemyType)
         {
@@ -55,14 +55,14 @@ public class Enemy : MonoBehaviour
             attackRange = stats.attackRange;
             attackDamage = stats.attackDamage * damageRATIO;
             attackInterval = stats.attackInterval;
-            spriteNormal = stats.spriteNormal;
-            spriteWalk = stats.spriteWalk;
+            sprites = stats.sprites;
         }
     }
 
     void Start()
     {
         experiencePool = GameObject.FindObjectOfType<ObjectPool>();
+        _EnemyMoveAndAttackAndAnime.ProcessStart();
     }
 
     public void TakeDamage(float damage)
@@ -73,7 +73,10 @@ public class Enemy : MonoBehaviour
             Die();
         }
 
-        SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.15f);
+        if (!GameManager.Instance.IsGameFinished())
+        {
+            SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.15f);
+        }
     }
 
     void Die()
@@ -89,22 +92,12 @@ public class Enemy : MonoBehaviour
         experience.GetComponent<Experience>().Initialize();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D c)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (c.gameObject.CompareTag("DeadZone"))
         {
-            // プレイヤーとの衝突を無視する
-            Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
-        }
-        else if (collision.gameObject.CompareTag("Enemy"))
-        {
-            // 敵との衝突を無視する
-            Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
-        }
-        else if (collision.gameObject.CompareTag("Map"))
-        {
-            // マップコライダーとの衝突を無視する
-            Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
+            health = 0;
+            Destroy(gameObject); // 敵を破壊
         }
     }
 }

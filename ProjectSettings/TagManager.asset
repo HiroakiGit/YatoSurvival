@@ -8,6 +8,7 @@ TagManager:
   - Map
   - Item
   - Obstacle
+  - DeadZone
   layers:
   - Default
   - TransparentFX

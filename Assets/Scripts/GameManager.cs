@@ -21,11 +21,14 @@ public class GameManager : MonoBehaviour
     public RankingManager _RankingManager;
     public LoadingScene _LoadingScene;
 
-    public bool isAutoLogin;
     private bool isGameStarted = false;
     private bool isGameFinished = false;
 
-    [Header("UI")]
+    [Header("TestPlay")]
+    public bool isAutoLogin;
+    public bool isCountDown;
+
+    [Header("===UI===")]
     public GameState CurrentState;
     public GameObject ReallyUI;
     public Text ReallyText;
@@ -36,6 +39,8 @@ public class GameManager : MonoBehaviour
     public GameObject ExplainAndGameStartingCanvas;
     public Text startingText;
     public Text countDownText;
+    public int startCount = 3;
+    private AudioClip[] startSoundClips;
 
     [Header("GamePause")]
     public GameObject GamePauseCanvas;
@@ -85,6 +90,15 @@ public class GameManager : MonoBehaviour
         SEVolumeSlider.value = 0.5f;
         SEVolumeSlider.onValueChanged.AddListener(SetSEVolume);
 
+        // クリップを一度だけ生成して保存
+        startSoundClips = new AudioClip[]
+        {
+            SoundClipCreator.Instance.CreateClip(440f, 440f, 0.15f, false),
+            SoundClipCreator.Instance.CreateClip(440f, 440f, 0.15f, false),
+            SoundClipCreator.Instance.CreateClip(440f, 440f, 0.15f, false),
+            SoundClipCreator.Instance.CreateClip(880f, 880f, 0.5f, false),
+        };
+
         //ログイン開始
         if (isAutoLogin) _loginManager.AutoLogin();
         else _loginManager.StartLogin();
@@ -102,18 +116,23 @@ public class GameManager : MonoBehaviour
         ExplainAndGameStartingCanvas.SetActive(true);
         _BuffAndDeBuffManager.BuffAndDeBuffStateCanvas.SetActive(false);
 
-        //TODO
-        for (int i = 1; i >= 0; i--)
+        //カウントダウン
+        if (isCountDown)
         {
-            countDownText.text = i.ToString();
-            
-            if(i <= 0)
+            for (int i = startCount; i >= 0; i--)
             {
-                startingText.text = "スタート！";
-                countDownText.text = string.Empty;
-            }
+                countDownText.text = i.ToString();
 
-            yield return new WaitForSeconds(1);
+                if (i <= 0)
+                {
+                    startingText.text = "スタート！";
+                    countDownText.text = string.Empty;
+                }
+
+                SEAudio.Instance.PlayOneShot(startSoundClips[startCount - i], 0.15f);
+
+                yield return new WaitForSeconds(1);
+            }
         }
 
         ExplainAndGameStartingCanvas.SetActive(false);

@@ -20,7 +20,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     [Range(0, 1)] public float probabilityRateIncreaseWeapon = 0.4f;
     [Range(0, 1)] public float probabilityStrengthenWeapon = 0.4f;
     public int showCount;
-    public List<WeaponBuff> selectedWeaponBuffList = new List<WeaponBuff>();
+    private List<WeaponBuff> selectedWeaponBuffList = new List<WeaponBuff>();
     [Space(30)]
 
     [Header("Buff")]
@@ -29,6 +29,8 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public float increaseMoveSpeedRATIO;
     public float increaseHp;
     private List<Buff> activeBuffList = new List<Buff>();
+    [Header("Audio")]
+    public AudioClip getBuffSoundClip;
     [Space(30)]
 
     [Header("DeBuff")]
@@ -40,6 +42,8 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public float increaseEnemyDamageRATIO;
     public float decreaseHpRATIO;
     private List<DeBuff> activeDebuffList = new List<DeBuff>();
+    [Header("Audio")]
+    public AudioClip getDeBuffSoundClip;
     [Space(30)]
 
     [Header("WeaponBuffUI")]
@@ -310,6 +314,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public void StartBuffProcess()
     {
         SelectBuff();
+        SEAudio.Instance.PlayOneShot(getBuffSoundClip, 0.1f);
     }
 
     private void SelectBuff()
@@ -339,18 +344,6 @@ public class BuffAndDeBuffManager : MonoBehaviour
         LogManager.Instance.AddLogs(buff.Name);
         LogManager.Instance.Log(2f, null);
 
-        //HP上昇だったら
-        if (buff.BuffType == BuffType.IncreaseHP)
-        {
-            StartBuff(buff);
-            buff.duration = 5;
-        }
-        //足の速度上昇だったらコルーチン処理する
-        else if (buff.BuffType == BuffType.WalkFast)
-        {
-            StartBuff(buff);
-        }
-
         if (activeBuffList.Contains(buff))
         {
             Debug.Log("もうある");
@@ -371,6 +364,17 @@ public class BuffAndDeBuffManager : MonoBehaviour
         {
             //すでにリストの中にある
             stateUI = buff.stateUI;
+
+            //HP上昇だったら
+            if (buff.BuffType == BuffType.IncreaseHP)
+            {
+                StartBuff(buff);
+            }
+            //足の速度上昇だったら
+            else if (buff.BuffType == BuffType.WalkFast)
+            {
+                StartBuff(buff);
+            }
         }
         else
         {
@@ -436,6 +440,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public void StartDeBuffProcess()
     {
         SelectDeBuff();
+        SEAudio.Instance.PlayOneShot(getDeBuffSoundClip, 0.1f);
     }
 
     private void SelectDeBuff()
@@ -452,18 +457,6 @@ public class BuffAndDeBuffManager : MonoBehaviour
     {
         LogManager.Instance.AddLogs(debuff.Name);
         LogManager.Instance.Log(2f, null);
-
-        //HP減少だったら
-        if (debuff.DeBuffType == DeBuffType.DecreaseHP)
-        {
-            StartDeBuff(debuff);
-            debuff.duration = 5;
-        }
-        //足の速度減少だったらコルーチン処理をする
-        else if (debuff.DeBuffType == DeBuffType.WalkSlow)
-        {
-            StartDeBuff(debuff);
-        }
 
         if (activeDebuffList.Contains(debuff))
         {
@@ -485,6 +478,17 @@ public class BuffAndDeBuffManager : MonoBehaviour
         {
             //すでにリストの中にある
             stateUI = debuff.stateUI;
+
+            //HP減少だったら
+            if (debuff.DeBuffType == DeBuffType.DecreaseHP)
+            {
+                StartDeBuff(debuff);
+            }
+            //足の速度減少だったら
+            else if (debuff.DeBuffType == DeBuffType.WalkSlow)
+            {
+                StartDeBuff(debuff);
+            }
         }
         else 
         {

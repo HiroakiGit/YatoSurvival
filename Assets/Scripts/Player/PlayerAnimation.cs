@@ -128,18 +128,23 @@ public class PlayerAnimation : MonoBehaviour
         await Task.Delay(1500);
 
         float t = 0;
+        bool isSEPlayed = false;
         while (t < 1)
         {
             t += Time.unscaledDeltaTime * rotateSpeed;
             transform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
             transform.position = Vector3.Lerp(startPosition, endPosition, t) + pivotOffset; // ピボットを考慮して位置を調整
+
+            if(!isSEPlayed && t > 0.7f)
+            {
+                SEAudio.Instance.PlayOneShot(playerDeadSoundClip, 0.6f);
+                isSEPlayed = true;
+            }
             await Task.Yield();
         }
 
         transform.rotation = endRotation; // 最終的にぴったりと目標角度にする
         transform.position = endPosition + pivotOffset; // 最終的な位置を調整
-
-        SEAudio.Instance.PlayOneShot(playerDeadSoundClip, 0.6f);
 
         await Task.Delay(1000);
     }

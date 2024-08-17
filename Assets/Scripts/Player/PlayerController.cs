@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         if(rb.velocity.magnitude > 0.1f)
         {
             stepTimer += Time.deltaTime;
-            if (stepTimer >= stepInterval)
+            if (stepTimer >= (stepInterval * (normalSpeed / currentSpeed)))
             {
                 int r = Random.Range(0, walkSoundClip.Length);
                 SEAudio.Instance.PlayOneShot(walkSoundClip[r], 1f);
