@@ -12,7 +12,8 @@ public class Enemy : MonoBehaviour
     public EnemyStats weakEnemyStats;
     public EnemyStats mediumEnemyStats;
     public EnemyStats strongEnemyStats;
-    public EnemyStats slimeEnemyStats;
+    public EnemyStats mimoriSlimeEnemyStats;
+    public EnemyStats okaSlimeEnemyStats;
 
     [Header("Content")]
     public EnemyStats stats;
@@ -44,8 +45,11 @@ public class Enemy : MonoBehaviour
             case EnemyType.Strong:
                 stats = strongEnemyStats;
                 break;
-            case EnemyType.Slime:
-                stats = slimeEnemyStats;
+            case EnemyType.MimoriSlime:
+                stats = mimoriSlimeEnemyStats;
+                break;
+            case EnemyType.OkaSlime:
+                stats = okaSlimeEnemyStats;
                 break;
         }
 
@@ -75,7 +79,7 @@ public class Enemy : MonoBehaviour
 
         if (!GameManager.Instance.IsGameFinished())
         {
-            SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.15f);
+            SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.08f);
         }
     }
 

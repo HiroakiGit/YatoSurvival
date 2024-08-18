@@ -301,10 +301,11 @@ public class BuffAndDeBuffManager : MonoBehaviour
         LogManager.Instance.AddLogs($"正解したらいいことあるかも！不正解だったら...");
         //TODO : 下の内容
         //FadeOut
-        FadeUI.Instance.StartFadeOut(2f);//6.8s
+        //FadeUI.Instance.StartFadeOut(2f);//6.8s
+        StartCoroutine(_QuestionManager.StartingQuestion());
 
         //Log
-        LogManager.Instance.Log(0.1f, () => //2s
+        LogManager.Instance.Log(2f, () => //2s
         {
             _QuestionManager.StartQuestion();
         }); 

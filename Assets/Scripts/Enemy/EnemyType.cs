@@ -4,5 +4,6 @@
         Weak,
         Medium,
         Strong,
-        Slime
+        MimoriSlime,
+        OkaSlime
     }

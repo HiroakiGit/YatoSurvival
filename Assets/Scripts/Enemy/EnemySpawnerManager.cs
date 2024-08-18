@@ -95,14 +95,18 @@ public class EnemySpawnerManager : MonoBehaviour
         int r = bossCount;
 
         //ボスのカウントがボスの数より多いときランダムなボスにする
-        if (bossCount >= maxBossCount)
+        if (bossCount > maxBossCount)
         {
-            r = UnityEngine.Random.Range(1, maxBossCount);
+            r = UnityEngine.Random.Range(1, maxBossCount + 1);
         }
         
         if (r == 1)
         {
-            bossEnemyType = EnemyType.Slime;
+            bossEnemyType = EnemyType.MimoriSlime;
+        }
+        else if (r == 2)
+        {
+            bossEnemyType = EnemyType.OkaSlime;
         }
 
         ShowDangerMessage("ボスが来る...", true, bossEnemyType);
@@ -135,7 +139,7 @@ public class EnemySpawnerManager : MonoBehaviour
 
         for(int i = 0; i < 3; i++)
         {
-            SEAudio.Instance.PlayOneShot(beepClip, 0.15f);
+            SEAudio.Instance.PlayOneShot(beepClip, 0.1f);
 
             dangerImage.SetActive(true);
             yield return new WaitForSeconds(0.5f);

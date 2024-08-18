@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     [Header("TestPlay")]
     public bool isAutoLogin;
+    public bool isExplain;
     public bool isCountDown;
 
     [Header("===UI===")]
@@ -35,8 +36,11 @@ public class GameManager : MonoBehaviour
     public AudioClip pushedButtonSoundClip;
     public bool isProcessing = false;
 
+    [Header("Explain")]
+    public GameObject ExplainCanvas;
+
     [Header("GameStart")]
-    public GameObject ExplainAndGameStartingCanvas;
+    public GameObject GameStartingCanvas;
     public Text startingText;
     public Text countDownText;
     public int startCount = 3;
@@ -76,8 +80,10 @@ public class GameManager : MonoBehaviour
 
         CurrentState = GameState.MainState;
 
-        GameOverCanvas.SetActive(false);
+        ExplainCanvas.SetActive(false);
         GamePauseCanvas.SetActive(false);
+        GameStartingCanvas.SetActive(false);
+        GameOverCanvas.SetActive(false);
         BGMMuteImageObj.SetActive(false);
         SEMuteImageObj.SetActive(false);
 
@@ -107,13 +113,35 @@ public class GameManager : MonoBehaviour
     //ログイン終了時
     public void OnLoginEnd()
     {
-        StartCoroutine(ExplainAndStartingGame());
+        if (isExplain)
+        {
+            StartExplain();
+        }
+        else
+        {
+            StartCoroutine(StartingGame());
+        }
     }
 
-    //説明とカウントダウン
-    public IEnumerator ExplainAndStartingGame()
+    //説明開始
+    private void StartExplain()
     {
-        ExplainAndGameStartingCanvas.SetActive(true);
+        ExplainCanvas.SetActive(true);
+    }
+
+    //説明終了ボタンを押した
+    public void OnClickExplainDoneButton()
+    {
+        ExplainCanvas.SetActive(false);
+        StartCoroutine(StartingGame());
+    }
+
+    //カウントダウン開始
+    public IEnumerator StartingGame()
+    {
+        yield return new WaitForSeconds(1);
+
+        GameStartingCanvas.SetActive(true);
         _BuffAndDeBuffManager.BuffAndDeBuffStateCanvas.SetActive(false);
 
         //カウントダウン
@@ -129,13 +157,13 @@ public class GameManager : MonoBehaviour
                     countDownText.text = string.Empty;
                 }
 
-                SEAudio.Instance.PlayOneShot(startSoundClips[startCount - i], 0.15f);
+                SEAudio.Instance.PlayOneShot(startSoundClips[startCount - i], 0.1f);
 
                 yield return new WaitForSeconds(1);
             }
         }
 
-        ExplainAndGameStartingCanvas.SetActive(false);
+        GameStartingCanvas.SetActive(false);
         _BuffAndDeBuffManager.BuffAndDeBuffStateCanvas.SetActive(true);
 
         StartGame();
@@ -167,7 +195,7 @@ public class GameManager : MonoBehaviour
 
     private void HandleEscapePress()
     {
-        if (isProcessing) return;
+        if (isProcessing || !IsGameStarted()) return;
 
         switch (CurrentState)
         {

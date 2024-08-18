@@ -14,6 +14,7 @@ public class QuestionManager : MonoBehaviour
     private Question currentQuestion;
 
     [Header("UI")]
+    public GameObject StartingQuestionCanvas;
     public GameObject QuestionCanvas;
     public GameObject QuestionUI;
     public GameObject[] HardQuestionUIs;
@@ -29,10 +30,41 @@ public class QuestionManager : MonoBehaviour
     public AudioClip collectSoundClip;
     public AudioClip inCollectSoundClip;
 
+    private List<AudioClip> schoolChimeClipList = new List<AudioClip>();
+    private float[] chimeFrequencies = new float[] { 350f, 440f, 392f, 261f, 350f, 392f, 440f, 350f }; 
+    private float noteDuration = 0.5f;
+
     private void Start()
     {
+        StartingQuestionCanvas.SetActive(false);
         QuestionCanvas.SetActive(false);
         InitalizeUI();
+
+        for (int i = 0; i < chimeFrequencies.Length; i++) 
+        {
+            AudioClip clip = SoundClipCreator.Instance.CreateClip(chimeFrequencies[i], chimeFrequencies[i], noteDuration, false);
+            schoolChimeClipList.Add(clip);
+        }
+    }
+
+    public IEnumerator StartingQuestion()
+    {
+        StartingQuestionCanvas.SetActive(true);
+
+        for (int i = 0; i < schoolChimeClipList.Count; i++)
+        {
+            SEAudio.Instance.PlayOneShot(schoolChimeClipList[i], 0.1f);
+
+            //”¼•ª‚ÌŽž
+            if(schoolChimeClipList.Count / 2 - 1 == i)
+            {
+                yield return new WaitForSecondsRealtime(0.7f);
+            }
+            else
+            {
+                yield return new WaitForSecondsRealtime(0.65f);
+            }
+        }
     }
 
     public void StartQuestion()
@@ -156,6 +188,7 @@ public class QuestionManager : MonoBehaviour
 
     private void InitalizeUI()
     {
+        StartingQuestionCanvas.SetActive(false);
         QuestionUI.SetActive(false);
         for (int i = 0; i < HardQuestionUIs.Length; i++)
         {

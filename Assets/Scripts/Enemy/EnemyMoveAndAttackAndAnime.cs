@@ -33,7 +33,7 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
         agent.updateUpAxis = false;
 
         //ƒXƒ‰ƒCƒ€‚Ì‰Šúİ’è
-        if(_Enemy.enemyType == EnemyType.Slime)
+        if(_Enemy.enemyType == EnemyType.MimoriSlime || _Enemy.enemyType == EnemyType.OkaSlime)
         {
             agent.enabled = true;
             circleCollider.radius = 4.8f;
