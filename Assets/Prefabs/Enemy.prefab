@@ -153,51 +153,51 @@ MonoBehaviour:
     normalColor: {r: 1, g: 0, b: 0, a: 1}
     hp: 1
     moveSpeed: 0.4
-    attackRange: 0.22
+    attackRange: 0.24
     attackDamage: 1
-    attackInterval: 3
+    attackInterval: 1
   mediumEnemyStats:
     sprites:
     - {fileID: 21300000, guid: 787aba9f0ad38d64a88d43f8f31cd108, type: 3}
     - {fileID: 21300000, guid: 9b9137405a1f629448abd840d184096e, type: 3}
     normalColor: {r: 1, g: 0.73324853, b: 0, a: 1}
-    hp: 1
+    hp: 2
     moveSpeed: 0.5
-    attackRange: 0.22
-    attackDamage: 1
-    attackInterval: 3
+    attackRange: 0.24
+    attackDamage: 2
+    attackInterval: 1
   strongEnemyStats:
     sprites:
     - {fileID: 21300000, guid: 53d90d3059458c043858954e4f01847b, type: 3}
     - {fileID: 21300000, guid: 6dc68a99523f8a84c9e09d10309e00cd, type: 3}
     normalColor: {r: 0, g: 0.015195131, b: 1, a: 1}
-    hp: 1
+    hp: 3
     moveSpeed: 0.3
     attackRange: 0.6
-    attackDamage: 1
-    attackInterval: 3
+    attackDamage: 2.5
+    attackInterval: 2
   mimoriSlimeEnemyStats:
     sprites:
     - {fileID: 21300000, guid: 868f0790898c4fb4d90d9b8a5b6729ab, type: 3}
     - {fileID: 21300000, guid: 46253f3621b165247b3c11e700814bf4, type: 3}
     - {fileID: 21300000, guid: 485dcbbcf26fa9643ad9d75532abd929, type: 3}
     normalColor: {r: 1, g: 1, b: 1, a: 1}
-    hp: 5
+    hp: 40
     moveSpeed: 5
-    attackRange: 0.25
-    attackDamage: 3
-    attackInterval: 0.5
+    attackRange: 0.3
+    attackDamage: 4
+    attackInterval: 0.45
   okaSlimeEnemyStats:
     sprites:
     - {fileID: 21300000, guid: 1c3e816fe572fe14d9dc19d2d5444cb2, type: 3}
     - {fileID: 21300000, guid: eeaedfd2894062244be42e2ecc182c6e, type: 3}
     - {fileID: 21300000, guid: 83281ed18163db4489eb8587eebc0038, type: 3}
     normalColor: {r: 1, g: 1, b: 1, a: 1}
-    hp: 5
+    hp: 80
     moveSpeed: 5
-    attackRange: 0.25
-    attackDamage: 3
-    attackInterval: 0.5
+    attackRange: 0.3
+    attackDamage: 5
+    attackInterval: 0.45
   stats:
     sprites: []
     normalColor: {r: 0, g: 0, b: 0, a: 0}

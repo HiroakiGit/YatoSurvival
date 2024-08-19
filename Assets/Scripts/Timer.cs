@@ -35,13 +35,18 @@ public class Timer : MonoBehaviour
             minText.text = ((int)(aliveTime / 60)).ToString("d2");
             secText.text = ((int)aliveTime % 60).ToString("d2");
 
-            //TODO *60
-            if (aliveTime % _EnemySpawnerManager.enemyWaveTimeIntervalMin == 0)
+            //SpawnIntervalChange
+            if(aliveTime % 15 == 0)
+            {
+                _EnemySpawnerManager.ChangeEnemySpawnInterval();
+            }
+            //EnemyWave
+            if ((aliveTime % (_EnemySpawnerManager.enemyWaveTimeIntervalMin * 60)) == 0)
             {
                 _EnemySpawnerManager.StartEnemyWaveProcess();
             }
-
-            if (aliveTime % _EnemySpawnerManager.bossSpawnTimeIntervalMin == 0)
+            //EnemyBoss
+            if ((aliveTime % (_EnemySpawnerManager.bossSpawnTimeIntervalMin * 60)) == 0)
             {
                 _EnemySpawnerManager.StartBossSpawnProcess();
             }

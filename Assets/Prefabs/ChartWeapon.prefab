@@ -148,6 +148,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 0}
   rotationSpeed: 200
-  distanceFromPlayer: 0.4
+  distanceFromPlayer: 0.48
   damage: 1
   startingAngle: 0

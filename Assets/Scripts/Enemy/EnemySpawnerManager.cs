@@ -17,6 +17,7 @@ public class EnemySpawnerManager : MonoBehaviour
 
     public float MapEdgeSpawnInterval;
     public float ScreenEdgeSpawnInterval;
+    public float decreaseSpawnIntervalSec = 0.1f;
     public float EnemyDamageRATIO = 1;
 
     [Header("Wave")]
@@ -47,15 +48,24 @@ public class EnemySpawnerManager : MonoBehaviour
         bossCount = 0;
     }
 
-    public void ChangeEnemyDamageRATIO(float ratio)
-    {
-        EnemyDamageRATIO = ratio;
-    }
-
     public EnemyType GetRandomEnemyType()
     {
         int number = UnityEngine.Random.Range(0, 3);//0,1,2
         return (EnemyType)Enum.ToObject(typeof(EnemyType), number);
+    }
+
+    public void ChangeEnemySpawnInterval()
+    {
+        MapEdgeSpawnInterval = MapEdgeSpawnInterval - decreaseSpawnIntervalSec;
+        ScreenEdgeSpawnInterval = ScreenEdgeSpawnInterval - decreaseSpawnIntervalSec;
+
+        if (MapEdgeSpawnInterval <= 0.1f) MapEdgeSpawnInterval = 0.1f; 
+        if (ScreenEdgeSpawnInterval <= 0.1f) ScreenEdgeSpawnInterval = 0.1f; 
+    }
+
+    public void ChangeEnemyDamageRATIO(float ratio)
+    {
+        EnemyDamageRATIO = ratio;
     }
 
     //EnemyWave=====================================================================

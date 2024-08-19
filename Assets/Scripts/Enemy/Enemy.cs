@@ -79,7 +79,7 @@ public class Enemy : MonoBehaviour
 
         if (!GameManager.Instance.IsGameFinished())
         {
-            SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.08f);
+            SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.1f);
         }
     }
 

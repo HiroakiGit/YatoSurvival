@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealItem : Item
 {
-    public int healAmount = 2;
+    public float healAmount = 2;
 
     void Update()
     {

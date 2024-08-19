@@ -52,7 +52,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public Image[] weaponTypeImages;
     public Image[] infoImages;
     public Sprite[] infoSprites;
-    public Text[] weaponNameTexts;
+    public Text[] weaponNameAndStateTexts;
     [Space(30)]
 
     [Header("DeBuffUI")]
@@ -232,7 +232,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
         for (int n = 0; n < showCount; n++)
         {
             weaponTypeImages[n].sprite = selectedWeaponBuffList[n].Sprite;
-            weaponNameTexts[n].text = selectedWeaponBuffList[n].WeaponName;
+            string weaponNameAndStateString = null;
 
             if (selectedWeaponBuffList[n].state == 0)
             {
@@ -245,15 +245,21 @@ public class BuffAndDeBuffManager : MonoBehaviour
                 {
                     infoImages[n].sprite = infoSprites[1];
                 }
+
+                weaponNameAndStateString = $"追加 : {selectedWeaponBuffList[n].WeaponName}";
             }
             else if (selectedWeaponBuffList[n].state == 1)
             {
                 infoImages[n].sprite = infoSprites[2];
+                weaponNameAndStateString = $"レート上昇 : {selectedWeaponBuffList[n].WeaponName}";
             }
             else
             {
                 infoImages[n].sprite = infoSprites[3];
+                weaponNameAndStateString = $"ダメージ上昇 : {selectedWeaponBuffList[n].WeaponName}";
             }
+
+            weaponNameAndStateTexts[n].text = weaponNameAndStateString;
         }
     }
 
@@ -288,7 +294,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
                 //攻撃力増加
                 _PlayerAttack.IncreaseDamage(weaponBuffList[n].WeaponType, weaponBuffList[n].increaseDamage);
                 weaponBuffList[n].BuffStateCountUp(0,1);
-                LogManager.Instance.AddLogs($"{weaponBuffList[n].WeaponName}の攻撃力が増加した！");
+                LogManager.Instance.AddLogs($"{weaponBuffList[n].WeaponName}の与ダメージが増加した！");
                 break;
         }
 
@@ -300,8 +306,6 @@ public class BuffAndDeBuffManager : MonoBehaviour
         LogManager.Instance.AddLogs($"まもなく問題が来る...");
         LogManager.Instance.AddLogs($"正解したらいいことあるかも！不正解だったら...");
         //TODO : 下の内容
-        //FadeOut
-        //FadeUI.Instance.StartFadeOut(2f);//6.8s
         StartCoroutine(_QuestionManager.StartingQuestion());
 
         //Log
@@ -559,8 +563,6 @@ public class BuffAndDeBuffManager : MonoBehaviour
                 _EnemySpawnerManager.ChangeEnemyDamageRATIO(1);
                 break;
         }
-
-        debuff.duration = 0;
     }
 
     //SHOW STATE===============================================================

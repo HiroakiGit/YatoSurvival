@@ -139,16 +139,16 @@ public class QuestionManager : MonoBehaviour
             //バツ
             MaruAndBatsuImage.sprite = MaruAndBatsuSprites[1];
             SEAudio.Instance.PlayOneShot(inCollectSoundClip, 0.2f);
+        }
 
-            //答えがある => 答えを表示 => 終了
-            //　　　ない => 終了
-            if (currentQuestion.answerText != string.Empty)
-            {
-                yield return new WaitForSecondsRealtime(1.5f);
-                InitalizeUI();
-                questionAndAnswerText.text = "答え";
-                questionAndAnswerContentText.text = currentQuestion.answerText;
-            }
+        //答えがある => 答えを表示 => 終了
+        //　　　ない => 終了
+        if (currentQuestion.answerText != string.Empty)
+        {
+            yield return new WaitForSecondsRealtime(1.5f);
+            InitalizeUI();
+            questionAndAnswerText.text = "答え";
+            questionAndAnswerContentText.text = currentQuestion.answerText;
         }
 
         yield return new WaitForSecondsRealtime(1.5f);
