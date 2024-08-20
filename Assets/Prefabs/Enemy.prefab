@@ -182,10 +182,10 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 46253f3621b165247b3c11e700814bf4, type: 3}
     - {fileID: 21300000, guid: 485dcbbcf26fa9643ad9d75532abd929, type: 3}
     normalColor: {r: 1, g: 1, b: 1, a: 1}
-    hp: 40
+    hp: 60
     moveSpeed: 5
-    attackRange: 0.3
-    attackDamage: 4
+    attackRange: 0.5
+    attackDamage: 5
     attackInterval: 0.45
   okaSlimeEnemyStats:
     sprites:
@@ -193,10 +193,10 @@ MonoBehaviour:
     - {fileID: 21300000, guid: eeaedfd2894062244be42e2ecc182c6e, type: 3}
     - {fileID: 21300000, guid: 83281ed18163db4489eb8587eebc0038, type: 3}
     normalColor: {r: 1, g: 1, b: 1, a: 1}
-    hp: 80
+    hp: 100
     moveSpeed: 5
-    attackRange: 0.3
-    attackDamage: 5
+    attackRange: 0.5
+    attackDamage: 6
     attackInterval: 0.45
   stats:
     sprites: []

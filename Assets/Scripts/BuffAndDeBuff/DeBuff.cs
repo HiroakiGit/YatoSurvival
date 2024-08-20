@@ -10,5 +10,6 @@ public class DeBuff
     public string Name;
     public DeBuffType DeBuffType;
     public Sprite Sprite;
+    public float initalDuration;
     public float duration;
 }

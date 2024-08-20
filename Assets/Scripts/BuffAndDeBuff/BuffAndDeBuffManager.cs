@@ -352,12 +352,12 @@ public class BuffAndDeBuffManager : MonoBehaviour
         if (activeBuffList.Contains(buff))
         {
             Debug.Log("もうある");
-            StartCoroutine(ApplyBuffCoroutine(buff, true, buff.duration));
+            StartCoroutine(ApplyBuffCoroutine(buff, true, buff.initalDuration));
         }
         else
         {
             activeBuffList.Add(buff);
-            StartCoroutine(ApplyBuffCoroutine(buff, false, buff.duration));
+            StartCoroutine(ApplyBuffCoroutine(buff, false, buff.initalDuration));
         }
     }
 
@@ -431,6 +431,8 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
     private void FinishBuff(Buff buff)
     {
+        buff.duration = buff.initalDuration;
+
         switch (buff.BuffType)
         {
             case BuffType.WalkFast:
@@ -466,12 +468,12 @@ public class BuffAndDeBuffManager : MonoBehaviour
         if (activeDebuffList.Contains(debuff))
         {
             Debug.Log("もうある");
-            StartCoroutine(ApplyDebuffCoroutine(debuff, true, debuff.duration));
+            StartCoroutine(ApplyDebuffCoroutine(debuff, true, debuff.initalDuration));
         }
         else
         {
             activeDebuffList.Add(debuff);
-            StartCoroutine(ApplyDebuffCoroutine(debuff, false, debuff.duration));
+            StartCoroutine(ApplyDebuffCoroutine(debuff, false, debuff.initalDuration));
         }
     }
 
@@ -551,6 +553,8 @@ public class BuffAndDeBuffManager : MonoBehaviour
 
     private void FinishDeBuff(DeBuff debuff)
     {
+        debuff.duration = debuff.initalDuration;
+
         switch (debuff.DeBuffType)
         {
             case DeBuffType.WalkSlow:
