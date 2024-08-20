@@ -173,6 +173,8 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         isGameStarted = true;
+        //BGM
+        BGMAudio.Instance.PlayBGM(null, true);
         //‰Šú•Ší¶¬
         _Player._PlayerAttack.GenerateInitialWeapon();
         //ŠÔ‘ª’èŠJn

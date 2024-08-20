@@ -8,4 +8,5 @@ public class RankUI : MonoBehaviour
     public Text positionText;
     public Text playerNameText;
     public Text scoreText;
+    public Outline Outline;
 }

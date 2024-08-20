@@ -248,12 +248,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7397384299014736538}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 1}
+  m_EffectColor: {r: 1, g: 0.5506037, b: 0, a: 1}
   m_EffectDistance: {x: 5, y: 5}
   m_UseGraphicAlpha: 1
 --- !u!114 &6035851652201350850
@@ -271,6 +271,7 @@ MonoBehaviour:
   positionText: {fileID: 7397384298920769156}
   playerNameText: {fileID: 7397384298847042315}
   scoreText: {fileID: 7397384299095825569}
+  Outline: {fileID: 1891617495659045658}
 --- !u!1 &7397384299095825575
 GameObject:
   m_ObjectHideFlags: 0

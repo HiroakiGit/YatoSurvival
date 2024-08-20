@@ -28,13 +28,19 @@ public class BGMAudio : MonoBehaviour
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        PlayBGM(null, true);
+        if (SceneManager.GetActiveScene().name.Contains("Lobby"))
+        {
+            PlayBGM(null, true);
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         BGMAudioSource.volume = startVolume;
-        PlayBGM(null, true);
+        if (SceneManager.GetActiveScene().name.Contains("Lobby"))
+        {
+            PlayBGM(null, true);
+        }
     }
 
     public void PlayBGM(AudioClip clip, bool loop)

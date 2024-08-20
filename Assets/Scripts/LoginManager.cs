@@ -11,10 +11,16 @@ public class LoginManager : MonoBehaviour
     [SerializeField] GameObject LoginCanvas;
     [SerializeField] InputField IFUserName;
     [SerializeField] InputField IFPassWord;
+    [SerializeField] Text ErrorText;
+    [SerializeField] Button[] Buttons;
+    private Coroutine currentErrorCoroutine;
 
     public void StartLogin()
     {
         LoginCanvas.SetActive(true);
+        IFUserName.text = string.Empty;
+        IFPassWord.text = string.Empty;
+        ErrorText.text = string.Empty;
     }
 
     //===============================
@@ -44,8 +50,11 @@ public class LoginManager : MonoBehaviour
     //登録ボタンを押したとき
     public void OnClickRegisterButton()
     {
-        _player.SUserName = IFUserName.text;
-        _player.SPassWord = IFPassWord.text;
+        if (OrganizedString(IFUserName.text).Length < 3 || OrganizedString(IFUserName.text).Length > 10) { ShowMessage("ユーザーネームは3~10文字にしてください", Color.red); return; }
+        if (OrganizedString(IFPassWord.text).Length < 6 || OrganizedString(IFPassWord.text).Length > 15) { ShowMessage("パスワードは6~15文字にしてください", Color.red); return; }
+
+        _player.SUserName = OrganizedString(IFUserName.text);
+        _player.SPassWord = OrganizedString(IFPassWord.text);
 
         //リクエスト
         var RegisterRequest = new RegisterPlayFabUserRequest()
@@ -63,9 +72,7 @@ public class LoginManager : MonoBehaviour
     //登録完了した時
     private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
-        Debug.Log("PlayFabアカウントを登録しました！");
-        //DisplayNameを設定
-        SetDisplayName();
+        ShowMessage("アカウントを登録しました！",Color.green);
         //自動ログイン
         OnClickLoginButton();
     }
@@ -73,8 +80,11 @@ public class LoginManager : MonoBehaviour
     //ログインボタンを押したとき
     public void OnClickLoginButton()
     {
-        _player.SUserName = IFUserName.text;
-        _player.SPassWord = IFPassWord.text;
+        if (OrganizedString(IFUserName.text).Length < 3 || OrganizedString(IFUserName.text).Length > 10) { ShowMessage("ユーザーネームは3~10文字にしてください", Color.red); return; }
+        if (OrganizedString(IFPassWord.text).Length < 6 || OrganizedString(IFPassWord.text).Length > 15) { ShowMessage("パスワードは6~15文字にしてください", Color.red); return; }
+
+        _player.SUserName = OrganizedString(IFUserName.text);
+        _player.SPassWord = OrganizedString(IFPassWord.text);
 
         //リクエスト
         var LoginRequest = new LoginWithPlayFabRequest()
@@ -94,8 +104,10 @@ public class LoginManager : MonoBehaviour
     }
 
     //ディスプレイネームを設定
-    private void SetDisplayName()
+    private IEnumerator SetDisplayName()
     {
+        yield return new WaitForSeconds(1);
+
         PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
         {
             DisplayName = _player.SUserName
@@ -103,17 +115,19 @@ public class LoginManager : MonoBehaviour
         {
             _player.SDisplayName = result.DisplayName;
             Debug.Log($"ニックネームは:{_player.SDisplayName}");
+
+            //プロセス終了
+            EndLogin();
+
         }, error => OnError(error)) ;
     }
 
     //ログイン完了した時
     private void OnLoginSuccess(LoginResult result)
     {
-        Debug.Log("PlayFabアカウントでログインしました！");
+        ShowMessage("ログイン成功しました！", Color.green);
         //DisplayNameを設定
-        SetDisplayName();
-        //プロセス終了
-        EndLogin();
+        StartCoroutine(SetDisplayName());
     }
 
     //ログイン終了
@@ -124,11 +138,62 @@ public class LoginManager : MonoBehaviour
         GameManager.Instance.OnLoginEnd();
     }
 
-    //エラー
+    //エラー===================================================================================
     private void OnError(PlayFabError error)
     {
         _player.SUserName = null;
         _player.SPassWord = null;
-        Debug.Log(error);
+        Debug.Log(error.GenerateErrorReport());
+
+        if (error.Error == PlayFabErrorCode.UsernameNotAvailable)
+        {
+            ShowMessage("このユーザーネームは既に使われています", Color.red);
+        }
+        if (error.Error == PlayFabErrorCode.AccountNotFound)
+        {
+            ShowMessage("アカウントが見つかりません", Color.red);
+        }
+        if (error.Error == PlayFabErrorCode.InvalidUsernameOrPassword)
+        {
+            ShowMessage("ユーザーネームまたはパスワードが間違っています", Color.red);
+        }
+        if(error.Error == PlayFabErrorCode.APIClientRequestRateLimitExceeded)
+        {
+            ShowMessage("しばらく時間をおいてください", Color.red);
+        }
+    }
+
+    private void ShowMessage(string message, Color color)
+    {
+        if (currentErrorCoroutine != null)
+        {
+            StopCoroutine(currentErrorCoroutine);
+        }
+        currentErrorCoroutine = StartCoroutine(MessageUIProcess(message, color));
+    }
+
+    private IEnumerator MessageUIProcess(string m, Color c)
+    {
+        for (int i = 0; i < Buttons.Length; i++) 
+        {
+            Buttons[i].interactable = false;
+        }
+        ErrorText.color = c;
+        ErrorText.text = m;
+
+        yield return new WaitForSeconds(2);
+
+        ErrorText.text = string.Empty;
+        for (int i = 0; i < Buttons.Length; i++)
+        {
+            Buttons[i].interactable = true;
+        }
+    }
+
+    //=======================================================================================
+
+    private string OrganizedString(string str)
+    {
+        return str.Replace("\r", "").Replace("\n", "").Trim();
     }
 }
