@@ -63,7 +63,7 @@ public class RankingManager : MonoBehaviour
     private async Task GetLeaderboard()
     {
         LoadingObj.SetActive(true);
-        SEAudio.Instance.PlayOneShot(showDataSoundClip, 0.7f);
+        SEAudio.Instance.PlayOneShot(showDataSoundClip, 0.7f, true);
 
         var request = new GetLeaderboardRequest
         {

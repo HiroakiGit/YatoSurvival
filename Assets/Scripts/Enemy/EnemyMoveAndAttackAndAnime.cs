@@ -15,6 +15,10 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
     private bool walk = false;
     private float lastAttackTime;
 
+    [Header("Strong")]
+    public GameObject StrongEnemyAttackBallObj;
+    public AudioClip strongEnemyAttackSoundClip;
+
     [Header("Slime")]
     private int spriteIndex = 0;
 
@@ -70,6 +74,19 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
                 AttackPlayer();
                 lastAttackTime = Time.time;
             }
+        }
+    }
+
+    void AttackPlayer()
+    {
+        if (_Enemy.enemyType == EnemyType.Strong)
+        {
+            StartCoroutine(StrongEnemyAttack());
+        }
+        else
+        {
+            // ダメージをプレイヤーに与える
+            _Enemy._player._PlayerHealth.TakeDamage(_Enemy.attackDamage);
         }
     }
 
@@ -131,6 +148,27 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
 
             yield return new WaitForSeconds(0.1f);
         }
+    }
+
+    private IEnumerator StrongEnemyAttack()
+    {
+        StrongEnemyAttackBallObj.SetActive(true);
+        SEAudio.Instance.PlayOneShot(strongEnemyAttackSoundClip, 0.2f);
+        float distanceToPlayer = 1;
+
+        while (distanceToPlayer > 0.02f)
+        {
+            distanceToPlayer = Vector2.Distance(StrongEnemyAttackBallObj.transform.position, _Enemy._player.playerTransform.position);
+            //弾をプレイヤーに向けて移動
+            StrongEnemyAttackBallObj.transform.position = Vector2.MoveTowards(StrongEnemyAttackBallObj.transform.position, _Enemy._player.playerTransform.position, 2 * Time.deltaTime);
+            yield return null;
+        }
+
+        StrongEnemyAttackBallObj.transform.localPosition = new Vector2(0, 0);
+        StrongEnemyAttackBallObj.SetActive(false);
+
+        // ダメージをプレイヤーに与える
+        _Enemy._player._PlayerHealth.TakeDamage(_Enemy.attackDamage);
     }
 
     //Wave
@@ -197,10 +235,4 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
         }
     }
     //======================================================================================
-
-    void AttackPlayer()
-    {
-        // ダメージをプレイヤーに与える
-        _Enemy._player._PlayerHealth.TakeDamage(_Enemy.attackDamage);
-    }
 }

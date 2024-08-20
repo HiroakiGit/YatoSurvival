@@ -128,4 +128,4 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   attracted: 0
   itemType: 1
-  healAmount: 1.5
+  healAmount: 2

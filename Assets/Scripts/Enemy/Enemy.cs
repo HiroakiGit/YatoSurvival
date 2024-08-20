@@ -77,10 +77,7 @@ public class Enemy : MonoBehaviour
             Die();
         }
 
-        if (!GameManager.Instance.IsGameFinished())
-        {
-            SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.1f);
-        }
+        SEAudio.Instance.PlayOneShot(takeDamageSoundClip, 0.1f);
     }
 
     void Die()

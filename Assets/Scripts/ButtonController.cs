@@ -56,7 +56,7 @@ public class ButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExi
             buttonText.color = Color.black;
         }
         
-        SEAudio.Instance.PlayOneShot(choiceButtonSoundClip, 0.1f);
+        SEAudio.Instance.PlayOneShot(choiceButtonSoundClip, 0.1f, true);
     }
 
     //マウスカーソル離れたとき
@@ -67,7 +67,7 @@ public class ButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnClickThisButton()
     {
-        SEAudio.Instance.PlayOneShot(pushedButtonSoundClip, 0.2f);
+        SEAudio.Instance.PlayOneShot(pushedButtonSoundClip, 0.2f, true);
         Initalize();
     }
 

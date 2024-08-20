@@ -4454,9 +4454,9 @@ MonoBehaviour:
   _BuffAndDeBuffManager: {fileID: 787327344}
   _RankingManager: {fileID: 697743946}
   _LoadingScene: {fileID: 346614237}
-  isAutoLogin: 0
-  isExplain: 1
-  isCountDown: 1
+  isAutoLogin: 1
+  isExplain: 0
+  isCountDown: 0
   CurrentState: 0
   ReallyUI: {fileID: 1320743853}
   ReallyText: {fileID: 1289902876}
@@ -8369,7 +8369,7 @@ MonoBehaviour:
     initalDuration: 3
     duration: 3
   increaseMoveSpeedRATIO: 1.2
-  increaseHp: 2
+  increaseHp: 3
   getBuffSoundClip: {fileID: 8300000, guid: d4635bf8e117a8b44a245fbf8100ef02, type: 3}
   _Player: {fileID: 1061298081}
   _EnemySpawnerManager: {fileID: 1907327854}
@@ -11710,7 +11710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4db673e0016d714e9289bbcd0deb825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attractionRadius: 0.85
+  attractionRadius: 0.67
 --- !u!114 &1061298086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22254,6 +22254,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6017517575384773985, guid: 3f965be90d9716c409c2d6d00a457cf2, type: 3}
+      propertyPath: Loop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6017517575384773985, guid: 3f965be90d9716c409c2d6d00a457cf2, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: aec523716de32e24e97956519b9fb5c1, type: 3}
     - target: {fileID: 6017517575384774014, guid: 3f965be90d9716c409c2d6d00a457cf2, type: 3}
       propertyPath: m_Name
       value: BGMAudioSource

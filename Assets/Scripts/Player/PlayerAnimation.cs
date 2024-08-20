@@ -137,7 +137,7 @@ public class PlayerAnimation : MonoBehaviour
 
             if(!isSEPlayed && t > 0.7f)
             {
-                SEAudio.Instance.PlayOneShot(playerDeadSoundClip, 0.6f);
+                SEAudio.Instance.PlayOneShot(playerDeadSoundClip, 0.6f, true);
                 isSEPlayed = true;
             }
             await Task.Yield();

@@ -32,8 +32,18 @@ public class SEAudio : MonoBehaviour
         SEAudioSource.volume = startVolume;
     }
 
-    public void PlayOneShot(AudioClip clip, float volume)
+    public void PlayOneShot(AudioClip clip, float volume, bool isMust = false)
     {
-        SEAudioSource.PlayOneShot(clip, volume);
+        if (isMust)
+        {
+            SEAudioSource.PlayOneShot(clip, volume);
+        }
+        else 
+        {
+            if (!GameManager.Instance.IsGameFinished())
+            {
+                SEAudioSource.PlayOneShot(clip, volume);
+            }
+        }
     }
 }
