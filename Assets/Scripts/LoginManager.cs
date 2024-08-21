@@ -50,8 +50,13 @@ public class LoginManager : MonoBehaviour
     //登録ボタンを押したとき
     public void OnClickRegisterButton()
     {
-        if (OrganizedString(IFUserName.text).Length < 3 || OrganizedString(IFUserName.text).Length > 10) { ShowMessage("ユーザーネームは3~10文字にしてください", Color.red); return; }
-        if (OrganizedString(IFPassWord.text).Length < 6 || OrganizedString(IFPassWord.text).Length > 15) { ShowMessage("パスワードは6~15文字にしてください", Color.red); return; }
+        for (int i = 0; i < Buttons.Length; i++)
+        {
+            Buttons[i].interactable = false;
+        }
+
+        if (OrganizedString(IFUserName.text).Length < 3 || OrganizedString(IFUserName.text).Length > 10) { ShowMessage("ユーザーネームは3~10文字にしてください"); return; }
+        if (OrganizedString(IFPassWord.text).Length < 6 || OrganizedString(IFPassWord.text).Length > 15) { ShowMessage("パスワードは6~15文字にしてください"); return; }
 
         _player.SUserName = OrganizedString(IFUserName.text);
         _player.SPassWord = OrganizedString(IFPassWord.text);
@@ -72,7 +77,7 @@ public class LoginManager : MonoBehaviour
     //登録完了した時
     private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
-        ShowMessage("アカウントを登録しました！",Color.green);
+        ShowMessage("アカウントを登録しました！",false);
         //自動ログイン
         OnClickLoginButton();
     }
@@ -80,8 +85,13 @@ public class LoginManager : MonoBehaviour
     //ログインボタンを押したとき
     public void OnClickLoginButton()
     {
-        if (OrganizedString(IFUserName.text).Length < 3 || OrganizedString(IFUserName.text).Length > 10) { ShowMessage("ユーザーネームは3~10文字にしてください", Color.red); return; }
-        if (OrganizedString(IFPassWord.text).Length < 6 || OrganizedString(IFPassWord.text).Length > 15) { ShowMessage("パスワードは6~15文字にしてください", Color.red); return; }
+        for (int i = 0; i < Buttons.Length; i++)
+        {
+            Buttons[i].interactable = false;
+        }
+
+        if (OrganizedString(IFUserName.text).Length < 3 || OrganizedString(IFUserName.text).Length > 10) { ShowMessage("ユーザーネームは3~10文字にしてください"); return; }
+        if (OrganizedString(IFPassWord.text).Length < 6 || OrganizedString(IFPassWord.text).Length > 15) { ShowMessage("パスワードは6~15文字にしてください"); return; }
 
         _player.SUserName = OrganizedString(IFUserName.text);
         _player.SPassWord = OrganizedString(IFPassWord.text);
@@ -125,7 +135,7 @@ public class LoginManager : MonoBehaviour
     //ログイン完了した時
     private void OnLoginSuccess(LoginResult result)
     {
-        ShowMessage("ログイン成功しました！", Color.green);
+        ShowMessage("ログイン成功しました！", false);
         //DisplayNameを設定
         StartCoroutine(SetDisplayName());
     }
@@ -147,46 +157,48 @@ public class LoginManager : MonoBehaviour
 
         if (error.Error == PlayFabErrorCode.UsernameNotAvailable)
         {
-            ShowMessage("このユーザーネームは既に使われています", Color.red);
+            ShowMessage("このユーザーネームは既に使われています");
         }
         if (error.Error == PlayFabErrorCode.AccountNotFound)
         {
-            ShowMessage("アカウントが見つかりません", Color.red);
+            ShowMessage("アカウントが見つかりません");
         }
         if (error.Error == PlayFabErrorCode.InvalidUsernameOrPassword)
         {
-            ShowMessage("ユーザーネームまたはパスワードが間違っています", Color.red);
+            ShowMessage("ユーザーネームまたはパスワードが間違っています");
         }
         if(error.Error == PlayFabErrorCode.APIClientRequestRateLimitExceeded)
         {
-            ShowMessage("しばらく時間をおいてください", Color.red);
+            ShowMessage("しばらく時間をおいてください");
         }
     }
 
-    private void ShowMessage(string message, Color color)
+    private void ShowMessage(string message, bool isError = true)
     {
         if (currentErrorCoroutine != null)
         {
             StopCoroutine(currentErrorCoroutine);
         }
-        currentErrorCoroutine = StartCoroutine(MessageUIProcess(message, color));
+        currentErrorCoroutine = StartCoroutine(MessageUIProcess(message, isError));
     }
 
-    private IEnumerator MessageUIProcess(string m, Color c)
+    private IEnumerator MessageUIProcess(string m, bool isError = true)
     {
-        for (int i = 0; i < Buttons.Length; i++) 
-        {
-            Buttons[i].interactable = false;
-        }
-        ErrorText.color = c;
+        if(isError) ErrorText.color = Color.red;
+        else ErrorText.color = Color.green;
+
         ErrorText.text = m;
 
         yield return new WaitForSeconds(2);
 
         ErrorText.text = string.Empty;
-        for (int i = 0; i < Buttons.Length; i++)
+
+        if (isError)
         {
-            Buttons[i].interactable = true;
+            for (int i = 0; i < Buttons.Length; i++)
+            {
+                Buttons[i].interactable = true;
+            }
         }
     }
 
