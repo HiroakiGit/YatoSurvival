@@ -53,6 +53,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
     public Image[] infoImages;
     public Sprite[] infoSprites;
     public Text[] weaponNameAndStateTexts;
+    public Text[] weaponExplainTexts;
     [Space(30)]
 
     [Header("DeBuffUI")]
@@ -218,6 +219,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
         WeaponBuff a = new WeaponBuff
         {
             WeaponName = sourceList[index].WeaponName,
+            WeaponExplain = sourceList[index].WeaponExplain,
             WeaponType = sourceList[index].WeaponType,
             Sprite = sourceList[index].Sprite,
             state = state,
@@ -232,6 +234,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
         for (int n = 0; n < showCount; n++)
         {
             weaponTypeImages[n].sprite = selectedWeaponBuffList[n].Sprite;
+
             string weaponNameAndStateString = null;
 
             if (selectedWeaponBuffList[n].state == 0)
@@ -260,6 +263,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
             }
 
             weaponNameAndStateTexts[n].text = weaponNameAndStateString;
+            weaponExplainTexts[n].text = selectedWeaponBuffList[n].WeaponExplain;
         }
     }
 

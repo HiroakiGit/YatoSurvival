@@ -28,6 +28,7 @@ public class EnemySpawnerManager : MonoBehaviour
 
     [Header("Boss")]
     public int maxBossCount;
+    public EnemyType[] bossEnemyTypes;
     public int bossSpawnTimeIntervalMin = 5;
     private EnemyType bossEnemyType;
     private int bossCount;
@@ -110,13 +111,12 @@ public class EnemySpawnerManager : MonoBehaviour
             r = UnityEngine.Random.Range(1, maxBossCount + 1);
         }
         
-        if (r == 1)
+        for(int i = 0; i < bossEnemyTypes.Length; i++)
         {
-            bossEnemyType = EnemyType.MimoriSlime;
-        }
-        else if (r == 2)
-        {
-            bossEnemyType = EnemyType.OkaSlime;
+            if(r == (i + 1))
+            {
+                bossEnemyType = bossEnemyTypes[i];
+            }
         }
 
         ShowDangerMessage("ƒ{ƒX‚ª—ˆ‚é...", true, bossEnemyType);

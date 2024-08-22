@@ -189,6 +189,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 80d49373d830ed74f92ec818a59a6700, type: 3}
     - {fileID: 21300000, guid: a9bc2244c1ba1d34f9970f8152db7f81, type: 3}
     normalColor: {r: 1, g: 0, b: 0, a: 1}
+    scaleChange: 0
     hp: 1
     moveSpeed: 0.4
     attackRange: 0.24
@@ -199,6 +200,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 787aba9f0ad38d64a88d43f8f31cd108, type: 3}
     - {fileID: 21300000, guid: 9b9137405a1f629448abd840d184096e, type: 3}
     normalColor: {r: 1, g: 0.73324853, b: 0, a: 1}
+    scaleChange: 0
     hp: 2
     moveSpeed: 0.5
     attackRange: 0.24
@@ -209,6 +211,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 53d90d3059458c043858954e4f01847b, type: 3}
     - {fileID: 21300000, guid: 6dc68a99523f8a84c9e09d10309e00cd, type: 3}
     normalColor: {r: 0, g: 0.015195131, b: 1, a: 1}
+    scaleChange: 0
     hp: 3
     moveSpeed: 0.3
     attackRange: 0.6
@@ -220,6 +223,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 46253f3621b165247b3c11e700814bf4, type: 3}
     - {fileID: 21300000, guid: 485dcbbcf26fa9643ad9d75532abd929, type: 3}
     normalColor: {r: 1, g: 1, b: 1, a: 1}
+    scaleChange: 0.2
     hp: 60
     moveSpeed: 5
     attackRange: 0.5
@@ -231,24 +235,39 @@ MonoBehaviour:
     - {fileID: 21300000, guid: eeaedfd2894062244be42e2ecc182c6e, type: 3}
     - {fileID: 21300000, guid: 83281ed18163db4489eb8587eebc0038, type: 3}
     normalColor: {r: 1, g: 1, b: 1, a: 1}
+    scaleChange: 0.2
     hp: 100
     moveSpeed: 5
     attackRange: 0.5
     attackDamage: 6
     attackInterval: 0.45
+  higeSlimeEnemyStats:
+    sprites:
+    - {fileID: 21300000, guid: e8d95fa41ab6d9e48921d20186aefa7f, type: 3}
+    - {fileID: 21300000, guid: 615f377704915724bb1f126dc0a0e188, type: 3}
+    - {fileID: 21300000, guid: f91d084c042122c48905a608c5d0bf04, type: 3}
+    normalColor: {r: 1, g: 1, b: 1, a: 1}
+    scaleChange: 0.3
+    hp: 200
+    moveSpeed: 2
+    attackRange: 0.7
+    attackDamage: 7
+    attackInterval: 0.45
   stats:
     sprites: []
     normalColor: {r: 0, g: 0, b: 0, a: 0}
+    scaleChange: 0
     hp: 0
     moveSpeed: 0
     attackRange: 0
     attackDamage: 0
     attackInterval: 0
+  sprites: []
+  scaleChange: 0
   health: 0
   attackRange: 0
   attackDamage: 0
   attackInterval: 0
-  sprites: []
   isWave: 0
   takeDamageSoundClip: {fileID: 8300000, guid: 73b54038e938d5b4c8485e233984ec0a, type: 3}
   experiencePool: {fileID: 0}

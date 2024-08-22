@@ -37,7 +37,9 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
         agent.updateUpAxis = false;
 
         //スライムの初期設定
-        if(_Enemy.enemyType == EnemyType.MimoriSlime || _Enemy.enemyType == EnemyType.OkaSlime)
+        if(_Enemy.enemyType == EnemyType.MimoriSlime
+            || _Enemy.enemyType == EnemyType.OkaSlime
+            || _Enemy.enemyType == EnemyType.HigeSlime)
         {
             agent.enabled = true;
             circleCollider.radius = 4.8f;
@@ -210,13 +212,13 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
             if (spriteIndex == 1)
             {
                 // 縮む
-                transform.localScale = originalScale * 0.2f;
+                transform.localScale = originalScale * _Enemy.scaleChange;
                 yield return new WaitForSeconds(0.1f);
             }
             else if (spriteIndex == 2)
             {
                 // 伸びる
-                transform.localScale = originalScale * 0.2f;
+                transform.localScale = originalScale * _Enemy.scaleChange;
 
                 // 一定時間待機（ぴょんと跳ねる動きを表現）
                 yield return new WaitForSeconds(0.1f);
@@ -224,7 +226,7 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
             else
             {
                 // 通常のサイズに戻す
-                transform.localScale = originalScale * 0.2f;
+                transform.localScale = originalScale * _Enemy.scaleChange;
 
                 // NavMeshAgentの移動を停止させる（その場に留まる）
                 agent.isStopped = true;

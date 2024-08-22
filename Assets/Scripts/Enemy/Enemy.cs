@@ -14,14 +14,16 @@ public class Enemy : MonoBehaviour
     public EnemyStats strongEnemyStats;
     public EnemyStats mimoriSlimeEnemyStats;
     public EnemyStats okaSlimeEnemyStats;
+    public EnemyStats higeSlimeEnemyStats;
 
     [Header("Content")]
     public EnemyStats stats;
+    public Sprite[] sprites;
+    public float scaleChange;
     public float health = 3;
     public float attackRange = 0.5f;
     public float attackDamage = 10;
     public float attackInterval = 5f;
-    public Sprite[] sprites;
     public bool isWave = false;
 
     [Header("Audio")]
@@ -51,15 +53,19 @@ public class Enemy : MonoBehaviour
             case EnemyType.OkaSlime:
                 stats = okaSlimeEnemyStats;
                 break;
+            case EnemyType.HigeSlime:
+                stats = higeSlimeEnemyStats;
+                break;
         }
 
         if (stats != null)
         {
+            sprites = stats.sprites;
+            scaleChange = stats.scaleChange;
             health = stats.hp;
             attackRange = stats.attackRange;
             attackDamage = stats.attackDamage * damageRATIO;
             attackInterval = stats.attackInterval;
-            sprites = stats.sprites;
         }
     }
 

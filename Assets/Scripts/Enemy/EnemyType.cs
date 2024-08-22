@@ -5,5 +5,6 @@
         Medium,
         Strong,
         MimoriSlime,
-        OkaSlime
+        OkaSlime,
+        HigeSlime
     }

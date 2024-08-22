@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Explain")]
     public GameObject ExplainCanvas;
+    public GameObject[] ExplainContents;
+    public Image[] stateImages;
+    private int state;
 
     [Header("GameStart")]
     public GameObject GameStartingCanvas;
@@ -81,6 +84,13 @@ public class GameManager : MonoBehaviour
         CurrentState = GameState.MainState;
 
         ExplainCanvas.SetActive(false);
+        foreach(GameObject obj in ExplainContents)
+        {
+            obj.SetActive(false);
+        }
+        state = 0;
+        ChangeState(0,false);
+
         GamePauseCanvas.SetActive(false);
         GameStartingCanvas.SetActive(false);
         GameOverCanvas.SetActive(false);
@@ -127,6 +137,40 @@ public class GameManager : MonoBehaviour
     private void StartExplain()
     {
         ExplainCanvas.SetActive(true);
+    }
+
+    //次へのボタン押した
+    public void OnClickNextExplainButton(int nextstate)
+    {
+        ChangeState(nextstate, true);
+    }
+    
+    public void OnClickChangeExplainButton(int state)
+    {
+        ChangeState(state, false);
+    }
+
+    private void ChangeState(int state, bool isNext)
+    {
+        if(isNext) this.state = this.state + state;
+        else this.state = state;
+       
+        if (this.state < 0) this.state = ExplainContents.Length - 1;
+        if(this.state > ExplainContents.Length - 1) this.state = 0;
+
+        for(int i = 0; i < ExplainContents.Length; i++)
+        {
+            if(this.state == i)
+            {
+                ExplainContents[i].SetActive(true);
+                stateImages[i].color = Color.cyan;
+            }
+            else
+            {
+                ExplainContents[i].SetActive(false);
+                stateImages[i].color = Color.white;
+            }
+        }
     }
 
     //説明終了ボタンを押した

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class WeaponBuff
 {
     public string WeaponName;
+    [Multiline(2)]public string WeaponExplain;
     public WeaponType WeaponType;
     public Sprite Sprite;
     public int state;
