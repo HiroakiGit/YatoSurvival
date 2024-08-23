@@ -45,5 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setSquarePrefab: {fileID: 817581339885243775, guid: 767e639e29d5f7f4a81b5054ebaa2507, type: 3}
-  throwSpeed: 2
-  maxDistance: 1.2
+  maxDistance: 1.5

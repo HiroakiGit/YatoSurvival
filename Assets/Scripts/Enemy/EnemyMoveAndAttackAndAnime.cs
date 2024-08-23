@@ -17,6 +17,7 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
 
     [Header("Strong")]
     public GameObject StrongEnemyAttackBallObj;
+    public float ballSpeed = 3.0f;
     public AudioClip strongEnemyAttackSoundClip;
 
     [Header("Slime")]
@@ -42,6 +43,7 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
             || _Enemy.enemyType == EnemyType.HigeSlime)
         {
             agent.enabled = true;
+            spriteRenderer.sortingOrder = 15;
             circleCollider.radius = 4.8f;
             agent.radius = 2.5f;
             StartCoroutine(SlimeMoveAndAnime());
@@ -49,6 +51,7 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
         //•’Ê‚Ì“G‚Ì‰Šúİ’è
         else 
         {
+            spriteRenderer.sortingOrder = 14;
             StartCoroutine(NormalEnemyAnime());
 
             if (!_Enemy.isWave)
@@ -162,7 +165,7 @@ public class EnemyMoveAndAttackAndAnime : MonoBehaviour
         {
             distanceToPlayer = Vector2.Distance(StrongEnemyAttackBallObj.transform.position, _Enemy._player.playerTransform.position);
             //’e‚ğƒvƒŒƒCƒ„[‚ÉŒü‚¯‚ÄˆÚ“®
-            StrongEnemyAttackBallObj.transform.position = Vector2.MoveTowards(StrongEnemyAttackBallObj.transform.position, _Enemy._player.playerTransform.position, 2 * Time.deltaTime);
+            StrongEnemyAttackBallObj.transform.position = Vector2.MoveTowards(StrongEnemyAttackBallObj.transform.position, _Enemy._player.playerTransform.position, ballSpeed * Time.deltaTime);
             yield return null;
         }
 
