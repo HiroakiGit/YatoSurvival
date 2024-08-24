@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour
             case GameState.MainState:
 
                 if (isGameFinished) return;
-                PauseGame(true);
+                PauseGame(true, false);
                 SEAudio.Instance.PlayOneShot(pushedButtonSoundClip, 0.1f);
                 break;
 
@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PauseGame(bool canvasActive)
+    public void PauseGame(bool canvasActive, bool continuePlayMainBGM)
     {
         GamePauseCanvas.SetActive(canvasActive);
         CurrentState = GameState.PauseState;
@@ -276,7 +276,8 @@ public class GameManager : MonoBehaviour
         _Player._PlayerAttackIndicator.enabled = false;
         _Player._PlayerAnimation.enabled = false;
 
-        if(canvasActive) BGMAudio.Instance.PlayBGM(pauseBGMSoundClip, true);
+        if (canvasActive) BGMAudio.Instance.PlayBGM(pauseBGMSoundClip, true);
+        if(!canvasActive && !continuePlayMainBGM) BGMAudio.Instance.Stop();
 
         Time.timeScale = 0;
     }

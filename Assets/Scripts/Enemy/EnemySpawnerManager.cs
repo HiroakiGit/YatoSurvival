@@ -37,6 +37,7 @@ public class EnemySpawnerManager : MonoBehaviour
     [Header("UI")]
     public GameObject DangerCanvas;
     public GameObject dangerImage;
+    public GameObject DangerBossComingCanvas;
     public Text dangerText;
 
     private Coroutine currentDangerCoroutine;
@@ -44,6 +45,7 @@ public class EnemySpawnerManager : MonoBehaviour
     private void Start()
     {
         DangerCanvas.SetActive(false);
+        DangerBossComingCanvas.SetActive(false);
         beepClip = SoundClipCreator.Instance.CreateClip(180, 180, 0.3f, false);
         bossComingClip = SoundClipCreator.Instance.CreateClip(100, 50, 1f, true);
         bossCount = 0;
@@ -145,6 +147,7 @@ public class EnemySpawnerManager : MonoBehaviour
     private IEnumerator DangerUIProcess(string m, bool isBoss, EnemyType bossEnemyType)
     {
         DangerCanvas.SetActive(true);
+        DangerBossComingCanvas.SetActive(isBoss);
         dangerText.text = m;
 
         for(int i = 0; i < 3; i++)
@@ -157,6 +160,7 @@ public class EnemySpawnerManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
+        DangerBossComingCanvas.SetActive(false);
         DangerCanvas.SetActive(false);
 
         if (isBoss)

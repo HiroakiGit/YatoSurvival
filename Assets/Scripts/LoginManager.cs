@@ -11,6 +11,7 @@ public class LoginManager : MonoBehaviour
     [SerializeField] GameObject LoginCanvas;
     [SerializeField] InputField IFUserName;
     [SerializeField] InputField IFPassWord;
+    [SerializeField] GameObject CheckMarkObj;
     [SerializeField] Text ErrorText;
     [SerializeField] Button[] Buttons;
     private Coroutine currentErrorCoroutine;
@@ -18,12 +19,13 @@ public class LoginManager : MonoBehaviour
     public void StartLogin()
     {
         LoginCanvas.SetActive(true);
+        CheckMarkObj.SetActive(false);
         IFUserName.text = string.Empty;
         IFPassWord.text = string.Empty;
         ErrorText.text = string.Empty;
     }
 
-    //===============================
+    //AutoLogin===============================
     public void AutoLogin()
     {
         _player.SUserName = "testman";
@@ -45,7 +47,25 @@ public class LoginManager : MonoBehaviour
         //ログイン
         PlayFabClientAPI.LoginWithPlayFab(LoginRequest, OnLoginSuccess, OnError);
     }
-    //===============================
+    //======================================
+
+    bool hide = true;
+    //パスワード確認ボタン押したとき
+    public void OnClickCheckPassWordButton()
+    {
+        hide = !hide;
+        CheckMarkObj.SetActive(!hide);
+        if(hide) IFPassWord.contentType = InputField.ContentType.Password;
+        else IFPassWord.contentType = InputField.ContentType.Standard;
+        StartCoroutine(ReloadInputField());
+    }
+
+    private IEnumerator ReloadInputField()
+    {
+        IFPassWord.ActivateInputField();
+        yield return null;
+        IFPassWord.MoveTextEnd(true);
+    }
 
     //登録ボタンを押したとき
     public void OnClickRegisterButton()

@@ -47,7 +47,7 @@ public class Timer : MonoBehaviour
             }
             //EnemyBoss
             //TODO:
-            if ((aliveTime % (_EnemySpawnerManager.bossSpawnTimeIntervalMin)) == 0)
+            if ((aliveTime % (_EnemySpawnerManager.bossSpawnTimeIntervalMin * 60)) == 0)
             {
                 _EnemySpawnerManager.StartBossSpawnProcess();
             }

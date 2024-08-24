@@ -21,6 +21,7 @@ public class RankingManager : MonoBehaviour
     private int myNUM;
 
     [Header("Audio")]
+    public AudioClip rankingBGM;
     public AudioClip showDataSoundClip;
 
     private void Start()
@@ -59,6 +60,7 @@ public class RankingManager : MonoBehaviour
         await GetLeaderboard();
         ShowLeaderboard();
         BackButton.SetActive(true);
+        BGMAudio.Instance.PlayBGM(rankingBGM, true);
 
         GameManager.Instance.isProcessing = false;
     }
@@ -135,7 +137,7 @@ public class RankingManager : MonoBehaviour
     public void OnClickBackButton()
     {
         Initalize();
-        GameManager.Instance.CurrentState = GameState.PauseState;
+        GameManager.Instance.PauseGame(!GameManager.Instance.IsGameFinished(), false);
     }
 
     private void Initalize()

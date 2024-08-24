@@ -97,7 +97,7 @@ public class BuffAndDeBuffManager : MonoBehaviour
         if (currentLevel % weaponBuffLevel == 0)
         {
             BuffCanvas.SetActive(true);
-            GameManager.Instance.PauseGame(false);
+            GameManager.Instance.PauseGame(false, true);
             GameManager.Instance.isProcessing = true;
 
             SelectWeaponBuff();

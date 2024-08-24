@@ -29,6 +29,7 @@ public class QuestionManager : MonoBehaviour
     public AudioClip questionSoundClip;
     public AudioClip collectSoundClip;
     public AudioClip inCollectSoundClip;
+    public AudioClip kuchioshiSoundClip;
 
     private List<AudioClip> schoolChimeClipList = new List<AudioClip>();
     private float[] chimeFrequencies = new float[] { 350f, 440f, 392f, 261f, 350f, 392f, 440f, 350f }; 
@@ -115,15 +116,15 @@ public class QuestionManager : MonoBehaviour
 
     public void OnClickYesButton()
     {
-        StartCoroutine(OnQuestionAnswered(currentQuestion.isCorrect));
+        StartCoroutine(OnQuestionAnswered(currentQuestion.isCorrect, currentQuestion.isHard));
     }
 
     public void OnClickNoButton()
     {
-        StartCoroutine(OnQuestionAnswered(!currentQuestion.isCorrect));
+        StartCoroutine(OnQuestionAnswered(!currentQuestion.isCorrect, currentQuestion.isHard));
     }
 
-    private IEnumerator OnQuestionAnswered(bool isCorrect)
+    private IEnumerator OnQuestionAnswered(bool isCorrect ,bool isHard)
     {
         InitalizeUI();
         AnswerUI.SetActive(true);
@@ -181,6 +182,8 @@ public class QuestionManager : MonoBehaviour
                 LogManager.Instance.Log(2f, null);
             }
         }
+
+        if (isHard) SEAudio.Instance.PlayOneShot(kuchioshiSoundClip, 0.4f);
 
         GameManager.Instance.isProcessing = false;
         GameManager.Instance.ContinueGame();
