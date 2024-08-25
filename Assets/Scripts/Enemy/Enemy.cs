@@ -88,15 +88,43 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        DropExperience();
+        switch (enemyType)
+        {
+            case EnemyType.MimoriSlime:
+                DropExperience(5);
+                break;
+            case EnemyType.OkaSlime:
+                DropExperience(7);
+                break;
+            case EnemyType.HigeSlime:
+                DropExperience(10);
+                break;
+            case EnemyType.Strong:
+                DropExperience(1);
+                break;
+            case EnemyType.Medium:
+                DropExperience(1);
+                break;
+            case EnemyType.Weak:
+                DropExperience(1);
+                break;
+        }
         Destroy(gameObject); // 敵を破壊
     }
 
-    private void DropExperience()
+    private void DropExperience(int amount)
     {
-        GameObject experience = experiencePool.GetObject();
-        experience.transform.position = transform.position;
-        experience.GetComponent<Experience>().Initialize();
+        for(int i = 0; i < amount; i++)
+        {
+            GameObject experience = experiencePool.GetObject();
+            // ランダムな範囲を設定
+            float radius = 0.1f;
+            // ランダムな位置を取得
+            Vector2 randomOffset = Random.insideUnitCircle * radius;
+            // 現在の位置にランダムなオフセットを追加
+            experience.transform.position = transform.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
+            experience.GetComponent<Experience>().Initialize();
+        }
     }
 
     void OnTriggerEnter2D(Collider2D c)

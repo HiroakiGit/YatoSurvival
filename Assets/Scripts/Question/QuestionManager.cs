@@ -183,7 +183,7 @@ public class QuestionManager : MonoBehaviour
             }
         }
 
-        if (isHard) SEAudio.Instance.PlayOneShot(kuchioshiSoundClip, 0.4f);
+        if (!isCorrect && isHard) SEAudio.Instance.PlayOneShot(kuchioshiSoundClip, 0.4f);
 
         GameManager.Instance.isProcessing = false;
         GameManager.Instance.ContinueGame();
