@@ -41,6 +41,10 @@ public class BGMAudio : MonoBehaviour
         {
             PlayBGM(null, true);
         }
+        else
+        {
+            Stop();
+        }
     }
 
     public void PlayBGM(AudioClip clip, bool loop)

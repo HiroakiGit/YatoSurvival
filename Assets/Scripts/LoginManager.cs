@@ -4,6 +4,7 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class LoginManager : MonoBehaviour
 {
