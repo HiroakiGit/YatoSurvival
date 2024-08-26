@@ -9,6 +9,7 @@ public class PlayerExperience : MonoBehaviour
     public int experiencePoints = 0;
     public int currentLevel = 1;
     public int experienceToNextLevel = 100;
+    private int count = 0;
     public Text levelText;
     public Slider experienceSlider;
 
@@ -49,7 +50,8 @@ public class PlayerExperience : MonoBehaviour
 
     private int CalculateExperienceForNextLevel()
     {
-        return experienceToNextLevel + 3;
+        count++;
+        return experienceToNextLevel + count;
     }
 
     private void UpdateExperienceUI()

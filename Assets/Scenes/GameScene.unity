@@ -9469,7 +9469,7 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: 7384111caeb529a409a9e631e4ba87b7, type: 3}
     initalDuration: 3
     duration: 3
-  increaseMoveSpeedRATIO: 1.2
+  increaseMoveSpeedRATIO: 1.1
   increaseHp: 3
   getBuffSoundClip: {fileID: 8300000, guid: d4635bf8e117a8b44a245fbf8100ef02, type: 3}
   _Player: {fileID: 1061298081}
@@ -9499,7 +9499,7 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: 2d202b47031018144a999305de686549, type: 3}
     initalDuration: 3
     duration: 3
-  decreaseMoveSpeedRATIO: 0.8
+  decreaseMoveSpeedRATIO: 0.9
   increaseEnemyDamageRATIO: 1.1
   decreaseHpRATIO: 0.03
   getDeBuffSoundClip: {fileID: 8300000, guid: 4b6cdde703fef9c49a9d80098d36f107, type: 3}

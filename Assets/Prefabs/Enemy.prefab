@@ -214,7 +214,7 @@ MonoBehaviour:
     scaleChange: 0
     hp: 3
     moveSpeed: 0.3
-    attackRange: 0.6
+    attackRange: 0.67
     attackDamage: 2.5
     attackInterval: 2
   mimoriSlimeEnemyStats:
@@ -285,6 +285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Enemy: {fileID: 239794287712467783}
   StrongEnemyAttackBallObj: {fileID: 1360505681574879253}
+  ballSpeed: 3
   strongEnemyAttackSoundClip: {fileID: 8300000, guid: c979f0a2e918d6045a8446567306bca2, type: 3}
   increaseDamageColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
 --- !u!1 &8836088267090974725
