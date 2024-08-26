@@ -50,8 +50,8 @@ public class PlayerExperience : MonoBehaviour
 
     private int CalculateExperienceForNextLevel()
     {
-        count++;
-        return experienceToNextLevel + count;
+        if(currentLevel % 3 == 0) count++;
+        return experienceToNextLevel + 3 + count;
     }
 
     private void UpdateExperienceUI()
