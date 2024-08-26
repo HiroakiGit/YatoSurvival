@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1;
+        Application.targetFrameRate = 60;
 
         CurrentState = GameState.MainState;
 
@@ -343,14 +344,16 @@ public class GameManager : MonoBehaviour
 
     public void OnClickRetryButton()
     {
-        ReallyText.text = "本当にリトライしますか？";
+        if(!IsGameFinished()) ReallyText.text = "本当にリトライしますか？\n※現在の進捗はなくなります";
+        else ReallyText.text = "本当にリトライしますか？";
         ReallyUI.SetActive(true);
         CurrentState = GameState.SubMenuState;
     }
     
     public void OnClickBackTitleButton()
     {
-        ReallyText.text = "本当にタイトルに戻りますか？";
+        if (!IsGameFinished()) ReallyText.text = "本当にタイトルに戻りますか？\n※現在の進捗はなくなります";
+        else ReallyText.text = "本当にタイトルに戻りますか？";
         ReallyUI.SetActive(true);
         CurrentState = GameState.SubMenuState;
     }
@@ -358,6 +361,7 @@ public class GameManager : MonoBehaviour
     public void OnClickCancelButton()
     {
         HandleEscapePress();
+        ReallyUI.SetActive(false);
     }
 
     public void OnClickNextSceneButton()

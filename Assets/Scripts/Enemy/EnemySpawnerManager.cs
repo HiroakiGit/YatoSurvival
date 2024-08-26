@@ -6,8 +6,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemySpawnerManager : MonoBehaviour
 {

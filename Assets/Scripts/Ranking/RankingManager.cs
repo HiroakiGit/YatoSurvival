@@ -103,8 +103,6 @@ public class RankingManager : MonoBehaviour
 
         await taskCompletionSource.Task;
 
-        await Task.Delay(1000);
-
         LoadingObj.SetActive(false);
     }
 

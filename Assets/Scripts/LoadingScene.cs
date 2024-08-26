@@ -15,6 +15,15 @@ public class LoadingScene : MonoBehaviour
         isloadingScene = false;
     }
 
+    public void OnClickQuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+    Application.Quit();//ゲームプレイ終了
+#endif
+    }
+
     public void LoadNextScene(string SceneName)
     {
         _loadingCanvas.SetActive(true);
