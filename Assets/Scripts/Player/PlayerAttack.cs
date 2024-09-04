@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -387,15 +388,15 @@ public class PlayerAttack : MonoBehaviour
         switch (type)
         {
             case WeaponType.Suica:
-                return suicaFireRate <= 0.2f;
+                return suicaFireRate <= 0.5f;
             case WeaponType.Laser:
                 return laserFireRate <= 0.2f;
             case WeaponType.Chart:
                 return chartRotateFireRate >= 500;
             case WeaponType.SetSquare:
-                return setSquareFireRate <= 0.2f;
+                return setSquareFireRate <= 1f;
             case WeaponType.Portion:
-                return portionFireRate <= 0.2f;
+                return portionFireRate <= 0.8f;
         }
         return false;
     }

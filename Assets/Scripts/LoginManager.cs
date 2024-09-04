@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using UnityEditor.PackageManager;
+using PlayFab;
+using PlayFab.ClientModels;
 
 public class LoginManager : MonoBehaviour
 {
@@ -72,25 +75,52 @@ public class LoginManager : MonoBehaviour
         _player.SUserName = OrganizedString(IFUserName.text);
         _player.SPassWord = OrganizedString(IFPassWord.text);
 
-        //すでにその名前のプレイヤーがいる => Error
-        if (await _UserDataManager.IsExistUserName(_player.SUserName))
+        //PlayFabLoginかどうか
+        if(GameManager.Instance.isPlayFabLogin)
         {
-            ShowMessage($"登録失敗: ユーザー名が既に存在します");
+            //リクエスト
+            var RegisterRequest = new RegisterPlayFabUserRequest()
+            {
+                TitleId = "455AB",
+                Username = _player.SUserName,
+                Password = _player.SPassWord,
+                RequireBothUsernameAndEmail = false
+            };
+
+            //登録
+            PlayFabClientAPI.RegisterPlayFabUser(RegisterRequest, OnRegisterSuccess, OnError);
         }
-        //まだその名前のプレイヤーがいない => 登録成功
         else
         {
-            ShowMessage($"登録成功: {_player.SUserName}", false);
-            await _UserDataManager.RegisterUser(_player.SUserName, _player.SPassWord);
-            //登録完了
-            OnRegisterSuccess();
+            //すでにその名前のプレイヤーがいる => Error
+            if (await _UserDataManager.IsExistUserName(_player.SUserName))
+            {
+                ShowMessage($"登録失敗: ユーザー名が既に存在します");
+            }
+            //まだその名前のプレイヤーがいない => 登録成功
+            else
+            {
+                await _UserDataManager.RegisterUser(_player.SUserName, _player.SPassWord);
+                //登録完了
+                OnRegisterSuccess(null);
+            }
         }
     }
 
     //登録完了した時
-    private void OnRegisterSuccess()
+    private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
-        OnLoginSuccess();
+        ShowMessage($"登録成功: {_player.SUserName}", false);
+
+        if (GameManager.Instance.isPlayFabLogin)
+        {
+            //自動ログイン
+            OnClickLoginButton();
+        }
+        else
+        {
+            OnLoginSuccess(null);
+        }
     }
 
     //ログインボタンを押したとき
@@ -113,29 +143,51 @@ public class LoginManager : MonoBehaviour
         _player.SUserName = OrganizedString(IFUserName.text);
         _player.SPassWord = OrganizedString(IFPassWord.text);
 
-        //すでにその名前のプレイヤーがいる => ログイン成功
-        if (await _UserDataManager.IsExistUserName(_player.SUserName))
+        //PlayFabLoginかどうか
+        if (GameManager.Instance.isPlayFabLogin)
         {
-            if(await _UserDataManager.IsCorrectPassWord(_player.SUserName, _player.SPassWord))
+            //リクエスト
+            var LoginRequest = new LoginWithPlayFabRequest()
             {
-                ShowMessage($"ログイン成功: {_player.SUserName}", false);
-                OnLoginSuccess();
-            }
-            else
-            {
-                ShowMessage($"ログイン失敗: パスワードが違います");
-            }
+                TitleId = "455AB",
+                Username = _player.SUserName,
+                Password = _player.SPassWord,
+
+                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                {
+                    GetPlayerProfile = true
+                }
+            };
+
+            //ログイン
+            PlayFabClientAPI.LoginWithPlayFab(LoginRequest, OnLoginSuccess, OnError);
         }
-        //その名前のプレイヤーがいない => ログイン失敗
         else
         {
-            ShowMessage($"ログイン失敗: ユーザーが見つかりません");
+            //すでにその名前のプレイヤーがいる => ログイン成功
+            if (await _UserDataManager.IsExistUserName(_player.SUserName))
+            {
+                if (await _UserDataManager.IsCorrectPassWord(_player.SUserName, _player.SPassWord))
+                {
+                    OnLoginSuccess(null);
+                }
+                else
+                {
+                    ShowMessage($"ログイン失敗: パスワードが間違っています");
+                }
+            }
+            //その名前のプレイヤーがいない => ログイン失敗
+            else
+            {
+                ShowMessage($"ログイン失敗: ユーザーが見つかりません");
+            }
         }
     }
 
     //ログイン完了した時
-    private void OnLoginSuccess()
+    private void OnLoginSuccess(LoginResult result)
     {
+        ShowMessage($"ログイン成功: {_player.SUserName}", false);
         StartCoroutine(EndLogin());
     }
 
@@ -146,6 +198,31 @@ public class LoginManager : MonoBehaviour
         LoginCanvas.SetActive(false);
         //ログイン終了時の処理を呼び出す
         GameManager.Instance.OnLoginEnd();
+    }
+
+    //エラー===================================================================================
+    private void OnError(PlayFabError error)
+    {
+        _player.SUserName = null;
+        _player.SPassWord = null;
+        Debug.Log(error.GenerateErrorReport());
+
+        if (error.Error == PlayFabErrorCode.UsernameNotAvailable)
+        {
+            ShowMessage("ユーザー名が既に存在します");
+        }
+        if (error.Error == PlayFabErrorCode.AccountNotFound)
+        {
+            ShowMessage("ユーザーが見つかりません");
+        }
+        if (error.Error == PlayFabErrorCode.InvalidUsernameOrPassword)
+        {
+            ShowMessage("ユーザーネームまたはパスワードが間違っています");
+        }
+        if (error.Error == PlayFabErrorCode.APIClientRequestRateLimitExceeded)
+        {
+            ShowMessage("しばらく時間をおいてください");
+        }
     }
 
     //メッセージ================================================================================

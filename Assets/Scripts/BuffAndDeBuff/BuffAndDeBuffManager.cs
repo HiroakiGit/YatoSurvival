@@ -123,8 +123,16 @@ public class BuffAndDeBuffManager : MonoBehaviour
                 if (_PlayerAttack.IsFullWeapon(weaponBuffList[i].WeaponType))
                 {
                     Debug.Log($"Full! : {weaponBuffList[i].WeaponType}");
+                    
                     //レート上昇または強化に限る
                     n = UnityEngine.Random.Range(1, 3);
+                    
+                    //武器のレートが最大値に到達してるか確認
+                    if (_PlayerAttack.IsMaxRateIncrease(weaponBuffList[i].WeaponType))
+                    {
+                        //強化に限る
+                        n = 2;
+                    }
                 }
 
                 //追加または強化またはレート上昇
@@ -152,6 +160,15 @@ public class BuffAndDeBuffManager : MonoBehaviour
                     //レート上昇または強化に限る
                     n = UnityEngine.Random.Range(1, 3);
 
+                    //武器のレートが最大値に到達してるか確認
+                    if (_PlayerAttack.IsMaxRateIncrease(weaponBuffList[i].WeaponType))
+                    {
+                        //強化に限る
+                        n = 2;
+                    }
+                }
+                else
+                {
                     //武器のレートが最大値に到達してるか確認
                     if (_PlayerAttack.IsMaxRateIncrease(weaponBuffList[i].WeaponType))
                     {

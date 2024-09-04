@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using PlayFab.ClientModels;
+using PlayFab;
 
 public class RankingManager : MonoBehaviour
 {
@@ -67,35 +69,69 @@ public class RankingManager : MonoBehaviour
 
         var taskCompletionSource = new TaskCompletionSource<bool>();
 
-        int maxcount = 0;
-        if (_UserDataManager.GetRankingList().Count < 20)
+        //PlayFabLoginかどうか
+        if(GameManager.Instance.isPlayFabLogin)
         {
-            maxcount = _UserDataManager.GetRankingList().Count;
+            var request = new GetLeaderboardRequest
+            {
+                StatisticName = "HighScore"
+            };
+
+            PlayFabClientAPI.GetLeaderboard(request, result =>
+            {
+                for (int i = 0; i < result.Leaderboard.Count; i++)
+                {
+                    Rank r = new Rank((result.Leaderboard[i].Position + 1).ToString(), result.Leaderboard[i].DisplayName, result.Leaderboard[i].StatValue);
+
+                    //自分がいるとき
+                    if (result.Leaderboard[i].DisplayName == _Player.SUserName)
+                    {
+                        playerInRanking = true;
+                        myNUM = i;
+                    }
+
+                    rankingList.Add(r);
+                }
+                taskCompletionSource.SetResult(true);
+            }, error =>
+            {
+                Debug.Log(error.GenerateErrorReport());
+                taskCompletionSource.SetResult(false);
+            });
         }
         else
         {
-            maxcount = 20;
-        }
-
-        var resultList = _UserDataManager.GetRankingList();
-        for (int i = 0; i < maxcount; i++)
-        {
-            Rank r = new Rank((i + 1).ToString(), resultList[i].username, resultList[i].score);
-            
-            if(_Player != null)
+            int maxcount = 0;
+            if (_UserDataManager.GetRankingList().Count < 20)
             {
-                //自分がいるとき
-                if (resultList[i].username == _Player.SUserName)
-                {
-                    playerInRanking = true;
-                    myNUM = i;
-                }
+                maxcount = _UserDataManager.GetRankingList().Count;
+            }
+            else
+            {
+                maxcount = 20;
             }
 
-            rankingList.Add(r);
+            var resultList = _UserDataManager.GetRankingList();
+            for (int i = 0; i < maxcount; i++)
+            {
+                Rank r = new Rank((i + 1).ToString(), resultList[i].username, resultList[i].score);
+
+                if (_Player != null)
+                {
+                    //自分がいるとき
+                    if (resultList[i].username == _Player.SUserName)
+                    {
+                        playerInRanking = true;
+                        myNUM = i;
+                    }
+                }
+
+                rankingList.Add(r);
+            }
+
+            taskCompletionSource.SetResult(true);
         }
 
-        taskCompletionSource.SetResult(true);
         await taskCompletionSource.Task;
         await Task.Delay(500);
         LoadingObj.SetActive(false);

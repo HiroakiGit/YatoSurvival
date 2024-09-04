@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
     private bool isGameStarted = false;
     private bool isGameFinished = false;
 
-    [Header("TestPlay")]
+    [Header("PlaySetting")]
+    public bool isPlayFabLogin = true;
     public bool isAutoLogin;
     public bool isExplain;
     public bool isCountDown;
