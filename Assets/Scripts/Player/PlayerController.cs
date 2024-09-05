@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public MachineChangeAdaptor _MachineChangeAdaptor;
     public float normalSpeed;
     public float currentSpeed;
     [Header("Audio")]
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private float stepTimer = 0f;
 
     private Rigidbody2D rb;
+    public Vector2 moveInput;
     private Vector2 moveVelocity;
 
     void Start()
@@ -27,11 +29,21 @@ public class PlayerController : MonoBehaviour
         //ゲームが終わっていたら何もしない
         if(GameManager.Instance.IsGameFinished()) return;
 
-        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+#if UNITY_STANDALONE
+        moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         moveVelocity = moveInput.normalized * currentSpeed;
+#endif
+#if UNITY_ANDROID || UNITY_IOS
+        // ジョイスティックの入力を取得
+        float horizontal = _MachineChangeAdaptor.inputMove.Horizontal; // ジョイスティックの水平入力
+        float vertical = _MachineChangeAdaptor.inputMove.Vertical;     // ジョイスティックの垂直入力
+        // ジョイスティックの入力をベクトルとして保持
+        moveInput = new Vector2(horizontal, vertical);
+        moveVelocity = moveInput.normalized * currentSpeed * _MachineChangeAdaptor.moveSpeed;
+#endif
 
         //動いているとき
-        if(rb.velocity.magnitude > 0.1f)
+        if (rb.velocity.magnitude > 0.1f)
         {
             stepTimer += Time.deltaTime;
             if (stepTimer >= (stepInterval * (normalSpeed / currentSpeed)))

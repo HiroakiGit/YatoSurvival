@@ -56,12 +56,33 @@ public class PlayerAttack : MonoBehaviour
     private float nextPortionFireTime = 0f;
     private int numberOfPortionWeapons = 0;
 
+    private Transform attackTarget;
+
     [Header("Audio")]
     public AudioClip chartRotateSoundClip;
     public AudioClip laserBeamSoundClip;
     public AudioClip fireSuicaSoundClip;
     public AudioClip fireSetSquareSoundClip;
     public AudioClip firePortionSoundClip;
+
+    private void Start()
+    {
+        StartCoroutine(SetAttackTarget());
+    }
+
+    private IEnumerator SetAttackTarget()
+    {
+        while (true)
+        {
+            if(_Player._PlayerAttackIndicator.cursorInstance != null)
+            {
+                attackTarget = _Player._PlayerAttackIndicator.cursorInstance.transform;
+                break;
+            }
+
+            yield return null;
+        }
+    }
 
     //初期武器
     public void GenerateInitialWeapon()
@@ -274,8 +295,7 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator FireSuica()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePosition - transform.position).normalized;
+        Vector2 direction = (attackTarget.position - transform.position).normalized;
 
         if(WeaponCount(WeaponType.Suica) > 0)
         {
@@ -309,8 +329,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if (WeaponCount(WeaponType.SetSquare) > 0)
         {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 direction = (mousePosition - transform.position).normalized;
+            Vector2 direction = (attackTarget.position - transform.position).normalized;
 
             for (int i = 0; i < numberOfSetSquareWeapons; i++)
             {
@@ -326,11 +345,9 @@ public class PlayerAttack : MonoBehaviour
     {
         if (WeaponCount(WeaponType.Portion) > 0)
         {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
             for (int i = 0; i < numberOfPortionWeapons; i++)
             {
-                _PortionWeapon.Fire(mousePosition, transform, portionSpeed, portionDamage);
+                _PortionWeapon.Fire(attackTarget.position, transform, portionSpeed, portionDamage);
                 SEAudio.Instance.PlayOneShot(firePortionSoundClip, 0.4f);
 
                 yield return new WaitForSeconds(0.1f);

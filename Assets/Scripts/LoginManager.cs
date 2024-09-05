@@ -32,7 +32,7 @@ public class LoginManager : MonoBehaviour
     public void AutoLogin()
     {
         IFUserName.text = "testman";
-        _player.SPassWord = "testman";
+        IFPassWord.text = "testman";
         OnClickLoginButton();
     }
     //======================================
@@ -76,7 +76,7 @@ public class LoginManager : MonoBehaviour
         _player.SPassWord = OrganizedString(IFPassWord.text);
 
         //PlayFabLoginかどうか
-        if(GameManager.Instance.isPlayFabLogin)
+        if(PlaySetting.Instance.isPlayFabLogin)
         {
             //リクエスト
             var RegisterRequest = new RegisterPlayFabUserRequest()
@@ -112,7 +112,7 @@ public class LoginManager : MonoBehaviour
     {
         ShowMessage($"登録成功: {_player.SUserName}", false);
 
-        if (GameManager.Instance.isPlayFabLogin)
+        if (PlaySetting.Instance.isPlayFabLogin)
         {
             //自動ログイン
             OnClickLoginButton();
@@ -144,7 +144,7 @@ public class LoginManager : MonoBehaviour
         _player.SPassWord = OrganizedString(IFPassWord.text);
 
         //PlayFabLoginかどうか
-        if (GameManager.Instance.isPlayFabLogin)
+        if (PlaySetting.Instance.isPlayFabLogin)
         {
             //リクエスト
             var LoginRequest = new LoginWithPlayFabRequest()

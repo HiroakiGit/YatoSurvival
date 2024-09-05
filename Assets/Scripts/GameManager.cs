@@ -14,6 +14,7 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public MachineChangeAdaptor _MachineChangeAdaptor;
     public LoginManager _loginManager;
     public MapEdgeEnemySpawner _enemyGenerater;
     public Player _Player;
@@ -24,12 +25,6 @@ public class GameManager : MonoBehaviour
 
     private bool isGameStarted = false;
     private bool isGameFinished = false;
-
-    [Header("PlaySetting")]
-    public bool isPlayFabLogin = true;
-    public bool isAutoLogin;
-    public bool isExplain;
-    public bool isCountDown;
 
     [Header("===UI===")]
     public GameState CurrentState;
@@ -119,14 +114,16 @@ public class GameManager : MonoBehaviour
         };
 
         //ログイン開始
-        if (isAutoLogin) _loginManager.AutoLogin();
+        if (PlaySetting.Instance.isAutoLogin) _loginManager.AutoLogin();
         else _loginManager.StartLogin();
     }
 
     //ログイン終了時
     public void OnLoginEnd()
     {
-        if (isExplain)
+        _MachineChangeAdaptor.Initalize();
+
+        if (PlaySetting.Instance.isExplain)
         {
             StartExplain();
         }
@@ -192,7 +189,7 @@ public class GameManager : MonoBehaviour
         _BuffAndDeBuffManager.BuffAndDeBuffStateCanvas.SetActive(false);
 
         //カウントダウン
-        if (isCountDown)
+        if (PlaySetting.Instance.isCountDown)
         {
             for (int i = startCount; i >= 0; i--)
             {

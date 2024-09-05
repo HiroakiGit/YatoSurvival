@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class LobbyManager : MonoBehaviour
 {
     public LoadingScene _LoadingScene;
-    [Header("PlaySetting")]
-    public bool isPlayFabLogin = true;
     [Header("UI")]
     public GameObject RankingButtonObj;
     public GameObject ReallyUI;
@@ -15,7 +13,7 @@ public class LobbyManager : MonoBehaviour
 
     private void Awake()
     {
-        RankingButtonObj.SetActive(!isPlayFabLogin);
+        RankingButtonObj.SetActive(!PlaySetting.Instance.isPlayFabLogin);
         ReallyUI.SetActive(false);
     }
 

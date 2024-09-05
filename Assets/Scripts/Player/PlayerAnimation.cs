@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
+    public Player _Player;
     [Header("Walk")]
     public Sprite idleUp;
     public Sprite[] walkUp;
@@ -46,15 +47,13 @@ public class PlayerAnimation : MonoBehaviour
     {
         if (GameManager.Instance.IsGameFinished()) return;
 
-        Vector2 direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
         // プレイヤーが動いているかを判断
-        isMoving = direction != Vector2.zero;
+        isMoving = _Player._PlayerController.moveInput != Vector2.zero;
 
         if (isMoving)
         {
             // 最後に動いた方向を記憶
-            lastDirection = direction;
+            lastDirection = _Player._PlayerController.moveInput;
 
             // アニメーションフレームを更新
             frameTimer += Time.deltaTime;
@@ -72,7 +71,7 @@ public class PlayerAnimation : MonoBehaviour
         }
 
         // 向きに応じてスプライトを設定
-        UpdateSprite(direction);
+        UpdateSprite(_Player._PlayerController.moveInput);
     }
 
     void UpdateSprite(Vector2 direction)

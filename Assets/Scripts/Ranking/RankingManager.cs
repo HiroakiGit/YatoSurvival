@@ -33,7 +33,31 @@ public class RankingManager : MonoBehaviour
 
     public async Task SubmitScore()
     {
-        await _UserDataManager.UpdateScore(_Player.SUserName ,_Timer.aliveTime);
+        //PlayFabLoginかどうか
+        if (PlaySetting.Instance.isPlayFabLogin)
+        {
+            PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest
+            {
+                Statistics = new List<StatisticUpdate>
+            {
+                new StatisticUpdate
+                {
+                    StatisticName = "HighScore",
+                    Value = _Timer.aliveTime
+                }
+            }
+            }, result =>
+            {
+                Debug.Log($"スコア {_Timer.aliveTime} 送信完了！");
+            }, error =>
+            {
+                Debug.Log(error.GenerateErrorReport());
+            });
+        }
+        else
+        {
+            await _UserDataManager.UpdateScore(_Player.SUserName, _Timer.aliveTime);
+        }
     }
 
     //ランキング取得ボタンを押したとき
@@ -70,7 +94,7 @@ public class RankingManager : MonoBehaviour
         var taskCompletionSource = new TaskCompletionSource<bool>();
 
         //PlayFabLoginかどうか
-        if(GameManager.Instance.isPlayFabLogin)
+        if(PlaySetting.Instance.isPlayFabLogin)
         {
             var request = new GetLeaderboardRequest
             {
