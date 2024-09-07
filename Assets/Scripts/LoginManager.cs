@@ -1,9 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Threading.Tasks;
-using UnityEditor.PackageManager;
 using PlayFab;
 using PlayFab.ClientModels;
 
@@ -69,7 +66,7 @@ public class LoginManager : MonoBehaviour
         if (OrganizedString(IFPassWord.text).Length < 6 || OrganizedString(IFPassWord.text).Length > 15) { ShowMessage("パスワードは6~15文字にしてください"); return; }
 
         //Load
-        await _UserDataManager.LoadUserData();
+        if(!PlaySetting.Instance.isPlayFabLogin) await _UserDataManager.LoadUserData();
 
         //UserName,Passwordを設定
         _player.SUserName = OrganizedString(IFUserName.text);
@@ -137,7 +134,7 @@ public class LoginManager : MonoBehaviour
         if (OrganizedString(IFPassWord.text).Length < 6 || OrganizedString(IFPassWord.text).Length > 15) { ShowMessage("パスワードは6~15文字にしてください"); return; }
 
         //Load
-        await _UserDataManager.LoadUserData();
+        if (!PlaySetting.Instance.isPlayFabLogin) await _UserDataManager.LoadUserData();
 
         //UserName,Passwordを設定
         _player.SUserName = OrganizedString(IFUserName.text);

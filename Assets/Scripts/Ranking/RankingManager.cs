@@ -82,8 +82,8 @@ public class RankingManager : MonoBehaviour
     }
 
     private async Task GetLeaderboard()
-    {
-        await _UserDataManager.LoadUserData();
+    {     
+        if (!PlaySetting.Instance.isPlayFabLogin) await _UserDataManager.LoadUserData();
 
         playerInRanking = false;
         myNUM = 0;

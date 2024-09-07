@@ -390,16 +390,23 @@ public class GameManager : MonoBehaviour
         {
             sceneprocessing = true;
 
-            await SectionDataManager.Instance.LoadSectionData();
-
-            //セクションが終了したか
-            if(SectionDataManager.Instance.IsEndCurrentSection())
+            if (PlaySetting.Instance.isPlayFabLogin)
             {
-                _LoadingScene.LoadNextScene("LobbyScene");
+                _LoadingScene.LoadNextScene("GameScene");
             }
             else
             {
-                _LoadingScene.LoadNextScene("GameScene");
+                await SectionDataManager.Instance.LoadSectionData();
+
+                //セクションが終了したか
+                if (SectionDataManager.Instance.IsEndCurrentSection())
+                {
+                    _LoadingScene.LoadNextScene("LobbyScene");
+                }
+                else
+                {
+                    _LoadingScene.LoadNextScene("GameScene");
+                }
             }
 
             sceneprocessing = false;

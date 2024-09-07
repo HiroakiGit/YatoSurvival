@@ -14,6 +14,10 @@ public class PlayerAttackIndicator : MonoBehaviour
     public GameObject attackCursorPrefab;
     public GameObject cursorInstance;
 
+    // 感度調整用のスケール
+    float sensitivity = 0.8f; // 感度を調整する変数
+    float screenWidthHalf = Screen.width / 2; // 画面の右半分の判定
+
     public float movementSpeed = 5f;
 
     void Start()
@@ -32,18 +36,32 @@ public class PlayerAttackIndicator : MonoBehaviour
         cursorInstance.transform.position = Vector2.MoveTowards(cursorInstance.transform.position, mousePosition, 20 * Time.deltaTime);
 #endif
 #if UNITY_ANDROID || UNITY_IOS
-        // ジョイスティックの入力を取得
-        float horizontal = _MachineChangeAdaptor.inputRotate.Horizontal; // ジョイスティックの水平入力
-        float vertical = _MachineChangeAdaptor.inputRotate.Vertical;     // ジョイスティックの垂直入力
-        float speed = _MachineChangeAdaptor.rotateSpeed;
-        // ジョイスティックの入力をベクトルとして保持
-        Vector2 joystickInput = new Vector2(horizontal, vertical);
+        // 画面内の制限範囲を計算
+        Vector3 screenMin = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        Vector3 screenMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
 
-        // 移動させる位置を計算（移動速度を調整）
-        cursorInstance.transform.position = Vector2.MoveTowards(
-            cursorInstance.transform.position,
-            cursorInstance.transform.position + (Vector3)joystickInput,
-            speed * Time.deltaTime);
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            Touch touch = Input.GetTouch(i);
+            Vector2 touchPosition = touch.position;
+
+            // 画面の右半分をタッチしているかチェック
+            if (touchPosition.x > screenWidthHalf && touch.phase == TouchPhase.Moved)
+            {
+                // スワイプ量に基づいてカーソルを移動（感度調整）
+                Vector2 swipeDelta = touch.deltaPosition * sensitivity;
+
+                // 新しいカーソル位置を計算
+                Vector3 newCursorPos = cursorInstance.transform.position + new Vector3(swipeDelta.x, swipeDelta.y, 0) * Time.deltaTime;
+
+                // カーソルが画面外に行かないように制限
+                newCursorPos.x = Mathf.Clamp(newCursorPos.x, screenMin.x, screenMax.x);
+                newCursorPos.y = Mathf.Clamp(newCursorPos.y, screenMin.y, screenMax.y);
+
+                // カーソル位置を更新
+                cursorInstance.transform.position = newCursorPos;
+            }
+        }
 #endif
 
         // プレイヤーの位置を基準にしたマウスカーソルの方向を取得する

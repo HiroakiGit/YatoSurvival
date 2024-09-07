@@ -6,9 +6,7 @@ public class MachineChangeAdaptor : MonoBehaviour
 {
     [Header("JoyStick")]
     public FloatingJoystick inputMove; //左画面JoyStick
-    public FloatingJoystick inputRotate; //右画面JoyStick
     public float moveSpeed = 5.0f; //移動する速度
-    public float rotateSpeed = 5.0f;  //回転する速度
     [Header("UI")]
     public GameObject PCNaviCanvas;
     public GameObject PhoneJoyStickCanvas;

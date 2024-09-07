@@ -20,16 +20,23 @@ public class LobbyManager : MonoBehaviour
     //プレイボタンを押したとき
     public async void OnClickNextSceneButton()
     {
-        await SectionDataManager.Instance.LoadSectionData();
-
-        if (SectionDataManager.Instance.IsEndCurrentSection())
+        if (PlaySetting.Instance.isPlayFabLogin)
         {
-            ReallyUI.SetActive(true);
-            reallyText.text = $"{SectionDataManager.Instance.GetCurrentSectionName()}は終了しました。\nゲームのプレイは可能ですが、ランキングは更新されません。\nそれでもプレイしますか？";
+            _LoadingScene.LoadNextScene("GameScene");
         }
         else
         {
-            _LoadingScene.LoadNextScene("GameScene");
+            await SectionDataManager.Instance.LoadSectionData();
+
+            if (SectionDataManager.Instance.IsEndCurrentSection())
+            {
+                ReallyUI.SetActive(true);
+                reallyText.text = $"{SectionDataManager.Instance.GetCurrentSectionName()}は終了しました。\nゲームのプレイは可能ですが、ランキングは更新されません。\nそれでもプレイしますか？";
+            }
+            else
+            {
+                _LoadingScene.LoadNextScene("GameScene");
+            }
         }
     }
 
