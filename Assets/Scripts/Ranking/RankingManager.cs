@@ -56,7 +56,7 @@ public class RankingManager : MonoBehaviour
         }
         else
         {
-            await _UserDataManager.UpdateScore(_Player.SUserName, _Timer.aliveTime);
+            await _UserDataManager.UpdateScore(_Player.SDisplayName, _Timer.aliveTime);
         }
     }
 
@@ -108,7 +108,7 @@ public class RankingManager : MonoBehaviour
                     Rank r = new Rank((result.Leaderboard[i].Position + 1).ToString(), result.Leaderboard[i].DisplayName, result.Leaderboard[i].StatValue);
 
                     //自分がいるとき
-                    if (result.Leaderboard[i].DisplayName == _Player.SUserName)
+                    if (result.Leaderboard[i].DisplayName == _Player.SDisplayName)
                     {
                         playerInRanking = true;
                         myNUM = i;
@@ -143,7 +143,7 @@ public class RankingManager : MonoBehaviour
                 if (_Player != null)
                 {
                     //自分がいるとき
-                    if (resultList[i].username == _Player.SUserName)
+                    if (resultList[i].username == _Player.SDisplayName)
                     {
                         playerInRanking = true;
                         myNUM = i;

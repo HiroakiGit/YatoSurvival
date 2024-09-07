@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public PlayerAnimation _PlayerAnimation;
     public string SUserName;
     public string SPassWord;
+    public string SDisplayName;
     public Transform playerTransform;
     public Transform PlayerHaveObjectsParent;
 }

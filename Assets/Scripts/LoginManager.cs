@@ -3,14 +3,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using PlayFab;
 using PlayFab.ClientModels;
+using UnityEditor.Experimental.GraphView;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class LoginManager : MonoBehaviour
 {
     public UserDataManager _UserDataManager;
     public Player _player;
     [SerializeField] GameObject LoginCanvas;
+    [SerializeField] GameObject SetUserNameAndPassWordCanvas;
+    [SerializeField] GameObject SetDisplayNameCanvas;
     [SerializeField] InputField IFUserName;
     [SerializeField] InputField IFPassWord;
+    [SerializeField] InputField IFDisplayName;
     [SerializeField] GameObject CheckMarkObj;
     [SerializeField] Text ErrorText;
     [SerializeField] Button[] Buttons;
@@ -19,9 +26,12 @@ public class LoginManager : MonoBehaviour
     public void StartLogin()
     {
         LoginCanvas.SetActive(true);
+        SetUserNameAndPassWordCanvas.SetActive(true);
+        SetDisplayNameCanvas.SetActive(false);
         CheckMarkObj.SetActive(false);
         IFUserName.text = string.Empty;
         IFPassWord.text = string.Empty;
+        IFDisplayName.text = string.Empty;
         ErrorText.text = string.Empty;
     }
 
@@ -185,13 +195,94 @@ public class LoginManager : MonoBehaviour
     private void OnLoginSuccess(LoginResult result)
     {
         ShowMessage($"ログイン成功: {_player.SUserName}", false);
-        StartCoroutine(EndLogin());
+        StartCoroutine(StartSetDisplayName());
+    }
+
+    //DisplayNameを設定する処理を開始
+    private IEnumerator StartSetDisplayName()
+    {
+        yield return new WaitForSeconds(2);
+
+        //DisplayName設定
+        //PlayFabLoginかどうか
+        if (PlaySetting.Instance.isPlayFabLogin)
+        {
+            SetUserNameAndPassWordCanvas.SetActive(false);
+            SetDisplayNameCanvas.SetActive(true);
+        }
+        else
+        {
+            SetDisplayName();
+        }
+    }
+
+    //DisplayName決定ボタン押したとき
+    public void OnClickSetDisplayNameButton()
+    {
+        //ボタン無効化
+        for (int i = 0; i < Buttons.Length; i++)
+        {
+            Buttons[i].interactable = false;
+        }
+
+        SetDisplayName();
+    }
+
+    //キャンセルボタン押したとき
+    public void OnClickBackToSetNamePassButton()
+    {
+        //ボタン無効化
+        for (int i = 0; i < Buttons.Length; i++)
+        {
+            Buttons[i].interactable = false;
+        }
+
+        SetDisplayNameCanvas.SetActive(false);
+        SetUserNameAndPassWordCanvas.SetActive(true);
+    }
+
+    //DisplayName設定
+    private void SetDisplayName()
+    {
+        //PlayFabLoginかどうか
+        if (PlaySetting.Instance.isPlayFabLogin)
+        {
+            //文字数が適切か
+            if (OrganizedString(IFDisplayName.text).Length < 3 || OrganizedString(IFDisplayName.text).Length > 10) { ShowMessage("ニックネームは3~10文字にしてください"); return; }
+
+            var DisplayNameRequest = new UpdateUserTitleDisplayNameRequest
+            {
+                DisplayName = IFDisplayName.text
+            };
+
+            //PlayFabのDisplayNameリクエスト
+            PlayFabClientAPI.UpdateUserTitleDisplayName(DisplayNameRequest, OnSetDisplayNameEnd, OnError);
+        }
+        else
+        {
+            _player.SDisplayName = _player.SUserName;
+            OnSetDisplayNameEnd(null);
+        }
+    }
+
+    //DisplayNameの設定が完了した時
+    private void OnSetDisplayNameEnd(UpdateUserTitleDisplayNameResult result)
+    {
+        if(result != null) _player.SDisplayName = result.DisplayName;
+        StartCoroutine(EndSetDisplayNameEnd());
+    }
+
+    //DisplayName終了
+    private IEnumerator EndSetDisplayNameEnd()
+    {
+        ShowMessage($"ニックネーム: {_player.SDisplayName}", false);
+        yield return new WaitForSeconds(2);
+        EndLogin();
     }
 
     //ログイン終了
-    private IEnumerator EndLogin()
+    private void EndLogin()
     {
-        yield return new WaitForSecondsRealtime(2);
         LoginCanvas.SetActive(false);
         //ログイン終了時の処理を呼び出す
         GameManager.Instance.OnLoginEnd();
@@ -202,23 +293,36 @@ public class LoginManager : MonoBehaviour
     {
         _player.SUserName = null;
         _player.SPassWord = null;
+        _player.SDisplayName = null;
         Debug.Log(error.GenerateErrorReport());
 
         if (error.Error == PlayFabErrorCode.UsernameNotAvailable)
         {
             ShowMessage("ユーザー名が既に存在します");
         }
-        if (error.Error == PlayFabErrorCode.AccountNotFound)
+        else if (error.Error == PlayFabErrorCode.AccountNotFound)
         {
             ShowMessage("ユーザーが見つかりません");
         }
-        if (error.Error == PlayFabErrorCode.InvalidUsernameOrPassword)
+        else if (error.Error == PlayFabErrorCode.InvalidUsernameOrPassword)
         {
             ShowMessage("ユーザーネームまたはパスワードが間違っています");
         }
-        if (error.Error == PlayFabErrorCode.APIClientRequestRateLimitExceeded)
+        else if (error.Error == PlayFabErrorCode.InvalidParams)
+        {
+            ShowMessage("日本語や特定の記号は使用できません");
+        }
+        else if (error.Error == PlayFabErrorCode.NameNotAvailable)
+        {
+            ShowMessage("ニックネームが既に存在します");
+        }
+        else if (error.Error == PlayFabErrorCode.APIClientRequestRateLimitExceeded)
         {
             ShowMessage("しばらく時間をおいてください");
+        }
+        else
+        {
+            ShowMessage(string.Empty);
         }
     }
 
@@ -243,12 +347,10 @@ public class LoginManager : MonoBehaviour
 
         ErrorText.text = string.Empty;
 
-        if (isError)
+
+        for (int i = 0; i < Buttons.Length; i++)
         {
-            for (int i = 0; i < Buttons.Length; i++)
-            {
-                Buttons[i].interactable = true;
-            }
+            Buttons[i].interactable = true;
         }
     }
     //======================================================================================
